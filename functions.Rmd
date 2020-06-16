@@ -1,8 +1,0 @@
----
-title: "functions"
-author: "Kirsten Landsiedel"
-date: "6/16/2020"
-output: html_document
----
-
-Now we can build some functions! (practice)
