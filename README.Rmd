@@ -32,11 +32,66 @@ You can install the development version of scqe from [GitHub](https://github.com
 devtools::install_github("chadhazlett/scqe")
 ```
 ## Example
+This is a basic example which shows you how to use the getSCQE function in order to obtain the scqe estimates and the se/CI for each delta.
+The function allows for either a single value for delta or a vector of several values.
 
-This is a basic example which shows you how to solve a common problem:
-
+Say you have the following data. You have already determined your delta=.5
 ```{r}
 #library(scqe)
-## basic example code
+
+#your data:
+#we will use different data later, this is a sample for now
+#the real data should eventually be stored in /data
+my.data = data.frame(post=sample(c(0,1), replace=T,size=10), tmt=sample(c(0,1), replace=T,size=10), out=runif(10))
+my.data
 ```
+
+NOTE: this should not be here once the package is up and running
+```{r}
+library(AER)
+getSCQE = function(post, treatment, outcome, delta){
+  if(length(c(delta))==1){
+    y2 = outcome - post*c(delta)
+    iv.out = summary(ivreg(y2 ~ treatment | post))
+    est = iv.out$coef["treatment",1]
+    se = iv.out$coef["treatment",2]
+    conf.low = est - 1.96*se
+    conf.high = est + 1.96*se
+    r = c(delta, est, conf.low, conf.high)
+    names(r) = c("term", "estimate","conf.low","conf.high")
+    return(r)
+
+  }else{
+    y2 = outcome - post %*% t(delta)
+    r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
+    for (i in 1:length(delta)){
+      iv.out = summary(ivreg(y2[,i] ~ treatment | post))
+      est = iv.out$coef["treatment",1]
+      se = iv.out$coef["treatment",2]
+      conf.low = est - 1.96*se
+      conf.high = est + 1.96*se
+      r[i,] = c(delta[i], est, conf.low, conf.high)
+    }
+    return(r)
+  }
+}
+```
+
+
+You wish to calculate the scqe estimates: sigle value of delta
+```{r}
+d = .5
+getSCQE(my.data$post, my.data$tmt, my.data$out, d)
+#term signifies the delta used=
+```
+
+Let's say instead you want to get the scqe estimate for a range of values of delta: .5, .75, and 1
+```{r}
+d2 <- c(.5, .75, 1)
+getSCQE(my.data$post, my.data$tmt, my.data$out, d2)
+```
+Since you fed the function a vector of deltas, it outputs a data frame with each row corresponding to a different delta or "term."
+
+
+
 
