@@ -10,7 +10,7 @@
 The scqe package allows users to implement the stability controlled
 quasi-experiment (SCQE) (Hazlett, 2019) approach to study the effects of
 newly adopted treatments that were not assigned at random. This package
-created tools to help users avoid making statistical assumptions that
+contains tools to help users avoid making statistical assumptions that
 rely on infeasible assumptions.
 
 ## Motivation
@@ -49,19 +49,20 @@ delta=.5
 #your data:
 #we will use different data later, this is a sample for now
 #the real data should eventually be stored in /data
+set.seed(100)
 my.data = data.frame(post=sample(c(0,1), replace=T,size=10), tmt=sample(c(0,1), replace=T,size=10), out=runif(10))
 my.data
 #>    post tmt       out
-#> 1     1   1 0.7852252
-#> 2     0   0 0.7327932
-#> 3     0   0 0.3064098
-#> 4     0   0 0.7060504
-#> 5     1   1 0.3853947
-#> 6     0   0 0.4593918
-#> 7     0   0 0.2356888
-#> 8     0   1 0.5715070
-#> 9     1   0 0.3581574
-#> 10    0   0 0.9139753
+#> 1     1   1 0.5358112
+#> 2     0   1 0.7108038
+#> 3     1   1 0.5383487
+#> 4     1   1 0.7489722
+#> 5     0   0 0.4201015
+#> 6     0   1 0.1714202
+#> 7     1   1 0.7703016
+#> 8     1   0 0.8819536
+#> 9     1   0 0.5490967
+#> 10    0   0 0.2777238
 ```
 
 NOTE: this should not be here once the package is up and running
@@ -114,9 +115,9 @@ You wish to calculate the scqe estimates: sigle value of delta
 ``` r
 d = .5
 getSCQE(my.data$post, my.data$tmt, my.data$out, d)
-#>       term   estimate   conf.low  conf.high 
-#>  0.5000000 -1.0523643 -2.4956079  0.3908792
-#term signifies the delta used=
+#>      term  estimate  conf.low conf.high 
+#>   0.50000  -1.34559  -7.04340   4.35222
+#"term" column signifies the delta corresponding to estimates in that line of the df
 ```
 
 Let’s say instead you want to get the scqe estimate for a range of
@@ -125,10 +126,10 @@ values of delta: .5, .75, and 1
 ``` r
 d2 <- c(.5, .75, 1)
 getSCQE(my.data$post, my.data$tmt, my.data$out, d2)
-#>   term  estimate  conf.low conf.high
-#> 1 0.50 -1.052364 -2.495608 0.3908792
-#> 2 0.75 -1.529637 -3.473062 0.4137875
-#> 3 1.00 -2.006910 -4.466464 0.4526447
+#>   term estimate  conf.low conf.high
+#> 1 0.50 -1.34559  -7.04340  4.352220
+#> 2 0.75 -2.84559 -14.60075  8.909575
+#> 3 1.00 -4.34559 -22.22111 13.529932
 ```
 
 Since you fed the function a vector of deltas, it outputs a data frame

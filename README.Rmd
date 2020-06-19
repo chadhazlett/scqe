@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The scqe package allows users to implement the stability controlled quasi-experiment (SCQE) (Hazlett, 2019) approach to study the effects of newly adopted treatments that were not assigned at random. This package created tools to help users avoid making statistical assumptions that rely on infeasible assumptions.
+The scqe package allows users to implement the stability controlled quasi-experiment (SCQE) (Hazlett, 2019) approach to study the effects of newly adopted treatments that were not assigned at random. This package contains tools to help users avoid making statistical assumptions that rely on infeasible assumptions.
 
 ## Motivation
 Typical covariate-adjustment techniques used in statistical analysis impose the often too strict "no-unobserved confounding" assumption. Ignoring relevant cofounding biases can lead to overconfidence or inaccuracy of experimental results. SCQE instead imposes an assumption about the "baseline trend" for the change in average non-treatment outcome between successive cohorts in observational studies. More information about this method can be found in Hazlett, 2019.
@@ -42,6 +42,7 @@ Say you have the following data. You have already determined your delta=.5
 #your data:
 #we will use different data later, this is a sample for now
 #the real data should eventually be stored in /data
+set.seed(100)
 my.data = data.frame(post=sample(c(0,1), replace=T,size=10), tmt=sample(c(0,1), replace=T,size=10), out=runif(10))
 my.data
 ```
@@ -82,7 +83,7 @@ You wish to calculate the scqe estimates: sigle value of delta
 ```{r}
 d = .5
 getSCQE(my.data$post, my.data$tmt, my.data$out, d)
-#term signifies the delta used=
+#"term" column signifies the delta corresponding to estimates in that line of the df
 ```
 
 Let's say instead you want to get the scqe estimate for a range of values of delta: .5, .75, and 1
