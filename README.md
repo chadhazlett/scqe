@@ -46,23 +46,20 @@ delta=.5
 ``` r
 #library(scqe)
 
-#your data:
-#we will use different data later, this is a sample for now
-#the real data should eventually be stored in /data
 set.seed(100)
-my.data = data.frame(post=sample(c(0,1), replace=T,size=10), tmt=sample(c(0,1), replace=T,size=10), out=runif(10))
+my.data = data.frame(post=sample(c(0,1), replace=T,size=10), treatment=sample(c(0,1), replace=T,size=10), outcome=runif(10))
 my.data
-#>    post tmt       out
-#> 1     1   1 0.5358112
-#> 2     0   1 0.7108038
-#> 3     1   1 0.5383487
-#> 4     1   1 0.7489722
-#> 5     0   0 0.4201015
-#> 6     0   1 0.1714202
-#> 7     1   1 0.7703016
-#> 8     1   0 0.8819536
-#> 9     1   0 0.5490967
-#> 10    0   0 0.2777238
+#>    post treatment   outcome
+#> 1     1         1 0.5358112
+#> 2     0         1 0.7108038
+#> 3     1         1 0.5383487
+#> 4     1         1 0.7489722
+#> 5     0         0 0.4201015
+#> 6     0         1 0.1714202
+#> 7     1         1 0.7703016
+#> 8     1         0 0.8819536
+#> 9     1         0 0.5490967
+#> 10    0         0 0.2777238
 ```
 
 NOTE: this should not be here once the package is up and running
@@ -101,7 +98,7 @@ You wish to calculate the scqe estimates: sigle value of delta
 
 ``` r
 d = .5
-getSCQE(my.data$post, my.data$tmt, my.data$out, d)
+getSCQE(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d)
 #>   term estimate conf.low conf.high
 #> 1  0.5 -1.34559  -7.0434   4.35222
 #"term" column signifies the delta corresponding to estimates in that line of the df
@@ -112,7 +109,7 @@ values of delta: .5, .75, and 1
 
 ``` r
 d2 <- c(.5, .75, 1)
-getSCQE(my.data$post, my.data$tmt, my.data$out, d2)
+getSCQE(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d2)
 #>   term estimate  conf.low conf.high
 #> 1 0.50 -1.34559  -7.04340  4.352220
 #> 2 0.75 -2.84559 -14.60075  8.909575
