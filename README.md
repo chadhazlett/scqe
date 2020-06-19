@@ -83,18 +83,6 @@ library(AER)
 #> Loading required package: sandwich
 #> Loading required package: survival
 getSCQE = function(post, treatment, outcome, delta){
-  if(length(c(delta))==1){
-    y2 = outcome - post*c(delta)
-    iv.out = summary(ivreg(y2 ~ treatment | post))
-    est = iv.out$coef["treatment",1]
-    se = iv.out$coef["treatment",2]
-    conf.low = est - 1.96*se
-    conf.high = est + 1.96*se
-    r = c(delta, est, conf.low, conf.high)
-    names(r) = c("term", "estimate","conf.low","conf.high")
-    return(r)
-
-  }else{
     y2 = outcome - post %*% t(delta)
     r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
     for (i in 1:length(delta)){
@@ -107,7 +95,6 @@ getSCQE = function(post, treatment, outcome, delta){
     }
     return(r)
   }
-}
 ```
 
 You wish to calculate the scqe estimates: sigle value of delta
@@ -115,8 +102,8 @@ You wish to calculate the scqe estimates: sigle value of delta
 ``` r
 d = .5
 getSCQE(my.data$post, my.data$tmt, my.data$out, d)
-#>      term  estimate  conf.low conf.high 
-#>   0.50000  -1.34559  -7.04340   4.35222
+#>   term estimate conf.low conf.high
+#> 1  0.5 -1.34559  -7.0434   4.35222
 #"term" column signifies the delta corresponding to estimates in that line of the df
 ```
 
