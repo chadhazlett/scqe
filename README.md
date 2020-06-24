@@ -79,7 +79,7 @@ getSCQE = function(post, treatment, outcome, delta){
   }
 ```
 
-You wish to calculate the scqe estimates: sigle value of delta
+You wish to calculate the scqe estimates: single value of delta
 
 ``` r
 d = .5
