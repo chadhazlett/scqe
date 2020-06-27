@@ -1,5 +1,3 @@
-#build functions here
-#the ivreg requires the AER package!!!
 #' SCQE estimates.
 #'
 #' \code{getSCQE} returns the scqe estimates, standard deviations, and relevant confidence
