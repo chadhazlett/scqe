@@ -35,8 +35,8 @@ devtools::install_github("chadhazlett/scqe")
 
 ## Example
 
-This is a basic example which shows you how to use the getSCQE function
-in order to obtain the scqe estimates and the se/CI for each delta. The
+This is a basic example which shows you how to use the scqe function in
+order to obtain the scqe estimates and the se/CI for each delta. The
 function allows for either a single value for delta or a vector of
 several values.
 
@@ -64,7 +64,7 @@ my.data
 NOTE: this should not be here once the package is up and running
 
 ``` r
-getSCQE = function(post, treatment, outcome, delta){
+scqe = function(post, treatment, outcome, delta){
     y2 = outcome - post %*% t(delta)
     r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
     for (i in 1:length(delta)){
@@ -83,7 +83,7 @@ You wish to calculate the scqe estimates: single value of delta
 
 ``` r
 d = .5
-getSCQE(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d)
+scqe(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d)
 #>   term estimate conf.low conf.high
 #> 1  0.5 -1.34559  -7.0434   4.35222
 #"term" column signifies the delta corresponding to estimates in that line of the df
@@ -94,7 +94,7 @@ values of delta: .5, .75, and 1
 
 ``` r
 d2 <- c(.5, .75, 1)
-getSCQE(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d2)
+scqe(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d2)
 #>   term estimate  conf.low conf.high
 #> 1 0.50 -1.34559  -7.04340  4.352220
 #> 2 0.75 -2.84559 -14.60075  8.909575

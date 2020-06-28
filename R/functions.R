@@ -1,6 +1,6 @@
 #' SCQE estimates.
 #'
-#' \code{getSCQE} returns the scqe estimates, standard deviations, and relevant confidence
+#' \code{scqe} returns the scqe estimates, standard deviations, and relevant confidence
 #' intervals.
 #'
 #' @param post Binary vector corresponding to T=0,1 for each observation.
@@ -11,7 +11,7 @@
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
 #'@export
-getSCQE = function(post, treatment, outcome, delta){
+scqe = function(post, treatment, outcome, delta){
     y2 = outcome - post %*% t(delta)
     r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
     for (i in 1:length(delta)){

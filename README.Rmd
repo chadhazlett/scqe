@@ -32,7 +32,7 @@ You can install the development version of scqe from [GitHub](https://github.com
 devtools::install_github("chadhazlett/scqe")
 ```
 ## Example
-This is a basic example which shows you how to use the getSCQE function in order to obtain the scqe estimates and the se/CI for each delta.
+This is a basic example which shows you how to use the scqe function in order to obtain the scqe estimates and the se/CI for each delta.
 The function allows for either a single value for delta or a vector of several values.
 
 Say you have the following data. You have already determined your delta=.5
@@ -46,7 +46,7 @@ my.data
 NOTE: this should not be here once the package is up and running
 
 ```{r}
-getSCQE = function(post, treatment, outcome, delta){
+scqe = function(post, treatment, outcome, delta){
     y2 = outcome - post %*% t(delta)
     r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
     for (i in 1:length(delta)){
@@ -65,14 +65,14 @@ getSCQE = function(post, treatment, outcome, delta){
 You wish to calculate the scqe estimates: single value of delta
 ```{r}
 d = .5
-getSCQE(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d)
+scqe(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d)
 #"term" column signifies the delta corresponding to estimates in that line of the df
 ```
 
 Let's say instead you want to get the scqe estimate for a range of values of delta: .5, .75, and 1
 ```{r}
 d2 <- c(.5, .75, 1)
-getSCQE(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d2)
+scqe(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d2)
 ```
 Since you fed the function a vector of deltas, it outputs a data frame with each row corresponding to a different delta or "term."
 
