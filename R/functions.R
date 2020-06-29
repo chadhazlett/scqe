@@ -23,6 +23,7 @@ scqe = function(post, treatment, outcome, delta){
       conf.high = est + 1.96*se
       r[i,] = c(delta[i], est, conf.low, conf.high)
     }
+    class(r) <- "scqe"
     return(r)
   }
 

@@ -75,6 +75,7 @@ scqe = function(post, treatment, outcome, delta){
       conf.high = est + 1.96*se
       r[i,] = c(delta[i], est, conf.low, conf.high)
     }
+    class(r) <- "scqe"
     return(r)
   }
 ```
@@ -84,8 +85,22 @@ You wish to calculate the scqe estimates: single value of delta
 ``` r
 d = .5
 scqe(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d)
-#>   term estimate conf.low conf.high
-#> 1  0.5 -1.34559  -7.0434   4.35222
+#> $term
+#> [1] 0.5
+#> 
+#> $estimate
+#> [1] -1.34559
+#> 
+#> $conf.low
+#> [1] -7.0434
+#> 
+#> $conf.high
+#> [1] 4.35222
+#> 
+#> attr(,"row.names")
+#> [1] 1
+#> attr(,"class")
+#> [1] "scqe"
 #"term" column signifies the delta corresponding to estimates in that line of the df
 ```
 
@@ -95,10 +110,22 @@ values of delta: .5, .75, and 1
 ``` r
 d2 <- c(.5, .75, 1)
 scqe(post=my.data$post, treatment=my.data$treatment, outcome=my.data$outcome, delta=d2)
-#>   term estimate  conf.low conf.high
-#> 1 0.50 -1.34559  -7.04340  4.352220
-#> 2 0.75 -2.84559 -14.60075  8.909575
-#> 3 1.00 -4.34559 -22.22111 13.529932
+#> $term
+#> [1] 0.50 0.75 1.00
+#> 
+#> $estimate
+#> [1] -1.34559 -2.84559 -4.34559
+#> 
+#> $conf.low
+#> [1]  -7.04340 -14.60075 -22.22111
+#> 
+#> $conf.high
+#> [1]  4.352220  8.909575 13.529932
+#> 
+#> attr(,"row.names")
+#> [1] 1 2 3
+#> attr(,"class")
+#> [1] "scqe"
 ```
 
 Since you fed the function a vector of deltas, it outputs a data frame
