@@ -4,7 +4,7 @@
 #' confounding variables and their impact on estimates (Hazlett, 2019).
 #'
 #' @section scqe functions:
-#' scqeE: gets the scqe estimates, sd, and CIs
+#' scqe: gets the scqe estimates, sd, and CIs
 #'
 #'@section package dependencies:
 #'AER
