@@ -1,4 +1,4 @@
-#' SCQE estimates.
+#' SCQE.
 #'
 #' \code{scqe} returns the scqe estimates, standard deviations, and relevant confidence
 #' intervals.
@@ -10,6 +10,7 @@
 #'   observation.
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
+#'
 #'@export
 scqe = function(post, treatment, outcome, delta){
     y2 = outcome - post %*% t(delta)
