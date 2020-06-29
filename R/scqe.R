@@ -11,5 +11,5 @@
 #'
 #'
 #' @docType package
-#' @name scqe
+#' @name scqe-package
 NULL
