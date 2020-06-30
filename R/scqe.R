@@ -8,7 +8,7 @@
 #'
 #'@section package dependencies:
 #'AER
-#'
+#'ggplot2
 #'
 #' @docType package
 #' @name scqe-package
