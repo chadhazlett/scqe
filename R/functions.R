@@ -32,6 +32,14 @@ NULL
 #'
 #' @examples
 #' # Put examples here!
+#' set.seed(1234)
+#' post = c(rep(0,100), rep(1,100))
+#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
+#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#'
+#' scqe.out = scqe(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
+#'
+#' plot(scqe.out)
 #'
 #'@export
 scqe = function(post, treatment, outcome, delta, ...){
@@ -45,7 +53,7 @@ scqe = function(post, treatment, outcome, delta, ...){
       conf.high = est + 1.96*se
       r[i,] = c(delta[i], est, conf.low, conf.high)
     }
-    class(r) <- "scqe"
+    class(r) <- c("scqe", "data.frame")
     return(r)
   }
 
@@ -62,8 +70,9 @@ scqe = function(post, treatment, outcome, delta, ...){
 #'
 #' @export
 #'
-plot.scqe = function(scqe.obj,...){
-  ggplot() +
-  geom_pointrange(data=r, mapping=aes(x=estimate, y=term, ymin=conf.low, ymax=conf.high),  size=.5, color="blue", fill="white", shape=22) + ggtitle("Treatment effect estimation SCQE") +xlab("scqe estimate") +ylab("delta")}
+plot.scqe = function(scqe.obj){
+  ggplot2::ggplot() +
+  geom_pointrange(data=scqe.obj, mapping=aes(x=estimate, y=term, ymin=conf.low, ymax=conf.high),  size=.5, color="blue", fill="white", shape=22) + ggtitle("Treatment effect estimation SCQE") +xlab("scqe estimate") +ylab("delta")
+  }
 
 
