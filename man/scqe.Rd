@@ -2,9 +2,9 @@
 % Please edit documentation in R/functions.R
 \name{scqe}
 \alias{scqe}
-\title{SCQE.}
+\title{Stability controlled quasi-experiment (scqe)}
 \usage{
-scqe(post, treatment, outcome, delta)
+scqe(post, treatment, outcome, delta, ...)
 }
 \arguments{
 \item{post}{Binary vector corresponding to T=0,1 for each observation.}
@@ -19,6 +19,13 @@ observation.}
 delta.}
 }
 \description{
-\code{scqe} returns the scqe estimates, standard deviations, and relevant confidence
-intervals.
+This function returns the scqe estimates, standard deviations,  confidence
+intervals,...
+}
+\examples{
+# Put examples here!
+
+}
+\references{
+Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
 }
