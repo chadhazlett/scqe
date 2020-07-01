@@ -46,7 +46,7 @@ my.data
 NOTE: this should not be here once the package is up and running
 
 ```{r}
-scqe = function(post, treatment, outcome, delta){
+scqe = function(post, treatment, outcome, delta, ...){
     y2 = outcome - post %*% t(delta)
     r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
     for (i in 1:length(delta)){
@@ -57,7 +57,7 @@ scqe = function(post, treatment, outcome, delta){
       conf.high = est + 1.96*se
       r[i,] = c(delta[i], est, conf.low, conf.high)
     }
-    class(r) <- "scqe"
+    class(r) <- c("scqe", "data.frame")
     return(r)
   }
 ```
