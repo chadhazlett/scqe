@@ -72,7 +72,7 @@ scqe = function(post, treatment, outcome, delta, ...){
 #'
 plot.scqe = function(scqe.obj){
   ggplot2::ggplot() +
-  geom_pointrange(data=scqe.obj, mapping=aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high),  size=.5, color="blue", fill="white", shape=22) + ggtitle("Treatment effect estimation SCQE") +ylab("estimate") +xlab("delta") + coord_flip()
+  geom_pointrange(data=scqe.obj, mapping=aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high),  size=.5,shape=16) + ggtitle("Treatment effect estimation SCQE") +ylab("Estimated effect on trend's outcome, 95% CI") +xlab("Assumed outcome shift under no tmt change (delta)") + coord_flip() + theme_bw()
   }
 
 
