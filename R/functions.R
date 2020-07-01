@@ -71,8 +71,8 @@ scqe = function(post, treatment, outcome, delta, ...){
 #' @export
 #'
 plot.scqe = function(scqe.obj){
-  ggplot2::ggplot() +
-  ggplot2::geom_pointrange(data=scqe.obj, mapping=aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high),  size=.5,shape=16) +ylab("Average treatment effect on treated") +xlab("Delta") + coord_flip() + theme_bw()
+  return(ggplot2::ggplot() +
+  ggplot2::geom_pointrange(data=scqe.obj, mapping=aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high),  size=.5,shape=16) +ylab("Average treatment effect on treated") +xlab("Delta") + coord_flip() + theme_bw())
   }
 
 
