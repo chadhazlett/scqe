@@ -75,6 +75,18 @@ plot.scqe = function(scqe.obj){
   ggplot2::geom_pointrange(data=scqe.obj, mapping=aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high),  size=.5,shape=16) +ylab("Average treatment effect on treated") +xlab("Delta") + coord_flip() + theme_bw() + ggplot2::geom_hline(yintercept = 0, color="gray50"))
   }
 
+
+#' Summary method for \code{scqe}
+#' @rdname summary.scqe
+#' @description
+#' The \code{print} method provides...
+#'
+#' @param scqe.obj an object of class \code{\link{scqe}}
+#'
+#' @examples
+#' # give example here
+#'
+#' @export
 summary.scqe = function(scqe.obj){
   cat("With deltas of",scqe.out$term,"the scqe estimates would be", scqe.out$estimate, "respectively \n")
 }
