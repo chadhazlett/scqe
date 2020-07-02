@@ -76,3 +76,8 @@ plot.scqe = function(scqe.obj){
   }
 
 
+summary.scqe = function(scqe.obj){
+  cat("With deltas of",scqe.out$term,"the scqe estimates would be", scqe.out$estimate, "respectively \n")
+}
+
+
