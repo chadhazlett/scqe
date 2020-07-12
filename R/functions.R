@@ -88,9 +88,15 @@ plot.scqe = function(scqe.obj){
 #'
 #' @export
 summary.scqe = function(scqe.obj){
-  cat("With deltas of",scqe.out$term,"the scqe estimates would be", scqe.out$estimate, "respectively \n")
+  if(any(scqe.out$conf.high < 0)){
+    cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was", max(scqe.out[which((scqe.out$conf.high < 0)),1]) ,"or above.")
+  }
+  if(any(scqe.out$estimate == 0)){
+    cat("To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly", scqe.out[which(scqe.out$estimate == 0),1],".")
+  }
+  if(any(scqe.out$conf.low > 0)){
+    cat("To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was", min(scqe.out[which((scqe.out$conf.low > 0)),1]) ,"or below.")
+  }
 }
-
-
 
 
