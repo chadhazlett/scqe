@@ -43,6 +43,9 @@ NULL
 #'
 #'@export
 scqe = function(post, treatment, outcome, delta, ...){
+  if(any(delta > 1 | delta < -1)){
+    warning("One or more delta(s) are not in range")
+  }
   y2 = outcome - post %*% t(delta)
   r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
   for (i in 1:length(delta)){
