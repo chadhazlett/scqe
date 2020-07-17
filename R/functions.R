@@ -57,6 +57,45 @@ scqe = function(post, treatment, outcome, delta, ...){
   return(r)
 }
 
+#this is the code for the one cohort case from the shiny app (needs to be adapted?)
+one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max_outcome){
+  N <- tr_1C + untr_1C
+  pi1 <- tr_1C/N
+  Ybar_T1 <- (Y_tr_1C + Y_untr_1C)/N
+
+  if(min_outcome == max_outcome){
+    #spread out the outcome range to +/- 0.2 from the single entered
+    #outcome rate, ensuring the range doesn't go beyond the possible bounds
+    min_outcome <- max(0, min_outcome - 0.20)
+    max_outcome <- min(0.99, min_outcome + 0.40)
+    min_outcome <- max_outcome - 0.40
+  }
+
+  outcome_list <- seq(from = max_outcome, to = min_outcome, length.out = 11)
+
+  Beta_SCQE_1C <- NULL
+  SE_B_SCQE_1C <- NULL
+
+  for(Y_T0 in outcome_list){
+
+    Beta_SCQE_outcome <- (Ybar_T1 - Y_T0)/pi1
+
+    SE_B_SCQE_outcome <- sqrt( (1/(N-1))*( ((Ybar_T1*(1-Ybar_T1))/(pi1^2)) +
+                                             ((Ybar_T1-Y_T0)^2*(pi1*(1-pi1)))/(pi1^4) ) )
+
+    Beta_SCQE_1C <- c(Beta_SCQE_1C, Beta_SCQE_outcome)
+    SE_B_SCQE_1C <- c(SE_B_SCQE_1C, SE_B_SCQE_outcome)
+  }
+
+  SCQE_1C_df <- data.frame(assumed_nontreat_outcome = outcome_list, SCQE_estimate = Beta_SCQE_1C, SCQE_stderr = SE_B_SCQE_1C,
+                           term = outcome_list, estimate = Beta_SCQE_1C,
+                           conf.low = Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
+  return(SCQE_1C_df)
+
+}
+
+
+
 #' Plot method for \code{scqe}
 #' @rdname plot.scqe
 #' @description
@@ -86,16 +125,16 @@ plot.scqe = function(scqe.obj){
 #'
 #' @export
 delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_untreated, obj, specified = NULL){
-  
+
   N <- treated + untreated
   pi1 <- treated/N
   Ybar_T1 <- (Y_untreated + Y_untreated)/N
-  
+
   Beta_SCQE_1C <- (Ybar_T1 - Y_T0)/pi1
-  
-  SE_B_SCQE_1C <- sqrt( (1/(N-1))*( ((Ybar_T1*(1-Ybar_T1))/(pi1^2)) + 
+
+  SE_B_SCQE_1C <- sqrt( (1/(N-1))*( ((Ybar_T1*(1-Ybar_T1))/(pi1^2)) +
                                       ((Ybar_T1-Y_T0)^2*(pi1*(1-pi1)))/(pi1^4) ) )
-  
+
   if(obj == "zero"){return(Beta_SCQE_1C^2)}
   if(obj == "less"){return((Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)^2)}
   if(obj == "harm"){return((Beta_SCQE_1C - 1.96*SE_B_SCQE_1C)^2)}
@@ -115,23 +154,23 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_untreated,
 #'
 #' @export
 summary.scqe = function(scqe.obj){
-  
+
   # optimize for the "less likely case"
   opt_less_1C <- round(as.numeric(optimize(f = delta.optim.scqe, interval = c(-1,1),
-             untreated = untreated, Y_untreated = Y_untreated, treated = treated, 
+             untreated = untreated, Y_untreated = Y_untreated, treated = treated,
              Y_treated = Y_treated, obj = "less", tol = 0.0001)[1]), 3))
-  
+
   # claim: treatment makes outcome less likely
   cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",
       opt_less_1C())#, "or", ifelse(opt_bnft_2C() > opt_harm_2C(), "greater.\"", "less.\"")
       #max(scqe.out[which((scqe.out$conf.high < 0)),1]) ,"or above.")
-  
+
   # claim: treatment had 0 effect
   cat("To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
       scqe.out[which(scqe.out$estimate == 0),1],".")
-  
+
   # claim: treatment makes outcome more likely
   cat("To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was",
       min(scqe.out[which((scqe.out$conf.low > 0)),1]) ,"or below.")
-  
+
 }
