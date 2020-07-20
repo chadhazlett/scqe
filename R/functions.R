@@ -72,11 +72,11 @@ scqe_1cohort = function(treatment, outcome, delta){
 
   r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
   for(i in 1:length(delta)){
-    Beta_SCQE_out <- (Ybar_T1 - i)/pi1 #code adapted from shiby app for calculations here
+    Beta_SCQE_outcome <- (Ybar_T1 - i)/pi1 #code adapted from shiby app for calculations here
     SE_B_SCQE_outcome <- sqrt( (1/(N-1))*( ((Ybar_T1*(1-Ybar_T1))/(pi1^2)) +
                                              ((Ybar_T1-i)^2*(pi1*(1-pi1)))/(pi1^4) ) )
 
-    Beta_SCQE_1C <- c(Beta_SCQE_out)
+    Beta_SCQE_1C <- c(Beta_SCQE_outcome)
     SE_B_SCQE_1C <- c(SE_B_SCQE_outcome)
 
 
