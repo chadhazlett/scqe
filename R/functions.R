@@ -60,6 +60,38 @@ scqe = function(post, treatment, outcome, delta, ...){
   return(r)
 }
 
+
+#KIRSTEN'S ATTEMPT AT ONE COHORT FULL DATA SCQE FUNCTION
+scqe_1cohort = function(treatment, outcome, delta){
+  if(any(delta > 1 | delta < -1)){
+    warning("One or more delta(s) are not in range")
+  }
+  N <- length(treatment) #number of obs
+  pi1 <- sum(tx)/N #number of treated ind/N
+  Ybar_T1 <- sum(outcome)/N #the sum of outcomes for treated and untreated/N
+
+  r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
+  for(i in 1:length(delta)){
+    Beta_SCQE_out <- (Ybar_T1 - i)/pi1 #code adapted from shiby app for calculations here
+    SE_B_SCQE_outcome <- sqrt( (1/(N-1))*( ((Ybar_T1*(1-Ybar_T1))/(pi1^2)) +
+                                             ((Ybar_T1-i)^2*(pi1*(1-pi1)))/(pi1^4) ) )
+
+    Beta_SCQE_1C <- c(Beta_SCQE_out)
+    SE_B_SCQE_1C <- c(SE_B_SCQE_outcome)
+
+
+    r[i,] <- c(delta[i], Beta_SCQE_1C, Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
+
+  }
+  class(r) <- c("scqe", "data.frame")
+  return(r)
+}
+
+
+
+
+
+
 #this is the code for the one cohort case from the shiny app (needs to be adapted?)
 one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max_outcome){
   N <- tr_1C + untr_1C
@@ -161,7 +193,7 @@ summary.scqe = function(scqe.obj){
   # optimize for the "less likely case"
   opt_less_1C <- round(as.numeric(optimize(f = delta.optim.scqe, interval = c(-1,1),
              untreated = untreated, Y_untreated = Y_untreated, treated = treated,
-             Y_treated = Y_treated, obj = "less", tol = 0.0001)[1]), 3))
+             Y_treated = Y_treated, obj = "less", tol = 0.0001)[1]), 3)
 
   # claim: treatment makes outcome less likely
   cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",
