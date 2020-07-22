@@ -159,7 +159,7 @@ plot.scqe = function(scqe.obj){
 #' # give example here
 #'
 #' @export
-delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_untreated, obj, specified = NULL){
+delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, obj, specified = NULL){
 
   N <- treated + untreated
   pi1 <- treated/N
@@ -199,6 +199,10 @@ summary.scqe = function(scqe.obj){
   cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",
       opt_less_1C())#, "or", ifelse(opt_bnft_2C() > opt_harm_2C(), "greater.\"", "less.\"")
       #max(scqe.out[which((scqe.out$conf.high < 0)),1]) ,"or above.")
+
+  opt_harm_1C <- round(as.numeric(optimize(f = delta.optim.scqe, interval = c(-1,1),
+                                           untreated = untreated, Y_untreated = Y_untreated, treated = treated,
+                                           Y_treated = Y_treated, obj = "harm", tol = 0.0001)[1]), 3)
 
   # claim: treatment had 0 effect
   cat("To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
