@@ -144,8 +144,11 @@ one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max
 #' @export
 #'
 plot.scqe = function(scqe.obj){
-  return(ggplot2::ggplot() +
-           ggplot2::geom_pointrange(data=scqe.obj, mapping=aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high),  size=.5,shape=16) +ggplot2::ylab("Average treatment effect on treated") +ggplot2::xlab("Delta") + ggplot2::coord_flip() + ggplot2::theme_bw() + ggplot2::geom_hline(yintercept = 0, color="gray50"))
+  return(ggplot2::ggplot(scqe.obj, ggplot2::aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high)) +
+           ggplot2::geom_pointrange(size=.5, shape=16) +
+           ggplot2::ylab("Average treatment effect on treated") +
+           ggplot2::xlab("Delta") + ggplot2::coord_flip() + ggplot2::theme_bw() +
+           ggplot2::geom_hline(yintercept = 0, color="gray50"))
 }
 
 #' Delta optimization method for \code{scqe}
@@ -180,7 +183,7 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, o
 #' Summary method for \code{scqe}
 #' @rdname summary.scqe
 #' @description
-#' The \code{print} method provides...
+#' The \code{summary} method provides...
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
