@@ -10,7 +10,7 @@
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
 }
 \description{
-The \code{print} method provides...
+The \code{summary} method provides...
 }
 \examples{
 # give example here

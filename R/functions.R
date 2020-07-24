@@ -61,7 +61,33 @@ scqe = function(post, treatment, outcome, delta, ...){
 }
 
 
-#KIRSTEN'S ATTEMPT AT ONE COHORT FULL DATA SCQE FUNCTION
+#' Stability controlled quasi-experiment (scqe) for 1 cohort case
+#'
+#' @description
+#' This function returns the scqe estimates, standard deviations,  confidence
+#' intervals for the one cohort case. This function is similar to the main scqe function
+#' but does not have 2 cohort (ie there is only one measurement time (no "post" input)).
+#'
+#' @param treatment Binary or continuous vector correspoding (usually) to 0,1
+#'   (no treatment or treatment) for each observation.
+#' @param outcome Continuous vector representing the outcome for each
+#'   observation.
+#' @param delta Can take either a single value or vector of possible values for
+#'   delta.
+#'
+#' @references  Hazlett, C. (?)
+#'
+#' @examples
+#' # Put examples here!
+#' set.seed(1234)
+#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
+#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#'
+#' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
+#'
+#' plot(scqe_1cohort.out)
+#'
+#'@export
 scqe_1cohort = function(treatment, outcome, delta){
   if(any(delta > 1 | delta < -1)){
     warning("One or more delta(s) are not in range")
@@ -92,7 +118,7 @@ scqe_1cohort = function(treatment, outcome, delta){
 
 
 
-#this is the code for the one cohort case from the shiny app (needs to be adapted?)
+#this is the code for the one cohort case from the shiny app for summary stats case (needs to be adapted?)
 one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max_outcome){
   N <- tr_1C + untr_1C
   pi1 <- tr_1C/N
