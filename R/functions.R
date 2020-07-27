@@ -81,8 +81,7 @@ scqe = function(post, treatment, outcome, delta, ...){
 #' # Put examples here!
 #' set.seed(1234)
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' post = c(rep(0,100), rep(1,100))
-#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#' y = rbinom(n=200, prob = .25, size=1)
 #'
 #'
 #' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
@@ -240,8 +239,7 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #' @examples
 #' set.seed(1234)
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' post = c(rep(0,100), rep(1,100))
-#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#' y = rbinom(n=200, prob = .25, size=1)
 #'
 #'
 #' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
