@@ -81,7 +81,9 @@ scqe = function(post, treatment, outcome, delta, ...){
 #' # Put examples here!
 #' set.seed(1234)
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
+#' post = c(rep(0,100), rep(1,100))
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#'
 #'
 #' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
 #'
@@ -177,6 +179,7 @@ plot.scqe = function(scqe.obj){
            ggplot2::geom_hline(yintercept = 0, color="gray50"))
 }
 
+
 #' Delta optimization method for \code{scqe}
 #' @rdname delta.optim.scqe
 #' @description
@@ -206,6 +209,27 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, o
 }
 
 
+
+
+#DELTA OPTIM FXN FOR 1C CASE WITH FULL DATA
+delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = NULL){
+
+  N <- length(treatment)
+  pi1 <- sum(treatment)/N
+  Ybar_T1 <- sum(outcome)/N
+
+  Beta_SCQE_1C <- (Ybar_T1 - delta)/pi1
+
+  SE_B_SCQE_1C <- sqrt( (1/(N-1))*( ((Ybar_T1*(1-Ybar_T1))/(pi1^2)) +
+                                      ((Ybar_T1-delta)^2*(pi1*(1-pi1)))/(pi1^4) ) )
+
+  if(obj == "zero"){return(Beta_SCQE_1C^2)}
+  if(obj == "less"){return((Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)^2)}
+  if(obj == "harm"){return((Beta_SCQE_1C - 1.96*SE_B_SCQE_1C)^2)}
+  if(obj == "spec"){return((specified - Beta_SCQE_1C)^2)}
+}
+
+
 #' Summary method for \code{scqe}
 #' @rdname summary.scqe
 #' @description
@@ -214,31 +238,41 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, o
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
 #' @examples
-#' # give example here
+#' set.seed(1234)
+#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
+#' post = c(rep(0,100), rep(1,100))
+#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#'
+#'
+#' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
+#'
+#' plot(scqe_1cohort.out)
+#' summary(scqe_1cohort.out)
 #'
 #' @export
 summary.scqe = function(scqe.obj){
 
   # optimize for the "less likely case"
-  opt_less_1C <- round(as.numeric(optimize(f = delta.optim.scqe, interval = c(-1,1),
-             untreated = untreated, Y_untreated = Y_untreated, treated = treated,
-             Y_treated = Y_treated, obj = "less", tol = 0.0001)[1]), 3)
+  opt_less_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
+             treatment=tx, outcome=y, obj = "less", tol = 0.0001)[1]), 3)
 
   # claim: treatment makes outcome less likely
   cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",
-      opt_less_1C())#, "or", ifelse(opt_bnft_2C() > opt_harm_2C(), "greater.\"", "less.\"")
-      #max(scqe.out[which((scqe.out$conf.high < 0)),1]) ,"or above.")
+      opt_less_1C_full)
 
-  opt_harm_1C <- round(as.numeric(optimize(f = delta.optim.scqe, interval = c(-1,1),
-                                           untreated = untreated, Y_untreated = Y_untreated, treated = treated,
-                                           Y_treated = Y_treated, obj = "harm", tol = 0.0001)[1]), 3)
-
-  # claim: treatment had 0 effect
-  cat("To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
-      scqe.out[which(scqe.out$estimate == 0),1],".")
-
+  #optimize for "more likely case"
+  opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
+                                                treatment=tx, outcome=y, obj = "harm", tol = 0.0001)[1]), 3)
   # claim: treatment makes outcome more likely
-  cat("To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was",
-      min(scqe.out[which((scqe.out$conf.low > 0)),1]) ,"or below.")
+  cat("\n To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was",
+      opt_harm_1C_full)
+
+  # optimize for the "no effect case"
+  opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
+                                                treatment=tx, outcome=y, obj = "zero", tol = 0.0001)[1]), 3)
+
+  #claim: treatment had 0 effect
+  cat("\n To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
+      opt_zero_1C_full)
 
 }
