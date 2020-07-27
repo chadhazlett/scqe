@@ -14,7 +14,7 @@
 #' @name scqe-package
 NULL
 
-#' Stability controlled quasi-experiment (scqe)
+#' Stability controlled quasi-experiment (scqe) for 2 cohort case FULL DATA
 #'
 #' @description
 #' This function returns the scqe estimates, standard deviations,  confidence
@@ -61,7 +61,7 @@ scqe = function(post, treatment, outcome, delta, ...){
 }
 
 
-#' Stability controlled quasi-experiment (scqe) for 1 cohort case
+#' Stability controlled quasi-experiment (scqe) for 1 cohort case with FULL DATA
 #'
 #' @description
 #' This function returns the scqe estimates, standard deviations,  confidence
@@ -119,7 +119,31 @@ scqe_1cohort = function(treatment, outcome, delta){
 
 
 
-#this is the code for the one cohort case from the shiny app for summary stats case (needs to be adapted?)
+#' Stability controlled quasi-experiment (scqe) for 1 cohort case SUMMARY STATISTICS AS INPUT
+#'
+#' @description
+#' This function returns the scqe estimates, standard deviations,  confidence
+#' intervals for the one cohort case. This function is similar to the main scqe function
+#' but does not have 2 cohorts (ie there is only one measurement time (no "post" input)).
+#' It takes in summary statistics about the data instead of the full data.
+#'
+#' @param untr_1C Number of unreated individuals.
+#' @param Y_untr_1C Outcome for untreated individuals.
+#' @param tr_1C Number of treated individuals.
+#' @param Y_tr_1C Outcome for treated individuals.
+#' @param min_outcome Minimum possible delta.
+#' @param max_outcome Maximum possible delta.
+#'
+#' @references  Hazlett, C. (?)
+#'
+#' @examples
+#' # Put examples here!
+#' set.seed(1234)
+#' one_cohort_scqe.out <- one_cohort_scqe(200, 5, 50, 25, .1, 1)
+#' plot(one_cohort_scqe.out)
+#'
+#'
+#'@export
 one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max_outcome){
   N <- tr_1C + untr_1C
   pi1 <- tr_1C/N
@@ -152,6 +176,8 @@ one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max
   SCQE_1C_df <- data.frame(assumed_nontreat_outcome = outcome_list, SCQE_estimate = Beta_SCQE_1C, SCQE_stderr = SE_B_SCQE_1C,
                            term = outcome_list, estimate = Beta_SCQE_1C,
                            conf.low = Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
+
+  class(SCQE_1C_df) <- c("scqe", "data.frame")
   return(SCQE_1C_df)
 
 }
@@ -178,6 +204,10 @@ plot.scqe = function(scqe.obj){
            ggplot2::geom_hline(yintercept = 0, color="gray50"))
 }
 
+
+
+
+#the below function is for the summary statistics 1c case
 
 #' Delta optimization method for \code{scqe}
 #' @rdname delta.optim.scqe
@@ -210,7 +240,8 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, o
 
 
 
-#DELTA OPTIM FXN FOR 1C CASE WITH FULL DATA
+#DELTA OPTIM FOR 1C FULL DATA CASE:
+
 delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = NULL){
 
   N <- length(treatment)
@@ -229,6 +260,13 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 }
 
 
+
+
+
+
+
+#Right now this is only working for 1C full data case example/I am having trouble making it work more generally:
+
 #' Summary method for \code{scqe}
 #' @rdname summary.scqe
 #' @description
@@ -240,7 +278,6 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #' set.seed(1234)
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 #' y = rbinom(n=200, prob = .25, size=1)
-#'
 #'
 #' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
 #'
