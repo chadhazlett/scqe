@@ -62,6 +62,7 @@ scqe = function(post, treatment, outcome, delta, ...){
   treatment <<- treatment
   outcome <<- outcome
   delta <<- delta
+  cohort <<- 2
   class(r) <- c("scqe", "data.frame")
   return(r)
 }
@@ -127,6 +128,7 @@ scqe_1cohort = function(treatment, outcome, delta){
   treatment <<- treatment
   outcome <<- outcome
   delta <<- delta
+  cohort <<- 1
   class(r) <- c("scqe", "data.frame")
   return(r)
 
@@ -569,28 +571,56 @@ plot.scqe = function(scqe.obj){
 #'
 #' @export
 summary.scqe = function(scqe.obj){
+  if(cohort == 2){
+    # optimize for the "less likely case"
+    opt_less_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
+                                                  treatment=treatment, outcome=outcome,post=post,obj = "less", tol = 0.0001)[1]), 3)
 
-  # optimize for the "less likely case"
-  opt_less_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
-             treatment=treatment, outcome=outcome,post=post,obj = "less", tol = 0.0001)[1]), 3)
+    # claim: treatment makes outcome less likely
+    cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",
+        opt_less_1C_full)
 
-  # claim: treatment makes outcome less likely
-  cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",
-      opt_less_1C_full)
+    #optimize for "more likely case"
+    opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
+                                                  treatment=treatment, outcome=outcome, post=post, obj = "harm", tol = 0.0001)[1]), 3)
+    # claim: treatment makes outcome more likely
+    cat("\n To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was",
+        opt_harm_1C_full)
 
-  #optimize for "more likely case"
-  opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
-                                                treatment=treatment, outcome=outcome, post=post, obj = "harm", tol = 0.0001)[1]), 3)
-  # claim: treatment makes outcome more likely
-  cat("\n To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was",
-      opt_harm_1C_full)
+    # optimize for the "no effect case"
+    opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
+                                                  treatment=treatment, outcome=outcome,post=post, obj = "zero", tol = 0.0001)[1]), 3)
 
-  # optimize for the "no effect case"
-  opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
-                                                treatment=treatment, outcome=outcome,post=post, obj = "zero", tol = 0.0001)[1]), 3)
+    #claim: treatment had 0 effect
+    cat("\n To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
+        opt_zero_1C_full)
 
-  #claim: treatment had 0 effect
-  cat("\n To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
-      opt_zero_1C_full)
+
+
+  }else{
+    # optimize for the "less likely case"
+    opt_less_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
+                                                  treatment=treatment, outcome=outcome,obj = "less", tol = 0.0001)[1]), 3)
+
+    # claim: treatment makes outcome less likely
+    cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",
+        opt_less_1C_full)
+
+    #optimize for "more likely case"
+    opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
+                                                  treatment=treatment, outcome=outcome,  obj = "harm", tol = 0.0001)[1]), 3)
+    # claim: treatment makes outcome more likely
+    cat("\n To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was",
+        opt_harm_1C_full)
+
+    # optimize for the "no effect case"
+    opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
+                                                  treatment=treatment, outcome=outcome, obj = "zero", tol = 0.0001)[1]), 3)
+
+    #claim: treatment had 0 effect
+    cat("\n To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
+        opt_zero_1C_full)
+
+  }
 
 }
