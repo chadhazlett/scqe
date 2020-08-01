@@ -42,6 +42,7 @@ NULL
 #' scqe.out = scqe(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
 #'
 #' plot(scqe.out)
+#' summary(scqe.out)
 #'
 #'@export
 scqe = function(post, treatment, outcome, delta, ...){
@@ -100,6 +101,7 @@ scqe = function(post, treatment, outcome, delta, ...){
 #'
 #' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
 #' plot(scqe_1cohort.out)
+#' summary(scqe_1cohort.out)
 #'
 #'
 #'
@@ -143,6 +145,7 @@ scqe_1cohort = function(treatment, outcome, delta){
 # set.seed(1234)
 # delta_range_SCQE.out <- delta_range_SCQE(200, 150, 50, 0, 20, 1, 5, 0, .1, 1)
 # plot(delta_range_SCQE.out)
+#summary(delta_range_SCQE.out)
 #2c summary stat case
 delta_range_SCQE <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
                              Y_untr_post,Y_tr_pre,Y_untr_pre,
@@ -227,6 +230,10 @@ delta_range_SCQE <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
   SCQE_2C_df <- data.frame(assumed_pre2post_shift = delta_list, SCQE_estimate = Beta_SCQE, SCQE_stderr = SE_B_SCQE,
                            term = delta_list, estimate = Beta_SCQE,
                            conf.low = Beta_SCQE - 1.96*SE_B_SCQE, conf.high = Beta_SCQE + 1.96*SE_B_SCQE)
+  cohort <<- 2
+  treatment <<- c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post))
+  outcome <<-c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) )  , rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post))    ,rep(1,Y_tr_pre),rep(0, ifelse(tr_pre-Y_tr_pre<0,0,tr_pre-Y_tr_pre))  ,   rep(1,Y_tr_post),rep(0, ifelse(tr_post-Y_tr_post<0,0,tr_post-Y_tr_post)) )
+  post <<- c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post))
   class(SCQE_2C_df) <- c("scqe","data.frame")
   return(SCQE_2C_df)
   #return(list(delta_list = delta_list, Beta_SCQE = Beta_SCQE, SE_B_SCQE = SE_B_SCQE))
@@ -259,6 +266,7 @@ delta_range_SCQE <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 #' set.seed(1234)
 #' one_cohort_scqe.out <- one_cohort_scqe(200, 5, 50, 25, .1, 1)
 #' plot(one_cohort_scqe.out)
+#' summary(one_cohort_scqe.out)
 #'
 #'
 #'@export
@@ -297,7 +305,7 @@ one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max
 
 
   treatment <<- c(rep(0,untr_1C),rep(1,tr_1C))
-  outcome <<- c(rep(1,Y_untr_1C),rep(0, untr_1C - Y_untr_1C), rep(1,Y_tr_1C),rep(0, tr_1C - Y_untr_1C))
+  outcome <<- c(rep(1,Y_untr_1C),rep(0, ifelse(untr_1C - Y_untr_1C <0,0,untr_1C - Y_untr_1C )), rep(1,Y_tr_1C),rep(0, ifelse(tr_1C - Y_untr_1C <0,0,tr_1C - Y_untr_1C)))
   cohort <<- 1
   class(SCQE_1C_df) <- c("scqe", "data.frame")
   return(SCQE_1C_df)
