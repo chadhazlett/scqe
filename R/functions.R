@@ -295,6 +295,10 @@ one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max
                            term = outcome_list, estimate = Beta_SCQE_1C,
                            conf.low = Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
 
+
+  treatment <<- c(rep(0,untr_1C),rep(1,tr_1C))
+  outcome <<- c(rep(1,Y_untr_1C),rep(0, untr_1C - Y_untr_1C), rep(1,Y_tr_1C),rep(0, tr_1C - Y_untr_1C))
+  cohort <<- 1
   class(SCQE_1C_df) <- c("scqe", "data.frame")
   return(SCQE_1C_df)
 
