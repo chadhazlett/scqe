@@ -14,6 +14,216 @@
 #' @name scqe-package
 NULL
 
+
+##FIRST ATTEMPT AT COMBINING ALL FOUR CASES INTO ONE FXN
+
+scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
+                        Y_untr_post,Y_tr_pre,Y_untr_pre,
+                        min_delta, max_delta){
+  if(cohort == 1){
+    #this is the 1 cohort summary stats fxn
+    if(missing(post) & missing(treatment) & missing(outcome)){
+        N <- tr_1C + untr_1C
+        pi1 <- tr_1C/N
+        Ybar_T1 <- (Y_tr_1C + Y_untr_1C)/N
+
+        if(min_outcome == max_outcome){
+          #spread out the outcome range to +/- 0.2 from the single entered
+          #outcome rate, ensuring the range doesn't go beyond the possible bounds
+          min_outcome <- max(0, min_outcome - 0.20)
+          max_outcome <- min(0.99, min_outcome + 0.40)
+          min_outcome <- max_outcome - 0.40
+        }
+
+        outcome_list <- seq(from = max_outcome, to = min_outcome, length.out = 11)
+
+        Beta_SCQE_1C <- NULL
+        SE_B_SCQE_1C <- NULL
+
+        for(Y_T0 in outcome_list){
+
+          Beta_SCQE_outcome <- (Ybar_T1 - Y_T0)/pi1
+
+          SE_B_SCQE_outcome <- sqrt( (1/(N-1))*( ((Ybar_T1*(1-Ybar_T1))/(pi1^2)) +
+                                                   ((Ybar_T1-Y_T0)^2*(pi1*(1-pi1)))/(pi1^4) ) )
+
+          Beta_SCQE_1C <- c(Beta_SCQE_1C, Beta_SCQE_outcome)
+          SE_B_SCQE_1C <- c(SE_B_SCQE_1C, SE_B_SCQE_outcome)
+        }
+
+        r <- data.frame(assumed_nontreat_outcome = outcome_list, SCQE_estimate = Beta_SCQE_1C, SCQE_stderr = SE_B_SCQE_1C,
+                                 term = outcome_list, estimate = Beta_SCQE_1C,
+                                 conf.low = Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
+
+
+        treatment <<- c(rep(0,untr_1C),rep(1,tr_1C))
+        outcome <<- c(rep(1,Y_untr_1C),rep(0, ifelse(untr_1C - Y_untr_1C <0,0,untr_1C - Y_untr_1C )), rep(1,Y_tr_1C),rep(0, ifelse(tr_1C - Y_untr_1C <0,0,tr_1C - Y_untr_1C)))
+        class(r) <- c("scqe", "data.frame")
+        return(r)
+
+
+
+
+    }else{
+      #this is the 1 cohort full data function
+        if(any(delta > 1 | delta < -1)){
+          warning("One or more delta(s) are not in range")
+        }
+        N <- length(treatment) #number of obs
+        pi1 <- sum(treatment)/N #number of treated ind/N
+        Ybar_T1 <- sum(outcome)/N #the sum of outcomes for treated and untreated/N
+
+        r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
+        for(i in 1:length(delta)){
+          Beta_SCQE_outcome <- (Ybar_T1 - delta[i])/pi1 #code adapted from shiby app for calculations here
+          SE_B_SCQE_outcome <- sqrt( (1/(N-1))*( ((Ybar_T1*(1-Ybar_T1))/(pi1^2)) +
+                                                   ((Ybar_T1-delta[i])^2*(pi1*(1-pi1)))/(pi1^4) ) )
+
+          Beta_SCQE_1C <- c(Beta_SCQE_outcome)
+          SE_B_SCQE_1C <- c(SE_B_SCQE_outcome)
+
+
+          r[i,] <- c(delta[i], Beta_SCQE_1C, Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
+
+        }
+        treatment <<- treatment
+        outcome <<- outcome
+        delta <<- delta
+        class(r) <- c("scqe", "data.frame")
+        return(r)
+
+
+    }
+  }
+  if(cohort==2){
+    #this is the 2 cohort summary stats case
+    if(missing(post) & missing(treatment) & missing(outcome)){
+        if(max_delta == min_delta){
+          #spread out the delta range to +/- 0.2 from the single entered
+          #delta, ensuring the range doesn't go beyond the possible bounds
+          min_delta <- max(-0.99, min_delta - 0.20)
+          max_delta <- min(0.99, min_delta + 0.40)
+          min_delta <- max_delta - 0.40
+        }
+
+        delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
+
+        N_pre <- untr_pre + tr_pre
+        N_post <- untr_post + tr_post
+        N <- N_pre + N_post
+        Y_pre <- Y_tr_pre + Y_untr_pre
+        Y_post <- Y_tr_post + Y_untr_post
+
+        P_T1 <- N_post/N
+        P_D1 <- (tr_post + tr_pre)/N
+        P_D1_T1 <- tr_post/N
+        P_D1_T0 <- tr_pre/N
+        P_D0_T1 <- (N_post - tr_post)/N
+        P_D0_T0 <- (N_pre - tr_pre)/N
+
+        P_T1_D1_Y1 <- Y_tr_post/N
+        P_T0_D1_Y1 <- Y_tr_pre/N
+        P_T1_D0_Y1 <- Y_untr_post/N
+        P_T0_D0_Y1 <- Y_untr_pre/N
+        P_T1_D1_Y0 <- (tr_post - Y_tr_post)/N
+        P_T0_D1_Y0 <- (tr_pre - Y_tr_pre)/N
+        P_T1_D0_Y0 <- (N_post - tr_post - Y_untr_post)/N
+        P_T0_D0_Y0 <- (N_pre - tr_pre - Y_untr_pre)/N
+
+        Beta_SCQE <- NULL
+        SE_B_SCQE <- NULL
+
+        for(d in delta_list){
+
+          #mean(delta_Y[post==1])
+          #mean(outcome[post==1])-delta
+          #mean(outcome&post)/mean(post) - delta
+          tildeY_in_post <- Y_post/N_post - d ###
+
+          #mean(delta_Y[post==0])
+          #mean(outcome[post==0])
+          #mean(outcome&!post)/mean(!post)
+          tildeY_in_pre <- Y_pre/N_pre
+
+          #mean(tr[post==1])
+          #mean(tr==1&post==1)/mean(post==1)
+          tr_in_post <- tr_post/N_post
+
+          #mean(tr[post==0])
+          #mean(tr==1&post==0)/mean(post==0)
+          tr_in_pre <- tr_pre/N_pre
+
+          Beta_SCQE_delta <- (tildeY_in_post - tildeY_in_pre) / (tr_in_post - tr_in_pre) ###
+
+          #mean(delta_Y)
+          #mean(outcome) - delta*mean(post)
+          tildeY_all <- (Y_pre + Y_post - d*N_post)/N ###
+
+          Beta_0 <- tildeY_all - Beta_SCQE_delta*P_D1 ###
+
+
+          SE_B_SCQE_delta <- sqrt((P_T1*(1-P_T1))/(N-2)
+                                  *(P_T1_D1_Y1*(1-d-Beta_0-Beta_SCQE_delta)^2 + P_T1_D0_Y1*(1-d-Beta_0)^2 +
+                                      P_T1_D1_Y0*(-d-Beta_0-Beta_SCQE_delta)^2 + P_T1_D0_Y0*(-d-Beta_0)^2 +
+                                      P_T0_D1_Y1*(1-Beta_0-Beta_SCQE_delta)^2 + P_T0_D0_Y1*(1-Beta_0)^2 +
+                                      P_T0_D1_Y0*(-Beta_0-Beta_SCQE_delta)^2 + P_T0_D0_Y0*(-Beta_0)^2)
+          )/
+            (P_D1_T1*(1-P_D1)*(1-P_T1) + P_D1_T0*(1-P_D1)*(-P_T1) +
+               P_D0_T1*(-P_D1)*(1-P_T1) + P_D0_T0*(-P_D1)*(-P_T1))      ###
+
+          Beta_SCQE <- c(Beta_SCQE, Beta_SCQE_delta)
+          SE_B_SCQE <- c(SE_B_SCQE, SE_B_SCQE_delta)
+        }
+        r <- data.frame(assumed_pre2post_shift = delta_list, SCQE_estimate = Beta_SCQE, SCQE_stderr = SE_B_SCQE,
+                                 term = delta_list, estimate = Beta_SCQE,
+                                 conf.low = Beta_SCQE - 1.96*SE_B_SCQE, conf.high = Beta_SCQE + 1.96*SE_B_SCQE)
+
+        treatment <<- c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post))
+        outcome <<-c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) )  , rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post))    ,rep(1,Y_tr_pre),rep(0, ifelse(tr_pre-Y_tr_pre<0,0,tr_pre-Y_tr_pre))  ,   rep(1,Y_tr_post),rep(0, ifelse(tr_post-Y_tr_post<0,0,tr_post-Y_tr_post)) )
+        post <<- c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post))
+        class(r) <- c("scqe","data.frame")
+        return(r)
+        #return(list(delta_list = delta_list, Beta_SCQE = Beta_SCQE, SE_B_SCQE = SE_B_SCQE))
+
+    }else{
+      #this is the 2 cohort full data case OG scqe
+        if(any(delta > 1 | delta < -1)){
+          warning("One or more delta(s) are not in range")
+        }
+        y2 = outcome - post %*% t(delta)
+        r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
+        for (i in 1:length(delta)){
+          iv.out = summary(AER::ivreg(y2[,i] ~ treatment | post))
+          est = iv.out$coef["treatment",1]
+          se = iv.out$coef["treatment",2]
+          conf.low = est - 1.96*se
+          conf.high = est + 1.96*se
+          r[i,] = c(delta[i], est, conf.low, conf.high)
+        }
+        post <<- post
+        treatment <<- treatment
+        outcome <<- outcome
+        delta <<- delta
+        cohort <<- 2
+        class(r) <- c("scqe", "data.frame")
+        return(r)
+
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 ## 2 COHORT CASE FULL DATA FXN
 
 #' Stability controlled quasi-experiment (scqe) for 2 cohort case FULL DATA
@@ -78,7 +288,7 @@ scqe = function(post, treatment, outcome, delta, ...){
 
 #' Stability controlled quasi-experiment (scqe) for 1 cohort case with FULL DATA
 #'
-#' @description
+#'@description
 #' This function returns the scqe estimates, standard deviations,  confidence
 #' intervals for the one cohort case. This function is similar to the main scqe function
 #' but does not have 2 cohort (ie there is only one measurement time (no "post" input)).
