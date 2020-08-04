@@ -31,6 +31,7 @@ It takes in summary statistics about the data instead of the full data.
 set.seed(1234)
 one_cohort_scqe.out <- one_cohort_scqe(200, 5, 50, 25, .1, 1)
 plot(one_cohort_scqe.out)
+summary(one_cohort_scqe.out)
 
 
 }

@@ -17,25 +17,67 @@ NULL
 
 ##FIRST ATTEMPT AT COMBINING ALL FOUR CASES INTO ONE FXN
 
+
+
+#' Stability controlled quasi-experiment (scqe)
+#'
+#'@description
+#'
+#' @param treatment Binary or continuous vector correspoding (usually) to 0,1
+#'   (no treatment or treatment) for each observation.
+#' @param outcome Continuous vector representing the outcome for each
+#'   observation.
+#' @param delta Can take either a single value or vector of possible values for
+#'   delta.
+#'
+#' @references  Hazlett, C. (?)
+#'
+#' @examples
+#' set.seed(1234)
+#' post = c(rep(0,100), rep(1,100))
+#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
+#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#'
+#' 2 COHORT, FULL DATA
+#' scqe_master.out = scqe_master(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1), cohort=2)
+#' plot(scqe_master.out)
+#' summary(scqe_master.out)
+#'
+#' 1 COHORT, FULL DATA
+#' master_scqe.out = master_scqe(treatment=tx, outcome=y, delta=c(-0.1,0,.1), cohort=1)
+#' plot(scqe_master.out)
+#' summary(scqe_master.out)
+#'
+#' 1 COHORT, SUMMARY STATS
+#' master_scqe.out = scqe_master(untr=100,tr=200,Y_untr=5,Y_tr=50,min_delta=.1,max_delta=1,cohort=1)
+#' plot(scqe_master.out)
+#' summary(scqe_master.out)
+#'
+#' 2 COHORT, SUMMARY STATS
+#' master_scqe.out = scqe_master(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=1,Y_untr_pre=5,min_delta=.1, max_delta=1,cohort=2)
+#' plot(scqe_master.out)
+#' summary(scqe_master.out)
+#'
+#'@export
 scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
-                        Y_untr_post,Y_tr_pre,Y_untr_pre,
+                        Y_untr_post,Y_tr_pre,Y_untr_pre, untr,tr,Y_tr,Y_untr,
                         min_delta, max_delta){
   if(cohort == 1){
     #this is the 1 cohort summary stats fxn
     if(missing(post) & missing(treatment) & missing(outcome)){
-        N <- tr_1C + untr_1C
-        pi1 <- tr_1C/N
-        Ybar_T1 <- (Y_tr_1C + Y_untr_1C)/N
+        N <- tr + untr
+        pi1 <- tr/N
+        Ybar_T1 <- (Y_tr + Y_untr)/N
 
-        if(min_outcome == max_outcome){
+        if(min_delta == max_delta){
           #spread out the outcome range to +/- 0.2 from the single entered
           #outcome rate, ensuring the range doesn't go beyond the possible bounds
-          min_outcome <- max(0, min_outcome - 0.20)
-          max_outcome <- min(0.99, min_outcome + 0.40)
-          min_outcome <- max_outcome - 0.40
+          min_delta <- max(0, min_delta - 0.20)
+          max_delta <- min(0.99, min_delta + 0.40)
+          min_delta <- max_delta - 0.40
         }
 
-        outcome_list <- seq(from = max_outcome, to = min_outcome, length.out = 11)
+        outcome_list <- seq(from = max_delta, to = min_delta, length.out = 11)
 
         Beta_SCQE_1C <- NULL
         SE_B_SCQE_1C <- NULL
@@ -56,9 +98,10 @@ scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_p
                                  conf.low = Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
 
 
-        treatment <<- c(rep(0,untr_1C),rep(1,tr_1C))
-        outcome <<- c(rep(1,Y_untr_1C),rep(0, ifelse(untr_1C - Y_untr_1C <0,0,untr_1C - Y_untr_1C )), rep(1,Y_tr_1C),rep(0, ifelse(tr_1C - Y_untr_1C <0,0,tr_1C - Y_untr_1C)))
+        treatment <<- c(rep(0,untr),rep(1,tr))
+        outcome <<- c(rep(1,Y_untr),rep(0, ifelse(untr - Y_untr <0,0,untr - Y_untr )), rep(1,Y_tr),rep(0, ifelse(tr - Y_untr <0,0,tr - Y_untr)))
         class(r) <- c("scqe", "data.frame")
+        cohort <<- 1
         return(r)
 
 
@@ -87,6 +130,7 @@ scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_p
 
         }
         treatment <<- treatment
+        cohort <<- 1
         outcome <<- outcome
         delta <<- delta
         class(r) <- c("scqe", "data.frame")
@@ -181,6 +225,7 @@ scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_p
         treatment <<- c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post))
         outcome <<-c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) )  , rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post))    ,rep(1,Y_tr_pre),rep(0, ifelse(tr_pre-Y_tr_pre<0,0,tr_pre-Y_tr_pre))  ,   rep(1,Y_tr_post),rep(0, ifelse(tr_post-Y_tr_post<0,0,tr_post-Y_tr_post)) )
         post <<- c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post))
+        cohort <<- 2
         class(r) <- c("scqe","data.frame")
         return(r)
         #return(list(delta_list = delta_list, Beta_SCQE = Beta_SCQE, SE_B_SCQE = SE_B_SCQE))

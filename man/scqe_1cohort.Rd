@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{scqe_1cohort}
 \alias{scqe_1cohort}
-\title{Stability controlled quasi-experiment (scqe) for 1 cohort case}
+\title{Stability controlled quasi-experiment (scqe) for 1 cohort case with FULL DATA}
 \usage{
 scqe_1cohort(treatment, outcome, delta)
 }
@@ -29,8 +29,10 @@ y = rbinom(n=200, prob = .25, size=1)
 
 
 scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-
 plot(scqe_1cohort.out)
+summary(scqe_1cohort.out)
+
+
 
 }
 \references{
