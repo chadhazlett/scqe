@@ -23,14 +23,31 @@ NULL
 #'
 #'@description
 #'
+#' @param post
 #' @param treatment Binary or continuous vector correspoding (usually) to 0,1
 #'   (no treatment or treatment) for each observation.
 #' @param outcome Continuous vector representing the outcome for each
 #'   observation.
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
+#' @param cohort 1 or 2 depending existence of time element.
+#' @param untr_pre Integer number of untreated patients in the first cohort if applicable (T=0).
+#' @param untr_post Integer number of untreated patients in the second cohort if applicable (T=1).
+#' @param tr_post Integer number of treated patients in the second cohort if applicable (T=1).
+#' @param tre_pre Integer number of treated patients in the first cohort if applicable (T=0).
+#' @param Y_tr_post Outcome for patients who received treatment at time T=1.
+#' @param Y_untr_post Outcome for patients who did not receive treatment at time T=1.
+#' @param Y_tr_pre Outcome for patients who did receive treatment at time T=0.
+#' @param Y_untr_pre Outcome for patients who did not receive treatment at time T=0.
+#' @param untr Integer number of untreated patients.
+#' @param tr Integer number of treated patients.
+#' @param Y_tr Outcome for treated patients.
+#' @param min_delta Minimum delta.
+#' @param max_delta Maximum delta.
 #'
-#' @references  Hazlett, C. (?)
+#'
+#'
+#' @references  Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
 #'
 #' @examples
 #' set.seed(1234)

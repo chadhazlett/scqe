@@ -17,6 +17,34 @@ observation.}
 
 \item{delta}{Can take either a single value or vector of possible values for
 delta.}
+
+\item{cohort}{1 or 2 depending existence of time element.}
+
+\item{untr_pre}{Integer number of untreated patients in the first cohort if applicable (T=0).}
+
+\item{untr_post}{Integer number of untreated patients in the second cohort if applicable (T=1).}
+
+\item{tr_post}{Integer number of treated patients in the second cohort if applicable (T=1).}
+
+\item{Y_tr_post}{Outcome for patients who received treatment at time T=1.}
+
+\item{Y_untr_post}{Outcome for patients who did not receive treatment at time T=1.}
+
+\item{Y_tr_pre}{Outcome for patients who did receive treatment at time T=0.}
+
+\item{Y_untr_pre}{Outcome for patients who did not receive treatment at time T=0.}
+
+\item{untr}{Integer number of untreated patients.}
+
+\item{tr}{Integer number of treated patients.}
+
+\item{Y_tr}{Outcome for treated patients.}
+
+\item{min_delta}{Minimum delta.}
+
+\item{max_delta}{Maximum delta.}
+
+\item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
 }
 \description{
 
@@ -49,5 +77,5 @@ summary(scqe_master.out)
 
 }
 \references{
-Hazlett, C. (?)
+Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
 }
