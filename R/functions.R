@@ -61,19 +61,21 @@ NULL
 #' summary(scqe_master.out)
 #'
 #' 1 COHORT, FULL DATA
-#' master_scqe.out = master_scqe(treatment=tx, outcome=y, delta=c(-0.1,0,.1), cohort=1)
+#' scqe_master.out = scqe_master(treatment=tx, outcome=y, delta=c(-0.1,0,.1), cohort=1)
 #' plot(scqe_master.out)
 #' summary(scqe_master.out)
 #'
 #' 1 COHORT, SUMMARY STATS
-#' master_scqe.out = scqe_master(untr=100,tr=200,Y_untr=5,Y_tr=50,min_delta=.1,max_delta=1,cohort=1)
+#' scqe_master.out = scqe_master(untr=100,tr=200,Y_untr=5,Y_tr=50,min_delta=.1,max_delta=1,cohort=1)
 #' plot(scqe_master.out)
 #' summary(scqe_master.out)
 #'
 #' 2 COHORT, SUMMARY STATS
-#' master_scqe.out = scqe_master(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=1,Y_untr_pre=5,min_delta=.1, max_delta=1,cohort=2)
+#' scqe_master.out = scqe_master(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,Y_untr_pre=5,min_delta=.1, max_delta=1,cohort=2)
 #' plot(scqe_master.out)
 #' summary(scqe_master.out)
+#'
+#' ALL OF THESE MATCH THE SHINY APP RESULTS
 #'
 #'@export
 scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
