@@ -55,6 +55,10 @@ NULL
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
+#'
+#' Set package environment to enable package local variables
+pkg.env <- new.env(parent = emptyenv())
+
 #' 2 COHORT, FULL DATA
 #' scqe_master.out = scqe_master(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1), cohort=2)
 #' plot(scqe_master.out)
@@ -116,11 +120,10 @@ scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_p
                                  term = outcome_list, estimate = Beta_SCQE_1C,
                                  conf.low = Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
 
-
-        treatment <<- c(rep(0,untr),rep(1,tr))
-        outcome <<- c(rep(1,Y_untr),rep(0, ifelse(untr - Y_untr <0,0,untr - Y_untr )), rep(1,Y_tr),rep(0, ifelse(tr - Y_untr <0,0,tr - Y_untr)))
+        assign(treatment, c(rep(0,untr),rep(1,tr)), envir = pkg.env)
+        assign(outcome,c(rep(1,Y_untr),rep(0, ifelse(untr - Y_untr <0,0,untr - Y_untr )), rep(1,Y_tr),rep(0, ifelse(tr - Y_untr <0,0,tr - Y_untr))), envir = pkg.env)
+        assign(cohort, 1, envir = pkg.env)
         class(r) <- c("scqe", "data.frame")
-        cohort <<- 1
         return(r)
 
 
@@ -148,10 +151,10 @@ scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_p
           r[i,] <- c(delta[i], Beta_SCQE_1C, Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
 
         }
-        treatment <<- treatment
-        cohort <<- 1
-        outcome <<- outcome
-        delta <<- delta
+        assign(treatment, treatment, envir = pkg.env)
+        assign(cohort, 1, envir = pkg.env)
+        assign(outcome, outcome, envir = pkg.env)
+        assign(delta, delta, envir = pkg.env)
         class(r) <- c("scqe", "data.frame")
         return(r)
 
@@ -241,10 +244,15 @@ scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_p
                                  term = delta_list, estimate = Beta_SCQE,
                                  conf.low = Beta_SCQE - 1.96*SE_B_SCQE, conf.high = Beta_SCQE + 1.96*SE_B_SCQE)
 
-        treatment <<- c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post))
-        outcome <<-c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) )  , rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post))    ,rep(1,Y_tr_pre),rep(0, ifelse(tr_pre-Y_tr_pre<0,0,tr_pre-Y_tr_pre))  ,   rep(1,Y_tr_post),rep(0, ifelse(tr_post-Y_tr_post<0,0,tr_post-Y_tr_post)) )
-        post <<- c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post))
-        cohort <<- 2
+        #treatment <<- c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post))
+        #outcome <<-c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) )  , rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post))    ,rep(1,Y_tr_pre),rep(0, ifelse(tr_pre-Y_tr_pre<0,0,tr_pre-Y_tr_pre))  ,   rep(1,Y_tr_post),rep(0, ifelse(tr_post-Y_tr_post<0,0,tr_post-Y_tr_post)) )
+        #post <<- c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post))
+        #cohort <<- 2
+        assign(treatment,  c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post)), envir = pkg.env)
+        assign(cohort, 2, envir = pkg.env)
+        assign(outcome, c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) ),
+                          rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post))), envir = pkg.env)
+        assign(post, c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post)), envir = pkg.env)
         class(r) <- c("scqe","data.frame")
         return(r)
         #return(list(delta_list = delta_list, Beta_SCQE = Beta_SCQE, SE_B_SCQE = SE_B_SCQE))
@@ -264,11 +272,12 @@ scqe_master <- function(post, treatment, outcome, delta, cohort, untr_pre,untr_p
           conf.high = est + 1.96*se
           r[i,] = c(delta[i], est, conf.low, conf.high)
         }
-        post <<- post
-        treatment <<- treatment
-        outcome <<- outcome
-        delta <<- delta
-        cohort <<- 2
+
+        assign(post, post, envir = pkg.env)
+        assign(treatment, treatment, envir = pkg.env)
+        assign(cohort, 2, envir = pkg.env)
+        assign(outcome, outcome, envir = pkg.env)
+        assign(delta, delta, envir = pkg.env)
         class(r) <- c("scqe", "data.frame")
         return(r)
 
@@ -333,11 +342,11 @@ scqe = function(post, treatment, outcome, delta, ...){
     conf.high = est + 1.96*se
     r[i,] = c(delta[i], est, conf.low, conf.high)
   }
-  post <<- post
-  treatment <<- treatment
-  outcome <<- outcome
-  delta <<- delta
-  cohort <<- 2
+  assign(post, post, envir = pkg.env)
+  assign(treatment, treatment, envir = pkg.env)
+  assign(cohort, 2, envir = pkg.env)
+  assign(outcome, outcome, envir = pkg.env)
+  assign(delta, delta, envir = pkg.env)
   class(r) <- c("scqe", "data.frame")
   return(r)
 }
@@ -401,10 +410,10 @@ scqe_1cohort = function(treatment, outcome, delta){
     r[i,] <- c(delta[i], Beta_SCQE_1C, Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
 
   }
-  treatment <<- treatment
-  outcome <<- outcome
-  delta <<- delta
-  cohort <<- 1
+  assign(treatment, treatment, envir = pkg.env)
+  assign(cohort, 1, envir = pkg.env)
+  assign(outcome, outcome, envir = pkg.env)
+  assign(delta, delta, envir = pkg.env)
   class(r) <- c("scqe", "data.frame")
   return(r)
 
@@ -504,10 +513,18 @@ delta_range_SCQE <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
   SCQE_2C_df <- data.frame(assumed_pre2post_shift = delta_list, SCQE_estimate = Beta_SCQE, SCQE_stderr = SE_B_SCQE,
                            term = delta_list, estimate = Beta_SCQE,
                            conf.low = Beta_SCQE - 1.96*SE_B_SCQE, conf.high = Beta_SCQE + 1.96*SE_B_SCQE)
-  cohort <<- 2
-  treatment <<- c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post))
-  outcome <<-c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) )  , rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post))    ,rep(1,Y_tr_pre),rep(0, ifelse(tr_pre-Y_tr_pre<0,0,tr_pre-Y_tr_pre))  ,   rep(1,Y_tr_post),rep(0, ifelse(tr_post-Y_tr_post<0,0,tr_post-Y_tr_post)) )
-  post <<- c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post))
+  #cohort <<- 2
+  #treatment <<- c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post))
+  #outcome <<-c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) )  , rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post))    ,rep(1,Y_tr_pre),rep(0, ifelse(tr_pre-Y_tr_pre<0,0,tr_pre-Y_tr_pre))  ,   rep(1,Y_tr_post),rep(0, ifelse(tr_post-Y_tr_post<0,0,tr_post-Y_tr_post)) )
+  #post <<- c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post))
+  
+  assign(post, c(rep(0, untr_pre), rep(1,untr_post), rep(0,tr_pre),rep(1,tr_post)), envir = pkg.env)
+  assign(treatment, c(rep(0, untr_pre + untr_post), rep(1, tr_pre+tr_post)), envir = pkg.env)
+  assign(cohort, 2, envir = pkg.env)
+  assign(outcome, c(rep(1,Y_untr_pre),rep(0, ifelse(untr_pre-Y_untr_pre < 0, 0,untr_pre-Y_untr_pre) ),
+                    rep(1,Y_untr_post),rep(0, ifelse(untr_post-Y_untr_post<0,0,untr_post-Y_untr_post)),
+                    rep(1,Y_tr_pre),rep(0, ifelse(tr_pre-Y_tr_pre<0,0,tr_pre-Y_tr_pre)),
+                    rep(1,Y_tr_post),rep(0, ifelse(tr_post-Y_tr_post<0,0,tr_post-Y_tr_post)) ), envir = pkg.env)
   class(SCQE_2C_df) <- c("scqe","data.frame")
   return(SCQE_2C_df)
   #return(list(delta_list = delta_list, Beta_SCQE = Beta_SCQE, SE_B_SCQE = SE_B_SCQE))
@@ -578,9 +595,13 @@ one_cohort_scqe <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max
                            conf.low = Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
 
 
-  treatment <<- c(rep(0,untr_1C),rep(1,tr_1C))
-  outcome <<- c(rep(1,Y_untr_1C),rep(0, ifelse(untr_1C - Y_untr_1C <0,0,untr_1C - Y_untr_1C )), rep(1,Y_tr_1C),rep(0, ifelse(tr_1C - Y_untr_1C <0,0,tr_1C - Y_untr_1C)))
-  cohort <<- 1
+  #treatment <<- c(rep(0,untr_1C),rep(1,tr_1C))
+  #outcome <<- c(rep(1,Y_untr_1C),rep(0, ifelse(untr_1C - Y_untr_1C <0,0,untr_1C - Y_untr_1C )), rep(1,Y_tr_1C),rep(0, ifelse(tr_1C - Y_untr_1C <0,0,tr_1C - Y_untr_1C)))
+  #cohort <<- 1
+  assign(treatment, c(rep(0,untr_1C),rep(1,tr_1C)), envir = pkg.env)
+  assign(cohort, 1, envir = pkg.env)
+  assign(outcome, c(rep(1,Y_untr_1C),rep(0, ifelse(untr_1C - Y_untr_1C <0,0,untr_1C - Y_untr_1C )),
+                    rep(1,Y_tr_1C),rep(0, ifelse(tr_1C - Y_untr_1C <0,0,tr_1C - Y_untr_1C))), envir = pkg.env)  
   class(SCQE_1C_df) <- c("scqe", "data.frame")
   return(SCQE_1C_df)
 
