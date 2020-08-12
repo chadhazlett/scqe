@@ -5,7 +5,7 @@
 \title{Delta optimization method for \code{scqe}}
 \usage{
 delta.optim.scqe(Y_T0, untreated, Y_untreated, treated, Y_treated, obj,
-  specified = NULL)
+  specified = NULL, ...)
 }
 \arguments{
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
