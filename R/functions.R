@@ -174,9 +174,6 @@ scqe <- function(...){
 #'
 #'@export
 scqe.2cfull = function(post, treatment, outcome, delta, ...){
-  if(any(delta > 1 | delta < -1)){
-    warning("One or more delta(s) are not in range")
-  }
   y2 = outcome - post %*% t(delta)
   r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
   for (i in 1:length(delta)){
@@ -231,9 +228,6 @@ scqe.2cfull = function(post, treatment, outcome, delta, ...){
 #'
 #'@export
 scqe.1cfull = function(treatment, outcome, delta, ...){
-  if(any(delta > 1 | delta < -1)){
-    warning("One or more delta(s) are not in range")
-  }
   N <- length(treatment) #number of obs
   pi1 <- sum(treatment)/N #number of treated ind/N
   Ybar_T1 <- sum(outcome)/N #the sum of outcomes for treated and untreated/N
