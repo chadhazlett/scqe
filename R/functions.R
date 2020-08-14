@@ -697,8 +697,8 @@ plot.scqe = function(scqe.obj){
 #'
 #' @export
 #'
-summary.scqe = function(scqe.obj, treatment=treatment, cohort=cohort, outcome=outcome, post=post,...) {
-  if(cohort == 2){
+summary.scqe = function(scqe.obj, treatment, cohort, outcome, post,...) {
+  if(cohort==2){
     # optimize for the "less likely case"
     opt_less_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome,post=post,obj = "less", tol = 0.0001)[1]), 3)
