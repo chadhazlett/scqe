@@ -113,28 +113,27 @@ scqe = function(post=NA, treatment=NA, outcome=NA, delta=NA, cohort=NA, untr_pre
 #' post = c(rep(0,100), rep(1,100))
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
-#' scqe.obj = NA
 #'
 #'
 #' 2 COHORT, FULL DATA
-#' scqe_master.out = scqe(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-#' plot(scqe_master.out)
-#' summary(scqe_master.out, cohort = 2)
+#' scqe.out = scqe(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
+#' plot(scqe.out)
+#' summary(scqe.out)
 #'
 #' 1 COHORT, FULL DATA
-#' scqe_master.out = scqe(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-#' plot(scqe_master.out)
-#' summary(scqe_master.out)
+#' scqe.out = scqe(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
+#' plot(scqe.out)
+#' summary(scqe.out)
 #'
 #' 1 COHORT, SUMMARY STATS
-#' scqe_master.out = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50, min_outcome=.1, max_outcome = 1, cohort=1)
-#' plot(scqe_master.out)
-#' summary(scqe_master.out)
+#' scqe.out = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50, min_outcome=.1, max_outcome = 1, cohort=1)
+#' plot(scqe.out)
+#' summary(scqe.out)
 #'
 #' 2 COHORT, SUMMARY STATS
-#' scqe_master.out = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,Y_untr_pre=5,min_delta=.1, max_delta=1,cohort=2)
-#' plot(scqe_master.out)
-#' summary(scqe_master.out)
+#' scqe.out = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,Y_untr_pre=5,min_delta=.1, max_delta=1,cohort=2)
+#' plot(scqe.out)
+#' summary(scqe.out)
 #'
 #' ALL OF THESE MATCH THE SHINY APP RESULTS
 #'
@@ -440,9 +439,7 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max_out
                            conf.low = Beta_SCQE_1C - 1.96*SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + 1.96*SE_B_SCQE_1C)
 
 
-  treatment <<- c(rep(0,untr_1C),rep(1,tr_1C))
-  outcome <<- c(rep(1,Y_untr_1C),rep(0, ifelse(untr_1C - Y_untr_1C <0,0,untr_1C - Y_untr_1C )), rep(1,Y_tr_1C),rep(0, ifelse(tr_1C - Y_untr_1C <0,0,tr_1C - Y_untr_1C)))
-  cohort <<- 1
+
   class(SCQE_1C_df) <- c("scqe", "data.frame")
   return(SCQE_1C_df)
 
@@ -702,7 +699,7 @@ plot.scqe = function(scqe.obj){
 #' set.seed(1234)
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 #' y = rbinom(n=200, prob = .25, size=1)
-#' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
+#' scqe_1cohort.out = scqe(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
 #' plot(scqe_1cohort.out)
 #' summary(scqe_1cohort.out)
 #'
