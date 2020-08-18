@@ -127,7 +127,7 @@ scqe = function(post=NA, treatment=NA, outcome=NA, delta=NA, cohort=NA, untr_pre
 #' summary(scqe_master.out)
 #'
 #' 1 COHORT, SUMMARY STATS
-#' scqe_master.out = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_delta=.1,max_delta=1,cohort=1)
+#' scqe_master.out = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50, min_outcome=.1, max_outcome = 1, cohort=1)
 #' plot(scqe_master.out)
 #' summary(scqe_master.out)
 #'
@@ -177,7 +177,8 @@ scqemethod <- function(...){
 #'
 #'@export
 scqe.2cfull = function(post, treatment, outcome, delta, ...){
-  if(any( class(post)=="character" | class(treatment)=="character" | class(outcome)=="character" | class(delta)=="character")){
+  #check first is any input is non-numeric
+  if(any(class(post)=="character" |class(treatment)=="character" | class(outcome)=="character" )){
     stop("One or more inputs to function are of invalid class")
   }
   y2 = outcome - post %*% t(delta)
@@ -234,6 +235,7 @@ scqe.2cfull = function(post, treatment, outcome, delta, ...){
 #'
 #'@export
 scqe.1cfull = function(treatment, outcome, delta, ...){
+  #check first is any input is non-numeric
   if(any( (treatment)=="character" | class(outcome)=="character" | class(delta)=="character")){
     stop("One or more inputs to function are of invalid class")
   }
@@ -274,7 +276,8 @@ scqe.1cfull = function(treatment, outcome, delta, ...){
 scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
                         Y_untr_post,Y_tr_pre,Y_untr_pre,
                         min_delta, max_delta, ...){
-  if(any( class(untr_pre)=="character" | class(untr_post)=="character" | class(tr_post)=="character" | class(tr_pre)=="character"| class(Y_tr_post)=="character" | class(Y_untr_post)=="character" | class(Y_tr_pre)=="character" | class(Y_untr_pre)=="character" )){
+  #check first is any input is non-numeric
+  if(any( class(untr_pre)=="character"| class(untr_post)=="character" | class(tr_post)=="character" | class(tr_pre)=="character"| class(Y_tr_post)=="character" | class(Y_untr_post)=="character" | class(Y_tr_pre)=="character" | class(Y_untr_pre)=="character" )){
     stop("One or more inputs to function are of invalid class")
   }
 
@@ -400,7 +403,8 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 #'
 #'@export
 scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome, max_outcome, ...){
-  if(any( class(untr_1C)=="character" | class(Y_untr_1C)=="character" | class(tr_1C)=="character" | class(Y_tr_1C)=="character")){
+  #check first is any input is non-numeric
+  if(any( class(untr_1C)=="character" | class(Y_untr_1C)=="character"| class(tr_1C)=="character" | class(Y_tr_1C)=="character")){
     stop("One or more inputs to function are of invalid class")
   }
   N <- tr_1C + untr_1C
@@ -558,6 +562,7 @@ delta_optim_SCQE_2C <- function(delta,untr_pre,untr_post,tr_post,tr_pre,
 
 delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, specified = NULL,...){
 
+
   untr_pre <- length(intersect(which(treatment == 0), which(post == 0)))
   untr_post <- length(intersect(which(treatment == 0), which(post == 1)))
   tr_post <- length(intersect(which(treatment == 1), which(post == 1)))
@@ -714,6 +719,12 @@ plot.scqe = function(scqe.obj){
 #' @export
 #'
 summary.scqe = function(scqe.obj, treatment, cohort, outcome, post,...) {
+
+  #warning for objects not of scqe class
+  if(class(scqe.obj)!= "scqe"){
+    warning("'object' must be of class 'scqe'")
+  }
+
   if(cohort==2){
     # optimize for the "less likely case"
     opt_less_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
