@@ -180,6 +180,22 @@ scqe.2cfull = function(post, treatment, outcome, delta, ...){
   if(any(class(post)=="character" |class(treatment)=="character" | class(outcome)=="character" )){
     stop("One or more inputs to function are of invalid class")
   }
+
+  #check if delta is in range for binary case
+  if(all(outcome == 1 | outcome == 0)){
+    if(any(delta > 1 | delta < -1)){
+      warning("One or more deltas out of expected range (-1,1)")
+    }
+  }else{
+    #checks if delta is in range for non-binary case
+    quant <- quantile(outcome, probs=c(.25,.75))
+    diff <- quant[[2]] - quant[[1]]
+    if(any(delta > diff | delta < -diff)){
+      warning("One or more deltas out of expected range")
+    }
+
+  }
+
   y2 = outcome - post %*% t(delta)
   r <- data.frame(term=numeric(length(delta)), estimate=numeric(length(delta)), conf.low=numeric(length(delta)),conf.high=numeric(length(delta)))
   for (i in 1:length(delta)){
@@ -238,6 +254,22 @@ scqe.1cfull = function(treatment, outcome, delta, ...){
   if(any( (treatment)=="character" | class(outcome)=="character" | class(delta)=="character")){
     stop("One or more inputs to function are of invalid class")
   }
+
+  #check if delta within range
+  if(all(outcome == 1 | outcome == 0)){
+    if(any(delta > 1 | delta < -1)){
+      warning("One or more deltas out of expected range (-1,1)")
+    }
+  }else{
+    #checks if delta is in range for non-binary case
+    quant <- quantile(outcome, probs=c(.25,.75))
+    diff <- quant[[2]] - quant[[1]]
+    if(any(delta > diff | delta < -diff)){
+      warning("One or more deltas out of expected range")
+    }
+
+  }
+
   N <- length(treatment) #number of obs
   pi1 <- sum(treatment)/N #number of treated ind/N
   Ybar_T1 <- sum(outcome)/N #the sum of outcomes for treated and untreated/N
