@@ -4,8 +4,7 @@
 \alias{summary.scqe}
 \title{Summary method for \code{scqe}}
 \usage{
-\method{summary}{scqe}(scqe.obj, treatment = treatment,
-  cohort = cohort, outcome = outcome, post = post, ...)
+\method{summary}{scqe}(scqe.obj, ...)
 }
 \arguments{
 \item{scqe.obj}{an object of class \code{\link{scqe}}}

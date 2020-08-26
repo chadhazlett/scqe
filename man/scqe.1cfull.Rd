@@ -4,7 +4,7 @@
 \alias{scqe.1cfull}
 \title{Stability controlled quasi-experiment (scqe) for 1 cohort case with FULL DATA}
 \usage{
-\method{scqe}{1cfull}(treatment, outcome, delta, ...)
+scqe.1cfull(treatment, outcome, delta, ...)
 }
 \arguments{
 \item{treatment}{Binary or continuous vector correspoding (usually) to 0,1
@@ -34,7 +34,4 @@ summary(scqe_1cohort.out)
 
 
 
-}
-\references{
-Hazlett, C. (?)
 }

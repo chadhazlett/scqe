@@ -4,8 +4,7 @@
 \alias{scqe.1csumm}
 \title{Stability controlled quasi-experiment (scqe) for 1 cohort case SUMMARY STATISTICS AS INPUT}
 \usage{
-\method{scqe}{1csumm}(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_outcome,
-  max_outcome, ...)
+scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta, ...)
 }
 \arguments{
 \item{untr_1C}{Number of unreated individuals.}
@@ -16,9 +15,9 @@
 
 \item{Y_tr_1C}{Outcome for treated individuals.}
 
-\item{min_outcome}{Minimum possible delta.}
+\item{min_delta}{Minimum possible delta.}
 
-\item{max_outcome}{Maximum possible delta.}
+\item{max_delta}{Maximum possible delta.}
 }
 \description{
 This function returns the scqe estimates, standard deviations,  confidence
@@ -34,7 +33,4 @@ plot(one_cohort_scqe.out)
 summary(one_cohort_scqe.out)
 
 
-}
-\references{
-Hazlett, C. (?)
 }

@@ -4,9 +4,15 @@
 \alias{scqe}
 \title{Stability controlled quasi-experiment (scqe)}
 \usage{
-scqe(...)
+scqe(post = NA, treatment = NA, outcome = NA, delta = NA,
+  cohort = NA, untr_pre = NA, untr_post = NA, tr_post = NA,
+  tr_pre = NA, Y_tr_post = NA, Y_untr_post = NA, Y_tr_pre = NA,
+  Y_untr_pre = NA, untr = NA, tr = NA, Y_tr = NA, Y_untr = NA,
+  min_delta = NA, max_delta = NA, ...)
 }
 \arguments{
+\item{post}{Indicator for being in the second cohort}
+
 \item{treatment}{Binary or continuous vector correspoding (usually) to 0,1
 (no treatment or treatment) for each observation.}
 
@@ -23,8 +29,6 @@ delta.}
 \item{untr_post}{Integer number of untreated patients in the second cohort if applicable (T=1).}
 
 \item{tr_post}{Integer number of treated patients in the second cohort if applicable (T=1).}
-
-\item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
 
 \item{Y_tr_post}{Outcome for patients who received treatment at time T=1.}
 
@@ -43,43 +47,36 @@ delta.}
 \item{min_delta}{Minimum delta.}
 
 \item{max_delta}{Maximum delta.}
+
+\item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
 }
 \description{
-
+Main function for user to call, taking input for any type of SCQE design.
 }
 \examples{
 set.seed(1234)
 post = c(rep(0,100), rep(1,100))
 tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
-scqe.obj = NA
 
+# Two cohorts, full data
+scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=seq(from=-.1,to=.1, by=0.05))
+plot(scqe.2cohort.full)
+summary(scqe.2cohort.full)
 
-2 COHORT, FULL DATA
-scqe.obj <- scqe.define(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-scqe_master.out = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-plot(scqe_master.out)
-summary(scqe_master.out)
+# One cohort, full data
+scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+plot(scqe.1cohort.full)summary(scqe.1cohort.full)
 
-1 COHORT, FULL DATA
-scqe.obj <- scqe.define(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-scqe_master.out = scqe(scqe.obj, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-plot(scqe_master.out)
-summary(scqe_master.out)
+# Two cohorts, summary data only
+scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+plot(scqe.2cohort.sum)
+summary(scqe.2cohort.sum)
 
-1 COHORT, SUMMARY STATS
-scqe.obj <- scqe.define( untr=100,tr=200,Y_untr=5,Y_tr=50,min_delta=.1,max_delta=1,cohort=1)
-scqe_master.out = scqe(scqe.obj, untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1,cohort=1)
-plot(scqe_master.out)
-summary(scqe_master.out)
-
-2 COHORT, SUMMARY STATS
-scqe.obj <- scqe.define(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,Y_untr_pre=5,min_delta=.1, max_delta=1,cohort=2)
-scqe_master.out = scqe(scqe.obj, untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,Y_untr_pre=5,min_delta=.1, max_delta=1,cohort=2)
-plot(scqe_master.out)
-summary(scqe_master.out)
-
-ALL OF THESE MATCH THE SHINY APP RESULTS
+# One cohort, summary data only
+scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
+plot(scqe.1cohort.sum)
+summary(scqe.1cohort.sum)
 
 }
 \references{

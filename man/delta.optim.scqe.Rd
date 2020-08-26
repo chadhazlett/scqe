@@ -13,7 +13,3 @@ delta.optim.scqe(Y_T0, untreated, Y_untreated, treated, Y_treated, obj,
 \description{
 The \code{print} method provides...
 }
-\examples{
-# give example here
-
-}
