@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{scqe.2cfull}
 \alias{scqe.2cfull}
-\title{Stability controlled quasi-experiment (scqe) for 2 cohort case FULL DATA}
+\title{Stability controlled quasi-experiment (scqe) for 2 cohort case, full data}
 \usage{
 scqe.2cfull(post, treatment, outcome, delta, ...)
 }
@@ -19,22 +19,19 @@ observation.}
 delta.}
 }
 \description{
-This function returns the scqe estimates, standard deviations,  confidence
-intervals,...
+This function returns the scqe estimates and confidence intervals for the
+2 cohort case when the user inputs full data.
 }
 \examples{
-# Put examples here!
 set.seed(1234)
 post = c(rep(0,100), rep(1,100))
 tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 
-scqe.out = scqe(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
+# Two cohorts, full data
+scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=seq(from=-.1,to=.1, by=0.05))
+scqe.2cohort.full$result
+plot(scqe.2cohort.full)
+summary(scqe.2cohort.full)
 
-plot(scqe.out)
-summary(scqe.out)
-
-}
-\references{
-Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
 }

@@ -16,11 +16,10 @@ NULL
 
 
 
-## SET CLASS OF SCQE OBJ
 #' Stability controlled quasi-experiment (scqe)
 #'
 #' @description
-#' Main function for user to call, taking input for any type of SCQE design.
+#' Main scqe function. Computes scqe estimates and corresponding confidence intervals.
 #'
 #' @param post Indicator for being in the second cohort
 #' @param treatment Binary or continuous vector correspoding (usually) to 0,1
@@ -44,7 +43,7 @@ NULL
 #' @param min_delta Minimum delta.
 #' @param max_delta Maximum delta.
 #'
-#' @references  Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
+#' @references  Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments." Journal of Causal Inference.
 #'
 #' @examples
 #' set.seed(1234)
@@ -54,20 +53,25 @@ NULL
 #'
 #' # Two cohorts, full data
 #' scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=seq(from=-.1,to=.1, by=0.05))
+#' scqe.2cohort.full$result
 #' plot(scqe.2cohort.full)
 #' summary(scqe.2cohort.full)
 #'
 #' # One cohort, full data
 #' scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-#' plot(scqe.1cohort.full)summary(scqe.1cohort.full)
+#' scqe.1cohort.full $result
+#' plot(scqe.1cohort.full)
+#' summary(scqe.1cohort.full)
 #'
 #' # Two cohorts, summary data only
 #' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+#' scqe.2cohort.sum$result
 #' plot(scqe.2cohort.sum)
 #' summary(scqe.2cohort.sum)
 #'
 #' # One cohort, summary data only
 #' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
+#' scqe.1cohort.sum$result
 #' plot(scqe.1cohort.sum)
 #' summary(scqe.1cohort.sum)
 #'
@@ -106,11 +110,11 @@ scqemethod <- function(...){
 
 ## 2 COHORT CASE FULL DATA FXN
 
-#' Stability controlled quasi-experiment (scqe) for 2 cohort case FULL DATA
+#' Stability controlled quasi-experiment (scqe) for 2 cohort case, full data
 #'
 #' @description
-#' This function returns the scqe estimates, standard deviations,  confidence
-#' intervals,...
+#' This function returns the scqe estimates and confidence intervals for the
+#' 2 cohort case when the user inputs full data.
 #'
 #' @param post Binary vector corresponding to T=0,1 for each observation.
 #' @param treatment Binary or continuous vector correspoding (usually) to 0,1
@@ -120,19 +124,18 @@ scqemethod <- function(...){
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
 #'
-#' @references  Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
 #'
 #' @examples
-#' # Put examples here!
 #' set.seed(1234)
 #' post = c(rep(0,100), rep(1,100))
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
-#' scqe.out = scqe(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-#'
-#' plot(scqe.out)
-#' summary(scqe.out)
+#' # Two cohorts, full data
+#' scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=seq(from=-.1,to=.1, by=0.05))
+#' scqe.2cohort.full$result
+#' plot(scqe.2cohort.full)
+#' summary(scqe.2cohort.full)
 #'
 #'@export
 scqe.2cfull = function(post, treatment, outcome, delta, ...){
@@ -161,12 +164,11 @@ scqe.2cfull = function(post, treatment, outcome, delta, ...){
 }
 
 ##ONE COHORT CASE FULL DATA FXN
-#' Stability controlled quasi-experiment (scqe) for 1 cohort case with FULL DATA
+#' Stability controlled quasi-experiment (scqe) for 1 cohort case, full data
 #'
 #'@description
-#' This function returns the scqe estimates, standard deviations,  confidence
-#' intervals for the one cohort case. This function is similar to the main scqe function
-#' but does not have 2 cohort (ie there is only one measurement time (no "post" input)).
+#' This function returns the scqe estimates and confidence intervals for the
+#' 1 cohort case (ie there is not 'post' input) when the user inputs full data.
 #'
 #' @param treatment Binary or continuous vector correspoding (usually) to 0,1
 #'   (no treatment or treatment) for each observation.
@@ -176,15 +178,16 @@ scqe.2cfull = function(post, treatment, outcome, delta, ...){
 #'   delta.
 #'
 #' @examples
-#' # Put examples here!
 #' set.seed(1234)
+#' post = c(rep(0,100), rep(1,100))
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' y = rbinom(n=200, prob = .25, size=1)
+#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
-#'
-#' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-#' plot(scqe_1cohort.out)
-#' summary(scqe_1cohort.out)
+#' # One cohort, full data
+#' scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.1cohort.full $result
+#' plot(scqe.1cohort.full)
+#' summary(scqe.1cohort.full)
 #'
 #'
 #'
@@ -222,12 +225,37 @@ scqe.1cfull = function(treatment, outcome, delta, ...){
 }
 
 ## 2 COHORT CASE SUM STATS FXN
-# Put examples here!
-# set.seed(1234)
-# delta_range_SCQE.out <- delta_range_SCQE(200, 150, 50, 0, 20, 1, 5, 0, .1, 1)
-# plot(delta_range_SCQE.out)
-#summary(delta_range_SCQE.out)
-#2c summary stat case
+#' Stability controlled quasi-experiment (scqe) for 1 cohort case, summary statistics
+#'
+#'@description
+#' This function returns the scqe estimates and confidence intervals for the 2 cohort
+#' case when the user inputs only summary statistics.
+#'
+#' @param untr_pre Integer number of untreated patients in the first cohort if applicable (T=0).
+#' @param untr_post Integer number of untreated patients in the second cohort if applicable (T=1).
+#' @param tr_post Integer number of treated patients in the second cohort if applicable (T=1).
+#' @param tre_pre Integer number of treated patients in the first cohort if applicable (T=0).
+#' @param Y_tr_post Outcome for patients who received treatment at time T=1.
+#' @param Y_untr_post Outcome for patients who did not receive treatment at time T=1.
+#' @param Y_tr_pre Outcome for patients who did receive treatment at time T=0.
+#' @param Y_untr_pre Outcome for patients who did not receive treatment at time T=0.
+#' @param untr Integer number of untreated patients.
+#' @param tr Integer number of treated patients.
+#' @param Y_tr Outcome for treated patients.
+#' @param min_delta Minimum delta.
+#' @param max_delta Maximum delta.
+#'
+#' @examples
+#' # Two cohorts, summary data only
+#' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+#' scqe.2cohort.sum$result
+#' plot(scqe.2cohort.sum)
+#' summary(scqe.2cohort.sum)
+#'
+#'
+#'
+#'
+#'@export
 scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
                         Y_untr_post,Y_tr_pre,Y_untr_pre,
                         min_delta, max_delta, ...){
@@ -327,8 +355,6 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
   class(out) <- c("scqe")
   return(out)
 
-
-  #return(list(delta_list = delta_list, Beta_SCQE = Beta_SCQE, SE_B_SCQE = SE_B_SCQE))
 }
 
 
@@ -336,13 +362,11 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 
 ##ONE COHORT CASE SUM STATS FXN
 
-#' Stability controlled quasi-experiment (scqe) for 1 cohort case SUMMARY STATISTICS AS INPUT
+#' Stability controlled quasi-experiment (scqe) for 1 cohort case, summary statistics
 #'
 #' @description
-#' This function returns the scqe estimates, standard deviations,  confidence
-#' intervals for the one cohort case. This function is similar to the main scqe function
-#' but does not have 2 cohorts (ie there is only one measurement time (no "post" input)).
-#' It takes in summary statistics about the data instead of the full data.
+#' This function returns the scqe estimates and confidence intervals for the 1 cohort
+#' case when the user inputs only summary statistics.
 #'
 #' @param untr_1C Number of unreated individuals.
 #' @param Y_untr_1C Outcome for untreated individuals.
@@ -352,11 +376,11 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 #' @param max_delta Maximum possible delta.
 #'
 #' @examples
-#' # Put examples here!
-#' set.seed(1234)
-#' one_cohort_scqe.out <- one_cohort_scqe(200, 5, 50, 25, .1, 1)
-#' plot(one_cohort_scqe.out)
-#' summary(one_cohort_scqe.out)
+#' # One cohort, summary data only
+#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
+#' scqe.1cohort.sum$result
+#' plot(scqe.1cohort.sum)
+#' summary(scqe.1cohort.sum)
 #'
 #'
 #'@export
@@ -413,10 +437,10 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta
 
 #DELTA OPTIM: ONE COHORT SUMMARY STATS
 
-#' Delta optimization method for \code{scqe}
+#' Delta optimization method for \code{scqe} 1 cohort, summary statistics
 #' @rdname delta.optim.scqe
 #' @description
-#' The \code{print} method provides...
+#' The \code{print} method provides the critical values presented in the summary method for scqe objects.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
@@ -441,6 +465,14 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, o
 
 #DELTA OPTIM: TWO COHORT SUMMARY STATS
 
+#' Delta optimization method for \code{scqe} 2 cohort, summary statistics
+#' @rdname delta_optim_SCQE_2C
+#' @description
+#' The \code{print} method provides the critical values presented in the summary method for scqe objects.
+#'
+#' @param scqe.obj an object of class \code{\link{scqe}}
+#'
+#' @export
 delta_optim_SCQE_2C <- function(delta,untr_pre,untr_post,tr_post,tr_pre,
                                 Y_tr_post, Y_untr_post,Y_tr_pre,Y_untr_pre,
                                 obj, specified = NULL,...){
@@ -510,6 +542,14 @@ delta_optim_SCQE_2C <- function(delta,untr_pre,untr_post,tr_post,tr_pre,
 
 #DELTA OPTIM: TWO COHORT FULL DATA
 
+#' Delta optimization method for \code{scqe} 2 cohort, full data
+#' @rdname delta.optim.scqe2
+#' @description
+#' The \code{print} method provides the critical values presented in the summary method for scqe objects.
+#'
+#' @param scqe.obj an object of class \code{\link{scqe}}
+#'
+#' @export
 delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, specified = NULL,...){
 
   untr_pre <- length(intersect(which(treatment == 0), which(post == 0)))
@@ -594,6 +634,14 @@ delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, specified = 
 
 #DELTA OPTIM: ONE COHORT FULL DATA
 
+#' Delta optimization method for \code{scqe} 1 cohort, full data
+#' @rdname delta.optim.scqe.1cfull
+#' @description
+#' The \code{print} method provides the critical values presented in the summary method for scqe objects.
+#'
+#' @param scqe.obj an object of class \code{\link{scqe}}
+#'
+#' @export
 delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = NULL,...){
 
   N <- length(treatment)

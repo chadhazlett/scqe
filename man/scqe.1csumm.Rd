@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{scqe.1csumm}
 \alias{scqe.1csumm}
-\title{Stability controlled quasi-experiment (scqe) for 1 cohort case SUMMARY STATISTICS AS INPUT}
+\title{Stability controlled quasi-experiment (scqe) for 1 cohort case, summary statistics}
 \usage{
 scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta, ...)
 }
@@ -20,17 +20,15 @@ scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta, ...)
 \item{max_delta}{Maximum possible delta.}
 }
 \description{
-This function returns the scqe estimates, standard deviations,  confidence
-intervals for the one cohort case. This function is similar to the main scqe function
-but does not have 2 cohorts (ie there is only one measurement time (no "post" input)).
-It takes in summary statistics about the data instead of the full data.
+This function returns the scqe estimates and confidence intervals for the 1 cohort
+case when the user inputs only summary statistics.
 }
 \examples{
-# Put examples here!
-set.seed(1234)
-one_cohort_scqe.out <- one_cohort_scqe(200, 5, 50, 25, .1, 1)
-plot(one_cohort_scqe.out)
-summary(one_cohort_scqe.out)
+# One cohort, summary data only
+scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
+scqe.1cohort.sum$result
+plot(scqe.1cohort.sum)
+summary(scqe.1cohort.sum)
 
 
 }

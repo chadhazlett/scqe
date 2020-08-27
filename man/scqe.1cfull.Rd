@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{scqe.1cfull}
 \alias{scqe.1cfull}
-\title{Stability controlled quasi-experiment (scqe) for 1 cohort case with FULL DATA}
+\title{Stability controlled quasi-experiment (scqe) for 1 cohort case, full data}
 \usage{
 scqe.1cfull(treatment, outcome, delta, ...)
 }
@@ -17,20 +17,20 @@ observation.}
 delta.}
 }
 \description{
-This function returns the scqe estimates, standard deviations,  confidence
-intervals for the one cohort case. This function is similar to the main scqe function
-but does not have 2 cohort (ie there is only one measurement time (no "post" input)).
+This function returns the scqe estimates and confidence intervals for the
+1 cohort case (ie there is not 'post' input) when the user inputs full data.
 }
 \examples{
-# Put examples here!
 set.seed(1234)
+post = c(rep(0,100), rep(1,100))
 tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .25, size=1)
+y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 
-
-scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-plot(scqe_1cohort.out)
-summary(scqe_1cohort.out)
+# One cohort, full data
+scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.1cohort.full $result
+plot(scqe.1cohort.full)
+summary(scqe.1cohort.full)
 
 
 

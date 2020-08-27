@@ -51,7 +51,7 @@ delta.}
 \item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
 }
 \description{
-Main function for user to call, taking input for any type of SCQE design.
+Main scqe function. Computes scqe estimates and corresponding confidence intervals.
 }
 \examples{
 set.seed(1234)
@@ -61,24 +61,29 @@ y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 
 # Two cohorts, full data
 scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=seq(from=-.1,to=.1, by=0.05))
+scqe.2cohort.full$result
 plot(scqe.2cohort.full)
 summary(scqe.2cohort.full)
 
 # One cohort, full data
 scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-plot(scqe.1cohort.full)summary(scqe.1cohort.full)
+scqe.1cohort.full $result
+plot(scqe.1cohort.full)
+summary(scqe.1cohort.full)
 
 # Two cohorts, summary data only
 scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+scqe.2cohort.sum$result
 plot(scqe.2cohort.sum)
 summary(scqe.2cohort.sum)
 
 # One cohort, summary data only
 scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
+scqe.1cohort.sum$result
 plot(scqe.1cohort.sum)
 summary(scqe.1cohort.sum)
 
 }
 \references{
-Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
+Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments." Journal of Causal Inference.
 }
