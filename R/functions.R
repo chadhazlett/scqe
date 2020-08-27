@@ -666,12 +666,22 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #' Plot method for \code{scqe}
 #' @rdname plot.scqe
 #' @description
-#' The \code{print} method provides...
+#' The \code{print} method provides a plot of the estimates
+#' and confidence intervals for the scqe estimates for the range of
+#' values of delta provided by the user.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
 #' @examples
-#' # give example here
+#' set.seed(1234)
+#' post = c(rep(0,100), rep(1,100))
+#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
+#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#'
+#' # Two cohorts, full data
+#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full$result
+#' plot(scqe.2cohort.full)
 #'
 #' @export
 #'
@@ -687,32 +697,25 @@ plot.scqe = function(scqe.obj){
 
 ##SCQE SUMMARY METHOD
 
-#Right now this is only working for 1C full data case example/I am having trouble making it work more generally:
-
 #' Summary method for \code{scqe}
 #' @rdname summary.scqe
 #' @description
-#' The \code{summary} method provides...
+#' The \code{summary} method provides several statements that summarize
+#' important values of delta requires to make different conclusions
+#' about the treatment's effect on patient outcome.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
 #' @examples
 #' set.seed(1234)
-#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' y = rbinom(n=200, prob = .25, size=1)
-#' scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-#' plot(scqe_1cohort.out)
-#' summary(scqe_1cohort.out)
-#'
-#'
-#' set.seed(1234)
 #' post = c(rep(0,100), rep(1,100))
 #' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
-#' scqe.out = scqe(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-#' plot(scqe.out)
-#' summary(scqe.out)
 #'
+#' # Two cohorts, full data
+#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full$result
+#' summary(scqe.2cohort.full)
 #'
 #' @export
 #'
