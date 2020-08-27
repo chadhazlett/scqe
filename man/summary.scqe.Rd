@@ -10,24 +10,19 @@
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
 }
 \description{
-The \code{summary} method provides...
+The \code{summary} method provides several statements that summarize
+important values of delta requires to make different conclusions
+about the treatment's effect on patient outcome.
 }
 \examples{
-set.seed(1234)
-tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .25, size=1)
-scqe_1cohort.out = scqe_1cohort(treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-plot(scqe_1cohort.out)
-summary(scqe_1cohort.out)
-
-
 set.seed(1234)
 post = c(rep(0,100), rep(1,100))
 tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
-scqe.out = scqe(post=post, treatment=tx, outcome=y, delta=c(-0.1,0,.1))
-plot(scqe.out)
-summary(scqe.out)
 
+# Two cohorts, full data
+scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full$result
+summary(scqe.2cohort.full)
 
 }
