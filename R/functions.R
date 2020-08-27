@@ -749,7 +749,10 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
 
     #claim: treatment had 0 effect
     cat("\n To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
-        opt_zero_1C_full)
+        opt_zero_1C_full,"\n")
+
+    critical_point <- data.frame("less"=opt_less_1C_full,"harm"=opt_harm_1C_full,"zero"=opt_zero_1C_full)
+    return(critical_point)
 
 
   } else {
@@ -774,7 +777,10 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
 
     #claim: treatment had 0 effect
     cat("\n To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
-        opt_zero_1C_full)
+        opt_zero_1C_full,"\n")
+
+    critical_point <- data.frame("less"=opt_less_1C_full,"harm"=opt_harm_1C_full,"zero"=opt_zero_1C_full)
+    return(critical_point)
 
   }
 }
