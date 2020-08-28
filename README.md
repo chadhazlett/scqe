@@ -75,12 +75,21 @@ The results can be summarized by calling summary() on an scqe object.
 
 ``` r
 summary(scqe.2cohort.full)
-#> To claim the treatment made the outcome significantly less likely,
-#>  one must claim the shift in outcomes under no treatment change was 0.007
-#>  To claim the treatment made the outcome significantly more likely,
-#>  one must claim the shift in outcomes under no treatment change was -0.184
-#>  To claim the treatment had exactly 0 effect on the outcome,
-#>  one must claim the shift in outcomes under no treatment change was exactly -0.09
+#> [[1]]
+#> [1] "To claim the treatment made the outcome significantly less likely,"       
+#> [2] " one must claim the shift in outcomes under no treatment change was 0.007"
+#> 
+#> [[2]]
+#> [1] "To claim the treatment made the outcome significantly more likely,"        
+#> [2] " one must claim the shift in outcomes under no treatment change was -0.184"
+#> 
+#> [[3]]
+#> [1] "To claim the treatment had exactly 0 effect on the outcome,"                      
+#> [2] " one must claim the shift in outcomes under no treatment change was exactly -0.09"
+#> 
+#> [[4]]
+#>    less   harm  zero
+#> 1 0.007 -0.184 -0.09
 ```
 
 Example 2: 2 cohorts, summary statistics The user can input summary
@@ -122,12 +131,21 @@ plot(scqe.2cohort.sum)
 
 ``` r
 summary(scqe.2cohort.sum)
-#> To claim the treatment made the outcome significantly less likely,
-#>  one must claim the shift in outcomes under no treatment change was 0.136
-#>  To claim the treatment made the outcome significantly more likely,
-#>  one must claim the shift in outcomes under no treatment change was 0.036
-#>  To claim the treatment had exactly 0 effect on the outcome,
-#>  one must claim the shift in outcomes under no treatment change was exactly 0.08
+#> [[1]]
+#> [1] "To claim the treatment made the outcome significantly less likely,"       
+#> [2] " one must claim the shift in outcomes under no treatment change was 0.136"
+#> 
+#> [[2]]
+#> [1] "To claim the treatment made the outcome significantly more likely,"       
+#> [2] " one must claim the shift in outcomes under no treatment change was 0.036"
+#> 
+#> [[3]]
+#> [1] "To claim the treatment had exactly 0 effect on the outcome,"                     
+#> [2] " one must claim the shift in outcomes under no treatment change was exactly 0.08"
+#> 
+#> [[4]]
+#>    less  harm zero
+#> 1 0.136 0.036 0.08
 ```
 
 Example 3: 1 cohort, full
@@ -149,12 +167,21 @@ plot(scqe.1cohort.full)
 
 ``` r
 summary(scqe.1cohort.full)
-#> To claim the treatment made the outcome significantly less likely,
-#>  one must claim the shift in outcomes under no treatment change was 0.164
-#>  To claim the treatment made the outcome significantly more likely,
-#>  one must claim the shift in outcomes under no treatment change was 0.066
-#>  To claim the treatment had exactly 0 effect on the outcome,
-#>  one must claim the shift in outcomes under no treatment change was exactly 0.115
+#> [[1]]
+#> [1] "To claim the treatment made the outcome significantly less likely,"       
+#> [2] " one must claim the shift in outcomes under no treatment change was 0.164"
+#> 
+#> [[2]]
+#> [1] "To claim the treatment made the outcome significantly more likely,"       
+#> [2] " one must claim the shift in outcomes under no treatment change was 0.066"
+#> 
+#> [[3]]
+#> [1] "To claim the treatment had exactly 0 effect on the outcome,"                      
+#> [2] " one must claim the shift in outcomes under no treatment change was exactly 0.115"
+#> 
+#> [[4]]
+#>    less  harm  zero
+#> 1 0.164 0.066 0.115
 ```
 
 Example 4: 1 cohort, summary
@@ -194,10 +221,19 @@ plot(scqe.1cohort.sum)
 
 ``` r
 summary(scqe.1cohort.sum)
-#> To claim the treatment made the outcome significantly less likely,
-#>  one must claim the shift in outcomes under no treatment change was 0.227
-#>  To claim the treatment made the outcome significantly more likely,
-#>  one must claim the shift in outcomes under no treatment change was 0.139
-#>  To claim the treatment had exactly 0 effect on the outcome,
-#>  one must claim the shift in outcomes under no treatment change was exactly 0.183
+#> [[1]]
+#> [1] "To claim the treatment made the outcome significantly less likely,"       
+#> [2] " one must claim the shift in outcomes under no treatment change was 0.227"
+#> 
+#> [[2]]
+#> [1] "To claim the treatment made the outcome significantly more likely,"       
+#> [2] " one must claim the shift in outcomes under no treatment change was 0.139"
+#> 
+#> [[3]]
+#> [1] "To claim the treatment had exactly 0 effect on the outcome,"                      
+#> [2] " one must claim the shift in outcomes under no treatment change was exactly 0.183"
+#> 
+#> [[4]]
+#>    less  harm  zero
+#> 1 0.227 0.139 0.183
 ```

@@ -82,5 +82,6 @@ scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outc
 scqe.1cohort.sum$result
 plot(scqe.1cohort.sum)
 summary(scqe.1cohort.sum)
+
 ```
 
