@@ -759,23 +759,20 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
                                                   treatment=treatment, outcome=outcome,obj = "less", tol = 0.0001)[1]), 3)
 
     # claim: treatment makes outcome less likely
-    one <- cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",
-        opt_less_1C_full)
+    one <- capture.output(cat("To claim the treatment made the outcome significantly less likely,\n one must claim the shift in outcomes under no treatment change was",opt_less_1C_full))
 
     #optimize for "more likely case"
     opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome,  obj = "harm", tol = 0.0001)[1]), 3)
     # claim: treatment makes outcome more likely
-    two <- cat("\n To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was",
-        opt_harm_1C_full)
+    two <- capture.output(cat("To claim the treatment made the outcome significantly more likely,\n one must claim the shift in outcomes under no treatment change was",opt_harm_1C_full))
 
     # optimize for the "no effect case"
     opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome, obj = "zero", tol = 0.0001)[1]), 3)
 
     #claim: treatment had 0 effect
-    three <- cat("\n To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",
-        opt_zero_1C_full,"\n")
+    three <- capture.output(cat("To claim the treatment had exactly 0 effect on the outcome,\n one must claim the shift in outcomes under no treatment change was exactly",opt_zero_1C_full))
 
     critical_point <- data.frame("less"=opt_less_1C_full,"harm"=opt_harm_1C_full,"zero"=opt_zero_1C_full)
     rlist <- list(one,two,three,critical_point)
