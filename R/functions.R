@@ -140,6 +140,10 @@ scqemethod <- function(...){
 #'@export
 scqe.2cfull = function(post, treatment, outcome, delta, ...){
 
+  if(all(post==TRUE|post==FALSE)){
+    post <- as.numeric(post)
+  }
+
   if(!is.numeric(delta)){
     delta <- seq(from=-.1, to=.1, by=.05)
   }
@@ -297,6 +301,8 @@ scqe.1cfull = function(treatment, outcome, delta, ...){
 scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
                         Y_untr_post,Y_tr_pre,Y_untr_pre,
                         min_delta, max_delta, ...){
+
+
   if(!is.numeric(min_delta) | !is.numeric(max_delta)){
     min_delta <- -.1
     max_delta <- .1
