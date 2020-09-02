@@ -788,33 +788,30 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
                                                   treatment=treatment, outcome=outcome,post=post,obj = "less", tol = 0.0001)[1]), 3)
     
     # claim: treatment makes outcome less likely
-    one <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_less_1C_full))
+    one <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_less_1C_full, "or above."))
     
     #optimize for "more likely case"
     opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome, post=post, obj = "harm", tol = 0.0001)[1]), 3)
     # claim: treatment makes outcome more likely
-    two <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_harm_1C_full))
+    two <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_harm_1C_full, "or below."))
     
     # optimize for the "no effect case"
     opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome,post=post, obj = "zero", tol = 0.0001)[1]), 3)
     
     #claim: treatment had 0 effect
-    three <- capture.output(cat("One must claim the shift in outcomes under no treatment change was exactly",opt_zero_1C_full))
+    three <- capture.output(cat("One must claim the shift in outcomes under no treatment change was exactly",paste0(opt_zero_1C_full,".")))
     
     critical_point <- data.frame("less likely"=opt_less_1C_full,"more likely"=opt_harm_1C_full,"zero effect"=opt_zero_1C_full)
     
     rlist <-
-      list("To claim the treatment made the outcome significantly less likely: " = one,
-           "To claim the treatment made the outcome significantly more likely: " = two,
-           "To claim the treatment had 0 effect on the outcome:  " = three,
-           "Critical Points" = critical_point, 
-           "Full Result Table"= scqe.obj
+      list("less.likely" = capture.output(cat("To claim the treatment made the outcome significantly less likely: \n", one)),
+           "more.likely" = capture.output(cat("To claim the treatment made the outcome significantly more likely: \n", two)),
+           "no.effect" =  capture.output(cat("To claim the treatment had 0 effect on the outcome:\n", three)),
+           "critical.points" = critical_point,
+           "full.results"= scqe.obj
       )
-    
-    #rlist <- list(one,two,three,critical_point, scqe.obj)
-    return(rlist)
     
     
   } else {
@@ -823,33 +820,49 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
                                                   treatment=treatment, outcome=outcome,obj = "less", tol = 0.0001)[1]), 3)
     
     # claim: treatment makes outcome less likely
-    one <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_less_1C_full))
+    one <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_less_1C_full, "or above."))
     
     #optimize for "more likely case"
     opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome,  obj = "harm", tol = 0.0001)[1]), 3)
     # claim: treatment makes outcome more likely
-    two <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_harm_1C_full))
+    two <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_harm_1C_full, "or below."))
     
     # optimize for the "no effect case"
     opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome, obj = "zero", tol = 0.0001)[1]), 3)
     
     #claim: treatment had 0 effect
-    three <- capture.output(cat("One must claim the shift in outcomes under no treatment change was exactly",opt_zero_1C_full))
+    three <- capture.output(cat("One must claim the shift in outcomes under no treatment change was exactly",paste0(opt_zero_1C_full,".")))
     
     critical_point <- data.frame("less likely"=opt_less_1C_full,"more likely"=opt_harm_1C_full,"zero effect"=opt_zero_1C_full)
     
+    
     rlist <-
-      list("To claim the treatment made the outcome significantly less likely: " = one,
-           "To claim the treatment made the outcome significantly more likely: " = two,
-           "To claim the treatment had 0 effect on the outcome:  " = three,
-           "Critical Points" = critical_point, 
-           "Full Result Table"= scqe.obj
+      list("less.likely" = capture.output(cat("To claim the treatment made the outcome significantly less likely: \n", one)),
+           "more.likely" = capture.output(cat("To claim the treatment made the outcome significantly more likely: \n", two)),
+           "no.effect" =  capture.output(cat("To claim the treatment had 0 effect on the outcome:\n", three)),
+           "critical.points" = critical_point,
+           "full.results"= scqe.obj
       )
     
-    #rlist <- list(one,two,three,critical_point,  scqe.obj)
-    return(rlist)
-    
   }
+  
+  cat("-- SCQE Method Results -- \n\n")
+  
+  cat("- Claims About Treatment Effects -\n")
+  
+  cat(" 1.", "To claim the treatment made the outcome significantly less likely:\n")
+  cat("   ", one,"\n\n")
+  
+  cat(" 2.","To claim the treatment made the outcome significantly more likely:\n")
+  cat("   ",two,"\n\n")
+  
+  cat(" 3.","To claim the treatment had 0 effect on the outcome:\n")
+  cat("   ",three,"\n\n\n")
+  
+  cat("- Full Results Table: - \n")
+  print(scqe.obj)
+  
+  invisible(rlist)
 }
