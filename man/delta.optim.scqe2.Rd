@@ -4,8 +4,8 @@
 \alias{delta.optim.scqe2}
 \title{Delta optimization method for \code{scqe} 2 cohort, full data}
 \usage{
-delta.optim.scqe2(post, treatment, outcome, delta, obj, specified = NULL,
-  ...)
+delta.optim.scqe2(post, treatment, outcome, delta, obj, alpha,
+  specified = NULL, ...)
 }
 \arguments{
 \item{scqe.obj}{an object of class \code{\link{scqe}}}

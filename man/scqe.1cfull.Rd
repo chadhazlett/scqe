@@ -4,7 +4,7 @@
 \alias{scqe.1cfull}
 \title{Stability controlled quasi-experiment (scqe) for 1 cohort case, full data}
 \usage{
-scqe.1cfull(treatment, outcome, delta, ...)
+scqe.1cfull(treatment, outcome, delta, alpha, ...)
 }
 \arguments{
 \item{treatment}{Binary or continuous vector correspoding (usually) to 0,1
@@ -15,6 +15,8 @@ observation.}
 
 \item{delta}{Can take either a single value or vector of possible values for
 delta.}
+
+\item{alpha}{Numeric alpha for confidence interval.}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the

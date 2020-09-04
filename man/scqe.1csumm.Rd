@@ -4,7 +4,8 @@
 \alias{scqe.1csumm}
 \title{Stability controlled quasi-experiment (scqe) for 1 cohort case, summary statistics}
 \usage{
-scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta, ...)
+scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
+  alpha, ...)
 }
 \arguments{
 \item{untr_1C}{Number of unreated individuals.}
@@ -18,6 +19,8 @@ scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta, ...)
 \item{min_delta}{Minimum possible delta.}
 
 \item{max_delta}{Maximum possible delta.}
+
+\item{alpha}{Numeric alpha for confidence interval.}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the 1 cohort

@@ -8,7 +8,7 @@ scqe(post = NA, treatment = NA, outcome = NA, delta = NA,
   cohort = NA, untr_pre = NA, untr_post = NA, tr_post = NA,
   tr_pre = NA, Y_tr_post = NA, Y_untr_post = NA, Y_tr_pre = NA,
   Y_untr_pre = NA, untr = NA, tr = NA, Y_tr = NA, Y_untr = NA,
-  min_delta = NA, max_delta = NA, ...)
+  min_delta = NA, max_delta = NA, alpha = NA, ...)
 }
 \arguments{
 \item{post}{Indicator for being in the second cohort}
@@ -47,6 +47,8 @@ delta.}
 \item{min_delta}{Minimum delta.}
 
 \item{max_delta}{Maximum delta.}
+
+\item{alpha}{Numeric alpha for confidence interval.}
 
 \item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
 }

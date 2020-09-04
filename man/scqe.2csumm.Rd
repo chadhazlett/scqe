@@ -5,7 +5,7 @@
 \title{Stability controlled quasi-experiment (scqe) for 1 cohort case, summary statistics}
 \usage{
 scqe.2csumm(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
-  Y_tr_pre, Y_untr_pre, min_delta, max_delta, ...)
+  Y_tr_pre, Y_untr_pre, min_delta, max_delta, alpha, ...)
 }
 \arguments{
 \item{untr_pre}{Integer number of untreated patients in the first cohort if applicable (T=0).}
@@ -25,6 +25,8 @@ scqe.2csumm(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
 \item{min_delta}{Minimum delta.}
 
 \item{max_delta}{Maximum delta.}
+
+\item{alpha}{Numeric alpha for confidence interval.}
 
 \item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
 

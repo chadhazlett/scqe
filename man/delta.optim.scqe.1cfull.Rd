@@ -5,7 +5,7 @@
 \title{Delta optimization method for \code{scqe} 1 cohort, full data}
 \usage{
 delta.optim.scqe.1cfull(treatment, outcome, delta, obj, specified = NULL,
-  ...)
+  alpha, ...)
 }
 \arguments{
 \item{scqe.obj}{an object of class \code{\link{scqe}}}

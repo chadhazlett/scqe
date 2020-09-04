@@ -19,7 +19,7 @@ The \code{summary} method provides several statements that summarize
 important values of delta requires to make different conclusions
 about the treatment's effect on patient outcome.
 
-The \code{ptin} method provides the result table that 
+The \code{ptin} method provides the result table that
 includes the given delta values and their conclusions
 about the treatment's effect on patient outcome.
 }

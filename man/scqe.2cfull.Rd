@@ -4,7 +4,7 @@
 \alias{scqe.2cfull}
 \title{Stability controlled quasi-experiment (scqe) for 2 cohort case, full data}
 \usage{
-scqe.2cfull(post, treatment, outcome, delta, ...)
+scqe.2cfull(post, treatment, outcome, delta, alpha, ...)
 }
 \arguments{
 \item{post}{Binary vector corresponding to T=0,1 for each observation.}
@@ -17,6 +17,8 @@ observation.}
 
 \item{delta}{Can take either a single value or vector of possible values for
 delta.}
+
+\item{alpha}{Numeric alpha for confidence interval.}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the
