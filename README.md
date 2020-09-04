@@ -54,13 +54,16 @@ Example 1: 2 cohorts, full data
 ``` r
 library(scqe)
 scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-scqe.2cohort.full$result
-#>    term estimate   conf.low  conf.high
-#> 1 -0.10     0.05 -0.3897057  0.4897057
-#> 2 -0.05    -0.20 -0.6495242  0.2495242
-#> 3  0.00    -0.45 -0.9297968  0.0297968
-#> 4  0.05    -0.70 -1.2270104 -0.1729896
-#> 5  0.10    -0.95 -1.5370919 -0.3629081
+#> -- SCQE Method Result Table -- 
+#> 
+#>    term estimate   conf.low   conf.high        se
+#> 1 -0.10     0.05 -0.3896977  0.48969765 0.2243397
+#> 2 -0.05    -0.20 -0.6495160  0.24951598 0.2293491
+#> 3  0.00    -0.45 -0.9297880  0.02978798 0.2447943
+#> 4  0.05    -0.70 -1.2270007 -0.17299932 0.2688828
+#> 5  0.10    -0.95 -1.5370811 -0.36291890 0.2995367
+#> 
+#> For more information, see full summary.
 ```
 
 The results can be plotted by calling plot() on an scqe object.
@@ -75,21 +78,26 @@ The results can be summarized by calling summary() on an scqe object.
 
 ``` r
 summary(scqe.2cohort.full)
-#> [[1]]
-#> [1] "To claim the treatment made the outcome significantly less likely,"       
-#> [2] " one must claim the shift in outcomes under no treatment change was 0.007"
+#> -- SCQE Method Results -- 
 #> 
-#> [[2]]
-#> [1] "To claim the treatment made the outcome significantly more likely,"        
-#> [2] " one must claim the shift in outcomes under no treatment change was -0.184"
+#> - Claims About Treatment Effects -
+#>  1. To claim the treatment made the outcome significantly less likely:
+#>     One must claim the shift in outcomes under no treatment change was 0.007 or above. 
 #> 
-#> [[3]]
-#> [1] "To claim the treatment had exactly 0 effect on the outcome,"                      
-#> [2] " one must claim the shift in outcomes under no treatment change was exactly -0.09"
+#>  2. To claim the treatment made the outcome significantly more likely:
+#>     One must claim the shift in outcomes under no treatment change was -0.184 or below. 
 #> 
-#> [[4]]
-#>    less   harm  zero
-#> 1 0.007 -0.184 -0.09
+#>  3. To claim the treatment had 0 effect on the outcome:
+#>     One must claim the shift in outcomes under no treatment change was exactly -0.09. 
+#> 
+#> 
+#> - Full Results Table: - 
+#>    term estimate   conf.low   conf.high        se
+#> 1 -0.10     0.05 -0.3896977  0.48969765 0.2243397
+#> 2 -0.05    -0.20 -0.6495160  0.24951598 0.2293491
+#> 3  0.00    -0.45 -0.9297880  0.02978798 0.2447943
+#> 4  0.05    -0.70 -1.2270007 -0.17299932 0.2688828
+#> 5  0.10    -0.95 -1.5370811 -0.36291890 0.2995367
 ```
 
 Example 2: 2 cohorts, summary statistics The user can input summary
@@ -99,31 +107,22 @@ well.
 
 ``` r
 scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
-scqe.2cohort.sum$result
-#>    assumed_pre2post_shift SCQE_estimate SCQE_stderr term estimate
-#> 1                    1.00         -3.68   0.5072618 1.00    -3.68
-#> 2                    0.91         -3.32   0.4637405 0.91    -3.32
-#> 3                    0.82         -2.96   0.4203612 0.82    -2.96
-#> 4                    0.73         -2.60   0.3771728 0.73    -2.60
-#> 5                    0.64         -2.24   0.3342493 0.64    -2.24
-#> 6                    0.55         -1.88   0.2917078 0.55    -1.88
-#> 7                    0.46         -1.52   0.2497436 0.46    -1.52
-#> 8                    0.37         -1.16   0.2087050 0.37    -1.16
-#> 9                    0.28         -0.80   0.1692668 0.28    -0.80
-#> 10                   0.19         -0.44   0.1328618 0.19    -0.44
-#> 11                   0.10         -0.08   0.1027658 0.10    -0.08
-#>      conf.low  conf.high
-#> 1  -4.6742332 -2.6857668
-#> 2  -4.2289314 -2.4110686
-#> 3  -3.7839079 -2.1360921
-#> 4  -3.3392586 -1.8607414
-#> 5  -2.8951287 -1.5848713
-#> 6  -2.4517474 -1.3082526
-#> 7  -2.0094974 -1.0305026
-#> 8  -1.5690619 -0.7509381
-#> 9  -1.1317630 -0.4682370
-#> 10 -0.7004092 -0.1795908
-#> 11 -0.2814209  0.1214209
+#> -- SCQE Method Result Table -- 
+#> 
+#>    term estimate   conf.low  conf.high        se
+#> 1  1.00    -3.68 -4.6742149 -2.6857851 0.5072618
+#> 2  0.91    -3.32 -4.2289147 -2.4110853 0.4637405
+#> 3  0.82    -2.96 -3.7838928 -2.1361072 0.4203612
+#> 4  0.73    -2.60 -3.3392450 -1.8607550 0.3771728
+#> 5  0.64    -2.24 -2.8951166 -1.5848834 0.3342493
+#> 6  0.55    -1.88 -2.4517369 -1.3082631 0.2917078
+#> 7  0.46    -1.52 -2.0094884 -1.0305116 0.2497436
+#> 8  0.37    -1.16 -1.5690543 -0.7509457 0.2087050
+#> 9  0.28    -0.80 -1.1317569 -0.4682431 0.1692668
+#> 10 0.19    -0.44 -0.7004044 -0.1795956 0.1328618
+#> 11 0.10    -0.08 -0.2814172  0.1214172 0.1027658
+#> 
+#> For more information, see full summary.
 plot(scqe.2cohort.sum)
 ```
 
@@ -131,21 +130,32 @@ plot(scqe.2cohort.sum)
 
 ``` r
 summary(scqe.2cohort.sum)
-#> [[1]]
-#> [1] "To claim the treatment made the outcome significantly less likely,"       
-#> [2] " one must claim the shift in outcomes under no treatment change was 0.136"
+#> -- SCQE Method Results -- 
 #> 
-#> [[2]]
-#> [1] "To claim the treatment made the outcome significantly more likely,"       
-#> [2] " one must claim the shift in outcomes under no treatment change was 0.036"
+#> - Claims About Treatment Effects -
+#>  1. To claim the treatment made the outcome significantly less likely:
+#>     One must claim the shift in outcomes under no treatment change was 0.136 or above. 
 #> 
-#> [[3]]
-#> [1] "To claim the treatment had exactly 0 effect on the outcome,"                     
-#> [2] " one must claim the shift in outcomes under no treatment change was exactly 0.08"
+#>  2. To claim the treatment made the outcome significantly more likely:
+#>     One must claim the shift in outcomes under no treatment change was 0.036 or below. 
 #> 
-#> [[4]]
-#>    less  harm zero
-#> 1 0.136 0.036 0.08
+#>  3. To claim the treatment had 0 effect on the outcome:
+#>     One must claim the shift in outcomes under no treatment change was exactly 0.08. 
+#> 
+#> 
+#> - Full Results Table: - 
+#>    term estimate   conf.low  conf.high        se
+#> 1  1.00    -3.68 -4.6742149 -2.6857851 0.5072618
+#> 2  0.91    -3.32 -4.2289147 -2.4110853 0.4637405
+#> 3  0.82    -2.96 -3.7838928 -2.1361072 0.4203612
+#> 4  0.73    -2.60 -3.3392450 -1.8607550 0.3771728
+#> 5  0.64    -2.24 -2.8951166 -1.5848834 0.3342493
+#> 6  0.55    -1.88 -2.4517369 -1.3082631 0.2917078
+#> 7  0.46    -1.52 -2.0094884 -1.0305116 0.2497436
+#> 8  0.37    -1.16 -1.5690543 -0.7509457 0.2087050
+#> 9  0.28    -0.80 -1.1317569 -0.4682431 0.1692668
+#> 10 0.19    -0.44 -0.7004044 -0.1795956 0.1328618
+#> 11 0.10    -0.08 -0.2814172  0.1214172 0.1027658
 ```
 
 Example 3: 1 cohort, full
@@ -153,13 +163,16 @@ data
 
 ``` r
 scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-scqe.1cohort.full $result
-#>    term estimate   conf.low conf.high
-#> 1 -0.10     2.15  1.1502059 3.1497941
-#> 2 -0.05     1.65  0.8317819 2.4682181
-#> 3  0.00     1.15  0.4971265 1.8028735
-#> 4  0.05     0.65  0.1305029 1.1694971
-#> 5  0.10     0.15 -0.2976393 0.5976393
+#> -- SCQE Method Result Table -- 
+#> 
+#>    term estimate   conf.low conf.high        se
+#> 1 -0.10     2.15  1.1502243 3.1497757 0.5100990
+#> 2 -0.05     1.65  0.8317969 2.4682031 0.4174582
+#> 3  0.00     1.15  0.4971385 1.8028615 0.3330987
+#> 4  0.05     0.65  0.1305125 1.1694875 0.2650495
+#> 5  0.10     0.15 -0.2976311 0.5976311 0.2283874
+#> 
+#> For more information, see full summary.
 plot(scqe.1cohort.full)
 ```
 
@@ -167,21 +180,26 @@ plot(scqe.1cohort.full)
 
 ``` r
 summary(scqe.1cohort.full)
-#> [[1]]
-#> [1] "To claim the treatment made the outcome significantly less likely,"       
-#> [2] " one must claim the shift in outcomes under no treatment change was 0.164"
+#> -- SCQE Method Results -- 
 #> 
-#> [[2]]
-#> [1] "To claim the treatment made the outcome significantly more likely,"       
-#> [2] " one must claim the shift in outcomes under no treatment change was 0.066"
+#> - Claims About Treatment Effects -
+#>  1. To claim the treatment made the outcome significantly less likely:
+#>     One must claim the shift in outcomes under no treatment change was 0.164 or above. 
 #> 
-#> [[3]]
-#> [1] "To claim the treatment had exactly 0 effect on the outcome,"                      
-#> [2] " one must claim the shift in outcomes under no treatment change was exactly 0.115"
+#>  2. To claim the treatment made the outcome significantly more likely:
+#>     One must claim the shift in outcomes under no treatment change was 0.066 or below. 
 #> 
-#> [[4]]
-#>    less  harm  zero
-#> 1 0.164 0.066 0.115
+#>  3. To claim the treatment had 0 effect on the outcome:
+#>     One must claim the shift in outcomes under no treatment change was exactly 0.115. 
+#> 
+#> 
+#> - Full Results Table: - 
+#>    term estimate   conf.low conf.high        se
+#> 1 -0.10     2.15  1.1502243 3.1497757 0.5100990
+#> 2 -0.05     1.65  0.8317969 2.4682031 0.4174582
+#> 3  0.00     1.15  0.4971385 1.8028615 0.3330987
+#> 4  0.05     0.65  0.1305125 1.1694875 0.2650495
+#> 5  0.10     0.15 -0.2976311 0.5976311 0.2283874
 ```
 
 Example 4: 1 cohort, summary
@@ -189,31 +207,22 @@ statistics
 
 ``` r
 scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
-scqe.1cohort.sum$result
-#>    assumed_nontreat_outcome SCQE_estimate SCQE_stderr term estimate
-#> 1                      1.00        -1.225  0.06029991 1.00   -1.225
-#> 2                      0.91        -1.090  0.05579840 0.91   -1.090
-#> 3                      0.82        -0.955  0.05149561 0.82   -0.955
-#> 4                      0.73        -0.820  0.04744562 0.73   -0.820
-#> 5                      0.64        -0.685  0.04371875 0.64   -0.685
-#> 6                      0.55        -0.550  0.04040452 0.55   -0.550
-#> 7                      0.46        -0.415  0.03761215 0.46   -0.415
-#> 8                      0.37        -0.280  0.03546514 0.37   -0.280
-#> 9                      0.28        -0.145  0.03408564 0.28   -0.145
-#> 10                     0.19        -0.010  0.03356843 0.19   -0.010
-#> 11                     0.10         0.125  0.03395292 0.10    0.125
-#>       conf.low   conf.high
-#> 1  -1.34318781 -1.10681219
-#> 2  -1.19936487 -0.98063513
-#> 3  -1.05593139 -0.85406861
-#> 4  -0.91299342 -0.72700658
-#> 5  -0.77068876 -0.59931124
-#> 6  -0.62919286 -0.47080714
-#> 7  -0.48871982 -0.34128018
-#> 8  -0.34951167 -0.21048833
-#> 9  -0.21180786 -0.07819214
-#> 10 -0.07579412  0.05579412
-#> 11  0.05845227  0.19154773
+#> -- SCQE Method Result Table -- 
+#> 
+#>    term estimate    conf.low   conf.high         se
+#> 1  1.00   -1.225 -1.34318564 -1.10681436 0.06029991
+#> 2  0.91   -1.090 -1.19936286 -0.98063714 0.05579840
+#> 3  0.82   -0.955 -1.05592954 -0.85407046 0.05149561
+#> 4  0.73   -0.820 -0.91299171 -0.72700829 0.04744562
+#> 5  0.64   -0.685 -0.77068718 -0.59931282 0.04371875
+#> 6  0.55   -0.550 -0.62919140 -0.47080860 0.04040452
+#> 7  0.46   -0.415 -0.48871846 -0.34128154 0.03761215
+#> 8  0.37   -0.280 -0.34951039 -0.21048961 0.03546514
+#> 9  0.28   -0.145 -0.21180663 -0.07819337 0.03408564
+#> 10 0.19   -0.010 -0.07579291  0.05579291 0.03356843
+#> 11 0.10    0.125  0.05845349  0.19154651 0.03395292
+#> 
+#> For more information, see full summary.
 plot(scqe.1cohort.sum)
 ```
 
@@ -221,19 +230,30 @@ plot(scqe.1cohort.sum)
 
 ``` r
 summary(scqe.1cohort.sum)
-#> [[1]]
-#> [1] "To claim the treatment made the outcome significantly less likely,"       
-#> [2] " one must claim the shift in outcomes under no treatment change was 0.227"
+#> -- SCQE Method Results -- 
 #> 
-#> [[2]]
-#> [1] "To claim the treatment made the outcome significantly more likely,"       
-#> [2] " one must claim the shift in outcomes under no treatment change was 0.139"
+#> - Claims About Treatment Effects -
+#>  1. To claim the treatment made the outcome significantly less likely:
+#>     One must claim the shift in outcomes under no treatment change was 0.227 or above. 
 #> 
-#> [[3]]
-#> [1] "To claim the treatment had exactly 0 effect on the outcome,"                      
-#> [2] " one must claim the shift in outcomes under no treatment change was exactly 0.183"
+#>  2. To claim the treatment made the outcome significantly more likely:
+#>     One must claim the shift in outcomes under no treatment change was 0.139 or below. 
 #> 
-#> [[4]]
-#>    less  harm  zero
-#> 1 0.227 0.139 0.183
+#>  3. To claim the treatment had 0 effect on the outcome:
+#>     One must claim the shift in outcomes under no treatment change was exactly 0.183. 
+#> 
+#> 
+#> - Full Results Table: - 
+#>    term estimate    conf.low   conf.high         se
+#> 1  1.00   -1.225 -1.34318564 -1.10681436 0.06029991
+#> 2  0.91   -1.090 -1.19936286 -0.98063714 0.05579840
+#> 3  0.82   -0.955 -1.05592954 -0.85407046 0.05149561
+#> 4  0.73   -0.820 -0.91299171 -0.72700829 0.04744562
+#> 5  0.64   -0.685 -0.77068718 -0.59931282 0.04371875
+#> 6  0.55   -0.550 -0.62919140 -0.47080860 0.04040452
+#> 7  0.46   -0.415 -0.48871846 -0.34128154 0.03761215
+#> 8  0.37   -0.280 -0.34951039 -0.21048961 0.03546514
+#> 9  0.28   -0.145 -0.21180663 -0.07819337 0.03408564
+#> 10 0.19   -0.010 -0.07579291  0.05579291 0.03356843
+#> 11 0.10    0.125  0.05845349  0.19154651 0.03395292
 ```
