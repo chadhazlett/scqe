@@ -2,16 +2,25 @@
 % Please edit documentation in R/functions.R
 \name{summary.scqe}
 \alias{summary.scqe}
+\alias{print.scqe}
 \title{Summary method for \code{scqe}}
 \usage{
 \method{summary}{scqe}(scqe.obj, ...)
+
+\method{print}{scqe}(scqe.obj, ...)
 }
 \arguments{
+\item{scqe.obj}{an object of class \code{\link{scqe}}}
+
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
 }
 \description{
 The \code{summary} method provides several statements that summarize
 important values of delta requires to make different conclusions
+about the treatment's effect on patient outcome.
+
+The \code{ptin} method provides the result table that 
+includes the given delta values and their conclusions
 about the treatment's effect on patient outcome.
 }
 \examples{
@@ -24,5 +33,15 @@ y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
 scqe.2cohort.full$result
 summary(scqe.2cohort.full)
+
+set.seed(1234)
+post = c(rep(0,100), rep(1,100))
+tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
+y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+
+# Two cohorts, full data
+scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full
+print(scqe.2cohort.full)
 
 }

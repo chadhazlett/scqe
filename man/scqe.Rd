@@ -67,7 +67,7 @@ summary(scqe.2cohort.full)
 
 # One cohort, full data
 scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-scqe.1cohort.full $result
+scqe.1cohort.full$result
 plot(scqe.1cohort.full)
 summary(scqe.1cohort.full)
 
