@@ -31,7 +31,6 @@ y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 
 # Two cohorts, full data
 scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-scqe.2cohort.full$result
 summary(scqe.2cohort.full)
 
 set.seed(1234)

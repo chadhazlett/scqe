@@ -20,7 +20,7 @@ scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
 
 \item{max_delta}{Maximum possible delta.}
 
-\item{alpha}{Numeric alpha for confidence interval.}
+\item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the 1 cohort
@@ -29,7 +29,6 @@ case when the user inputs only summary statistics.
 \examples{
 # One cohort, summary data only
 scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
-scqe.1cohort.sum$result
 plot(scqe.1cohort.sum)
 summary(scqe.1cohort.sum)
 

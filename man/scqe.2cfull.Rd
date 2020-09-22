@@ -18,7 +18,7 @@ observation.}
 \item{delta}{Can take either a single value or vector of possible values for
 delta.}
 
-\item{alpha}{Numeric alpha for confidence interval.}
+\item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the
@@ -32,7 +32,6 @@ y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 
 # Two cohorts, full data
 scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=seq(from=-.1,to=.1, by=0.05))
-scqe.2cohort.full$result
 plot(scqe.2cohort.full)
 summary(scqe.2cohort.full)
 

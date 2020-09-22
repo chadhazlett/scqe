@@ -8,7 +8,7 @@ The scqe package contains several function for statistical analysis that factor 
 confounding variables and their impact on estimates (Hazlett, 2019).
 }
 \details{
-The main function in the package is \code{\link{scqe}}, which...
+The main function in the package is \code{\link{scqe}}, which computes scqe estimates and confidence intervals for one or two cohorts with summary or full data given.
 }
 \section{package dependencies}{
 
@@ -17,5 +17,5 @@ ggplot2
 }
 
 \references{
-Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
+Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments." Journal of Causal Inference.
 }

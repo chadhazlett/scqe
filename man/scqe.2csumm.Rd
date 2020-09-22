@@ -26,7 +26,7 @@ scqe.2csumm(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
 
 \item{max_delta}{Maximum delta.}
 
-\item{alpha}{Numeric alpha for confidence interval.}
+\item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
 \item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
 
@@ -43,11 +43,8 @@ case when the user inputs only summary statistics.
 \examples{
 # Two cohorts, summary data only
 scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
-scqe.2cohort.sum$result
 plot(scqe.2cohort.sum)
 summary(scqe.2cohort.sum)
-
-
 
 
 }
