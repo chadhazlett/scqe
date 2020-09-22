@@ -3,9 +3,9 @@
 #' The scqe package contains several function for statistical analysis that factor in
 #' confounding variables and their impact on estimates (Hazlett, 2019).
 #'
-#' The main function in the package is \code{\link{scqe}}, which...
+#' The main function in the package is \code{\link{scqe}}, which computes scqe estimates and confidence intervals for one or two cohorts with summary or full data given.
 #'
-#' @references Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments. Journal of Causal Inference.
+#' @references Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments." Journal of Causal Inference.
 #'
 #'@section package dependencies:
 #'AER
@@ -42,7 +42,7 @@ NULL
 #' @param Y_tr Outcome for treated patients.
 #' @param min_delta Minimum delta.
 #' @param max_delta Maximum delta.
-#' @param alpha Numeric alpha for confidence interval.
+#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #'
 #' @references  Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments." Journal of Causal Inference.
 #'
@@ -54,19 +54,16 @@ NULL
 #'
 #' # Two cohorts, full data
 #' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-#' scqe.2cohort.full$result
 #' plot(scqe.2cohort.full)
 #' summary(scqe.2cohort.full)
 #'
 #' # One cohort, full data
 #' scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-#' scqe.1cohort.full$result
 #' plot(scqe.1cohort.full)
 #' summary(scqe.1cohort.full)
 #'
 #' # Two cohorts, summary data only
 #' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
-#' scqe.2cohort.sum$result
 #' plot(scqe.2cohort.sum)
 #' summary(scqe.2cohort.sum)
 #'
@@ -123,7 +120,7 @@ scqemethod <- function(...){
 #'   observation.
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
-#' @param alpha Numeric alpha for confidence interval.
+#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #'
 #'
 #' @examples
@@ -134,7 +131,6 @@ scqemethod <- function(...){
 #'
 #' # Two cohorts, full data
 #' scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=seq(from=-.1,to=.1, by=0.05))
-#' scqe.2cohort.full$result
 #' plot(scqe.2cohort.full)
 #' summary(scqe.2cohort.full)
 #'
@@ -212,7 +208,7 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
 #'   observation.
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
-#' @param alpha Numeric alpha for confidence interval.
+#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #'
 #' @examples
 #' set.seed(1234)
@@ -222,7 +218,6 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
 #'
 #' # One cohort, full data
 #' scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-#' scqe.1cohort.full $result
 #' plot(scqe.1cohort.full)
 #' summary(scqe.1cohort.full)
 #'
@@ -306,16 +301,13 @@ scqe.1cfull = function(treatment, outcome, delta, alpha, ...){
 #' @param Y_tr Outcome for treated patients.
 #' @param min_delta Minimum delta.
 #' @param max_delta Maximum delta.
-#' @param alpha Numeric alpha for confidence interval.
+#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #'
 #' @examples
 #' # Two cohorts, summary data only
 #' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
-#' scqe.2cohort.sum$result
 #' plot(scqe.2cohort.sum)
 #' summary(scqe.2cohort.sum)
-#'
-#'
 #'
 #'
 #'@export
@@ -455,12 +447,11 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 #' @param Y_tr_1C Outcome for treated individuals.
 #' @param min_delta Minimum possible delta.
 #' @param max_delta Maximum possible delta.
-#' @param alpha Numeric alpha for confidence interval.
+#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #'
 #' @examples
 #' # One cohort, summary data only
 #' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
-#' scqe.1cohort.sum$result
 #' plot(scqe.1cohort.sum)
 #' summary(scqe.1cohort.sum)
 #'
@@ -821,7 +812,6 @@ plot.scqe = function(scqe.obj){
 #'
 #' # Two cohorts, full data
 #' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-#' scqe.2cohort.full$result
 #' summary(scqe.2cohort.full)
 #'
 #' @export
