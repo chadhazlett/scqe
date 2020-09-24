@@ -4,7 +4,7 @@
 \alias{plot.scqe}
 \title{Plot method for \code{scqe}}
 \usage{
-\method{plot}{scqe}(scqe.obj)
+\method{plot}{scqe}(scqe.obj, ...)
 }
 \arguments{
 \item{scqe.obj}{an object of class \code{\link{scqe}}}

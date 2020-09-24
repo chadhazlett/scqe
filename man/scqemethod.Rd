@@ -10,5 +10,5 @@ scqemethod(...)
 \item{...}{Arguments from scqe}
 }
 \description{
-
+Discpactches to correct scqe function
 }

@@ -115,7 +115,7 @@ scqe = function(post=NA, treatment=NA, outcome=NA, delta=NA, cohort=NA, untr_pre
 
 #' Stability controlled quasi-experiment (scqe)
 #'
-#'@description
+#'@description Discpactches to correct scqe function
 #'
 #' @param ...  Arguments from scqe
 #'
@@ -819,7 +819,7 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #'
 #' @export
 #'
-plot.scqe = function(scqe.obj){
+plot.scqe = function(scqe.obj, ...){
   scqe.obj <- as.data.frame(scqe.obj$result)
   return(ggplot2::ggplot(scqe.obj, ggplot2::aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high)) +
            ggplot2::geom_pointrange(size=.5, shape=16) +
@@ -850,6 +850,8 @@ plot.scqe = function(scqe.obj){
 #' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
 #' delta=seq(from=-.1, to=.1, by=0.05))
 #' summary(scqe.2cohort.full)
+#'
+#' @importFrom stats optimize
 #'
 #' @export
 #'
