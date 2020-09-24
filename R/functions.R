@@ -1,11 +1,16 @@
 #' scqe: Stability Controlled Quasi-Experimentation
 #'
-#' The scqe package contains several function for statistical analysis that factor in
-#' confounding variables and their impact on estimates (Hazlett, 2019).
+#' The scqe package contains several function for statistical analysis that
+#' factor in confounding variables and their impact on estimates
+#' (Hazlett, 2019).
 #'
-#' The main function in the package is \code{\link{scqe}}, which computes scqe estimates and confidence intervals for one or two cohorts with summary or full data given.
+#' The main function in the package is \code{\link{scqe}}, which computes scqe
+#' estimates and confidence intervals for one or two cohorts with summary or
+#' full data given.
 #'
-#' @references Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments." Journal of Causal Inference.
+#' @references Hazlett, C. (2019), "Estimating causal effects of new treatments
+#' despite self-selection: The case of experimental medical treatments."
+#' Journal of Causal Inference.
 #'
 #'@section package dependencies:
 #'AER
@@ -19,7 +24,8 @@ NULL
 #' Stability controlled quasi-experiment (scqe)
 #'
 #' @description
-#' Main scqe function. Computes scqe estimates and corresponding confidence intervals.
+#' Main scqe function. Computes scqe estimates and corresponding confidence
+#' intervals.
 #'
 #' @param post Indicator for being in the second cohort
 #' @param treatment Binary or continuous vector correspoding (usually) to 0,1
@@ -29,14 +35,20 @@ NULL
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
 #' @param cohort 1 or 2 depending existence of time element.
-#' @param untr_pre Integer number of untreated patients in the first cohort if applicable (T=0).
-#' @param untr_post Integer number of untreated patients in the second cohort if applicable (T=1).
-#' @param tr_post Integer number of treated patients in the second cohort if applicable (T=1).
-#' @param tre_pre Integer number of treated patients in the first cohort if applicable (T=0).
+#' @param untr_pre Integer number of untreated patients in the first cohort if
+#' applicable (T=0).
+#' @param untr_post Integer number of untreated patients in the second cohort
+#' if applicable (T=1).
+#' @param tr_post Integer number of treated patients in the second cohort if
+#' applicable (T=1).
+#' @param tre_pre Integer number of treated patients in the first cohort if
+#' applicable (T=0).
 #' @param Y_tr_post Outcome for patients who received treatment at time T=1.
-#' @param Y_untr_post Outcome for patients who did not receive treatment at time T=1.
+#' @param Y_untr_post Outcome for patients who did not receive treatment at
+#' time T=1.
 #' @param Y_tr_pre Outcome for patients who did receive treatment at time T=0.
-#' @param Y_untr_pre Outcome for patients who did not receive treatment at time T=0.
+#' @param Y_untr_pre Outcome for patients who did not receive treatment at time
+#'  T=0.
 #' @param untr Integer number of untreated patients.
 #' @param tr Integer number of treated patients.
 #' @param Y_tr Outcome for treated patients.
@@ -44,7 +56,9 @@ NULL
 #' @param max_delta Maximum delta.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #'
-#' @references  Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments." Journal of Causal Inference.
+#' @references  Hazlett, C. (2019), "Estimating causal effects of new treatments
+#' despite self-selection: The case of experimental medical treatments."
+#' Journal of Causal Inference.
 #'
 #' @examples
 #' set.seed(1234)
@@ -53,23 +67,27 @@ NULL
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
+#' delta=seq(from=-.1, to=.1, by=0.05))
 #' plot(scqe.2cohort.full)
 #' summary(scqe.2cohort.full)
 #'
 #' # One cohort, full data
-#' scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.1cohort.full = scqe(treatment=tx, outcome=y,
+#' delta=seq(from=-.1, to=.1, by=0.05))
 #' plot(scqe.1cohort.full)
 #' summary(scqe.1cohort.full)
 #'
 #' # Two cohorts, summary data only
-#' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+#' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,
+#' Y_tr_post=20,Y_untr_post=1,
+#' Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
 #' plot(scqe.2cohort.sum)
 #' summary(scqe.2cohort.sum)
 #'
 #' # One cohort, summary data only
-#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
-#' scqe.1cohort.sum$result
+#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,
+#' max_outcome=1, min_delta=.1,max_delta=1)
 #' plot(scqe.1cohort.sum)
 #' summary(scqe.1cohort.sum)
 #'
@@ -130,7 +148,8 @@ scqemethod <- function(...){
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y, delta=seq(from=-.1,to=.1, by=0.05))
+#' scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y,
+#' delta=seq(from=-.1,to=.1, by=0.05))
 #' plot(scqe.2cohort.full)
 #' summary(scqe.2cohort.full)
 #'
@@ -141,7 +160,7 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
     alpha <- .05
   }
 
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
   if(all(post==TRUE|post==FALSE)){
     post <- as.numeric(post)
@@ -161,7 +180,7 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
     }
   }else{
     #checks if delta is in range for non-binary case
-    quant <- quantile(outcome, probs=c(.25,.75))
+    quant <- stats::quantile(outcome, probs=c(.25,.75))
     diff <- quant[[2]] - quant[[1]]
     if(any(delta > diff | delta < -diff)){
       warning("One or more deltas out of expected range")
@@ -217,7 +236,8 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
 #' # One cohort, full data
-#' scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.1cohort.full = scqe(treatment=tx, outcome=y,
+#' delta=seq(from=-.1, to=.1, by=0.05))
 #' plot(scqe.1cohort.full)
 #' summary(scqe.1cohort.full)
 #'
@@ -230,7 +250,7 @@ scqe.1cfull = function(treatment, outcome, delta, alpha, ...){
     alpha <- .05
   }
 
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
   if(!is.numeric(delta)){
     delta <- seq(from=-.1, to=.1, by=.05)
@@ -282,20 +302,27 @@ scqe.1cfull = function(treatment, outcome, delta, alpha, ...){
 }
 
 ## 2 COHORT CASE SUM STATS FXN
-#' Stability controlled quasi-experiment (scqe) for 1 cohort case, summary statistics
+#' Stability controlled quasi-experiment (scqe) for 1 cohort case,
+#' summary statistics
 #'
 #'@description
-#' This function returns the scqe estimates and confidence intervals for the 2 cohort
-#' case when the user inputs only summary statistics.
+#' This function returns the scqe estimates and confidence intervals for the
+#' 2 cohort case when the user inputs only summary statistics.
 #'
-#' @param untr_pre Integer number of untreated patients in the first cohort if applicable (T=0).
-#' @param untr_post Integer number of untreated patients in the second cohort if applicable (T=1).
-#' @param tr_post Integer number of treated patients in the second cohort if applicable (T=1).
-#' @param tre_pre Integer number of treated patients in the first cohort if applicable (T=0).
+#' @param untr_pre Integer number of untreated patients in the first cohort
+#' if applicable (T=0).
+#' @param untr_post Integer number of untreated patients in the second cohort
+#' if applicable (T=1).
+#' @param tr_post Integer number of treated patients in the second cohort if
+#' applicable (T=1).
+#' @param tre_pre Integer number of treated patients in the first cohort if
+#' applicable (T=0).
 #' @param Y_tr_post Outcome for patients who received treatment at time T=1.
-#' @param Y_untr_post Outcome for patients who did not receive treatment at time T=1.
+#' @param Y_untr_post Outcome for patients who did not receive treatment at
+#' time T=1.
 #' @param Y_tr_pre Outcome for patients who did receive treatment at time T=0.
-#' @param Y_untr_pre Outcome for patients who did not receive treatment at time T=0.
+#' @param Y_untr_pre Outcome for patients who did not receive treatment at
+#' time T=0.
 #' @param untr Integer number of untreated patients.
 #' @param tr Integer number of treated patients.
 #' @param Y_tr Outcome for treated patients.
@@ -305,7 +332,9 @@ scqe.1cfull = function(treatment, outcome, delta, alpha, ...){
 #'
 #' @examples
 #' # Two cohorts, summary data only
-#' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+#' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,
+#' Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,
+#' Y_untr_pre=5,min_delta=.1, max_delta=1)
 #' plot(scqe.2cohort.sum)
 #' summary(scqe.2cohort.sum)
 #'
@@ -319,7 +348,7 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
     alpha <- .05
   }
 
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
 
   if(!is.numeric(min_delta) | !is.numeric(max_delta)){
@@ -435,10 +464,12 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 
 ##ONE COHORT CASE SUM STATS FXN
 
-#' Stability controlled quasi-experiment (scqe) for 1 cohort case, summary statistics
+#' Stability controlled quasi-experiment (scqe) for 1 cohort case, summary
+#' statistics
 #'
 #' @description
-#' This function returns the scqe estimates and confidence intervals for the 1 cohort
+#' This function returns the scqe estimates and confidence intervals for the
+#' 1 cohort
 #' case when the user inputs only summary statistics.
 #'
 #' @param untr_1C Number of unreated individuals.
@@ -451,7 +482,8 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 #'
 #' @examples
 #' # One cohort, summary data only
-#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
+#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,
+#' max_outcome=1, min_delta=.1,max_delta=1)
 #' plot(scqe.1cohort.sum)
 #' summary(scqe.1cohort.sum)
 #'
@@ -463,7 +495,7 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta
     alpha <- .05
   }
 
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
   if(!is.numeric(min_delta) | !is.numeric(max_delta)){
     min_delta <- -.1
@@ -529,14 +561,15 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta
 #' Delta optimization method for \code{scqe} 1 cohort, summary statistics
 #' @rdname delta.optim.scqe
 #' @description
-#' The \code{print} method provides the critical values presented in the summary method for scqe objects.
+#' The \code{print} method provides the critical values presented in the summary
+#' method for scqe objects.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
 #' @export
 delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, obj, specified = NULL,alpha,...){
 
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
 
   N <- treated + untreated
@@ -560,7 +593,8 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, o
 #' Delta optimization method for \code{scqe} 2 cohort, summary statistics
 #' @rdname delta_optim_SCQE_2C
 #' @description
-#' The \code{print} method provides the critical values presented in the summary method for scqe objects.
+#' The \code{print} method provides the critical values presented in the summary
+#' method for scqe objects.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
@@ -569,7 +603,7 @@ delta_optim_SCQE_2C <- function(delta,untr_pre,untr_post,tr_post,tr_pre,
                                 Y_tr_post, Y_untr_post,Y_tr_pre,Y_untr_pre,
                                 obj, specified = NULL,alpha,...){
 
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
   N_pre <- untr_pre + tr_pre
   N_post <- untr_post + tr_post
@@ -639,14 +673,15 @@ delta_optim_SCQE_2C <- function(delta,untr_pre,untr_post,tr_post,tr_pre,
 #' Delta optimization method for \code{scqe} 2 cohort, full data
 #' @rdname delta.optim.scqe2
 #' @description
-#' The \code{print} method provides the critical values presented in the summary method for scqe objects.
+#' The \code{print} method provides the critical values presented in the summary
+#' method for scqe objects.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
 #' @export
 delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, alpha, specified = NULL,...){
 
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
   untr_pre <- length(intersect(which(treatment == 0), which(post == 0)))
   untr_post <- length(intersect(which(treatment == 0), which(post == 1)))
@@ -733,14 +768,15 @@ delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, alpha, speci
 #' Delta optimization method for \code{scqe} 1 cohort, full data
 #' @rdname delta.optim.scqe.1cfull
 #' @description
-#' The \code{print} method provides the critical values presented in the summary method for scqe objects.
+#' The \code{print} method provides the critical values presented in the summary
+#' method for scqe objects.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
 #'
 #' @export
 delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = NULL,alpha,...){
 
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
   N <- length(treatment)
   pi1 <- sum(treatment)/N
@@ -777,8 +813,8 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
-#' scqe.2cohort.full$result
+#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
+#' delta=seq(from=-.1, to=.1, by=0.05))
 #' plot(scqe.2cohort.full)
 #'
 #' @export
@@ -811,7 +847,8 @@ plot.scqe = function(scqe.obj){
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
+#' delta=seq(from=-.1, to=.1, by=0.05))
 #' summary(scqe.2cohort.full)
 #'
 #' @export
@@ -824,7 +861,7 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
   cohort <- scqe.obj$cohort
   alpha <- scqe.obj$alpha
   scqe.obj <- as.data.frame(scqe.obj$result)
-  value <- qnorm(1-(alpha/2))
+  value <- stats::qnorm(1-(alpha/2))
 
   if(cohort==2){
     # optimize for the "less likely case"
@@ -832,27 +869,27 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
                                                   treatment=treatment, outcome=outcome,post=post,alpha=alpha,obj = "less", tol = 0.0001)[1]), 3)
 
     # claim: treatment makes outcome less likely
-    one <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_less_1C_full, "or above."))
+    one <- utils::capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_less_1C_full, "or above."))
 
     #optimize for "more likely case"
     opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome, post=post,alpha=alpha, obj = "harm", tol = 0.0001)[1]), 3)
     # claim: treatment makes outcome more likely
-    two <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_harm_1C_full, "or below."))
+    two <- utils::capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_harm_1C_full, "or below."))
 
     # optimize for the "no effect case"
     opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe2, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome,post=post,alpha=alpha, obj = "zero", tol = 0.0001)[1]), 3)
 
     #claim: treatment had 0 effect
-    three <- capture.output(cat("One must claim the shift in outcomes under no treatment change was exactly",paste0(opt_zero_1C_full,".")))
+    three <- utils::capture.output(cat("One must claim the shift in outcomes under no treatment change was exactly",paste0(opt_zero_1C_full,".")))
 
     critical_point <- data.frame("less likely"=opt_less_1C_full,"more likely"=opt_harm_1C_full,"zero effect"=opt_zero_1C_full)
 
     rlist <-
-      list("less.likely" = capture.output(cat("To claim the treatment made the outcome significantly less likely: \n", one)),
-           "more.likely" = capture.output(cat("To claim the treatment made the outcome significantly more likely: \n", two)),
-           "no.effect" =  capture.output(cat("To claim the treatment had 0 effect on the outcome:\n", three)),
+      list("less.likely" = utils::capture.output(cat("To claim the treatment made the outcome significantly less likely: \n", one)),
+           "more.likely" = utils::capture.output(cat("To claim the treatment made the outcome significantly more likely: \n", two)),
+           "no.effect" =  utils::capture.output(cat("To claim the treatment had 0 effect on the outcome:\n", three)),
            "critical.points" = critical_point,
            "full.results"= scqe.obj
       )
@@ -864,28 +901,28 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
                                                   treatment=treatment, outcome=outcome,alpha=alpha,obj = "less", tol = 0.0001)[1]), 3)
 
     # claim: treatment makes outcome less likely
-    one <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_less_1C_full, "or above."))
+    one <- utils::capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_less_1C_full, "or above."))
 
     #optimize for "more likely case"
     opt_harm_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome, alpha=alpha, obj = "harm", tol = 0.0001)[1]), 3)
     # claim: treatment makes outcome more likely
-    two <- capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_harm_1C_full, "or below."))
+    two <- utils::capture.output(cat("One must claim the shift in outcomes under no treatment change was",opt_harm_1C_full, "or below."))
 
     # optimize for the "no effect case"
     opt_zero_1C_full <- round(as.numeric(optimize(f = delta.optim.scqe.1cfull, interval = c(-1,1),
                                                   treatment=treatment, outcome=outcome,alpha=alpha, obj = "zero", tol = 0.0001)[1]), 3)
 
     #claim: treatment had 0 effect
-    three <- capture.output(cat("One must claim the shift in outcomes under no treatment change was exactly",paste0(opt_zero_1C_full,".")))
+    three <- utils::capture.output(cat("One must claim the shift in outcomes under no treatment change was exactly",paste0(opt_zero_1C_full,".")))
 
     critical_point <- data.frame("less likely"=opt_less_1C_full,"more likely"=opt_harm_1C_full,"zero effect"=opt_zero_1C_full)
 
 
     rlist <-
-      list("less.likely" = capture.output(cat("To claim the treatment made the outcome significantly less likely: \n", one)),
-           "more.likely" = capture.output(cat("To claim the treatment made the outcome significantly more likely: \n", two)),
-           "no.effect" =  capture.output(cat("To claim the treatment had 0 effect on the outcome:\n", three)),
+      list("less.likely" = utils::capture.output(cat("To claim the treatment made the outcome significantly less likely: \n", one)),
+           "more.likely" = utils::capture.output(cat("To claim the treatment made the outcome significantly more likely: \n", two)),
+           "no.effect" =  utils::capture.output(cat("To claim the treatment had 0 effect on the outcome:\n", three)),
            "critical.points" = critical_point,
            "full.results"= scqe.obj
       )
@@ -929,7 +966,8 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
+#' delta=seq(from=-.1, to=.1, by=0.05))
 #' scqe.2cohort.full
 #' print(scqe.2cohort.full)
 #'

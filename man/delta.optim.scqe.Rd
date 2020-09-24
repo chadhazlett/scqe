@@ -11,5 +11,6 @@ delta.optim.scqe(Y_T0, untreated, Y_untreated, treated, Y_treated, obj,
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
 }
 \description{
-The \code{print} method provides the critical values presented in the summary method for scqe objects.
+The \code{print} method provides the critical values presented in the summary
+method for scqe objects.
 }

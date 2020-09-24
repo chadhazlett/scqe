@@ -29,7 +29,8 @@ tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 
 # One cohort, full data
-scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.1cohort.full = scqe(treatment=tx, outcome=y,
+delta=seq(from=-.1, to=.1, by=0.05))
 plot(scqe.1cohort.full)
 summary(scqe.1cohort.full)
 

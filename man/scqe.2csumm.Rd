@@ -2,25 +2,31 @@
 % Please edit documentation in R/functions.R
 \name{scqe.2csumm}
 \alias{scqe.2csumm}
-\title{Stability controlled quasi-experiment (scqe) for 1 cohort case, summary statistics}
+\title{Stability controlled quasi-experiment (scqe) for 1 cohort case,
+summary statistics}
 \usage{
 scqe.2csumm(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
   Y_tr_pre, Y_untr_pre, min_delta, max_delta, alpha, ...)
 }
 \arguments{
-\item{untr_pre}{Integer number of untreated patients in the first cohort if applicable (T=0).}
+\item{untr_pre}{Integer number of untreated patients in the first cohort
+if applicable (T=0).}
 
-\item{untr_post}{Integer number of untreated patients in the second cohort if applicable (T=1).}
+\item{untr_post}{Integer number of untreated patients in the second cohort
+if applicable (T=1).}
 
-\item{tr_post}{Integer number of treated patients in the second cohort if applicable (T=1).}
+\item{tr_post}{Integer number of treated patients in the second cohort if
+applicable (T=1).}
 
 \item{Y_tr_post}{Outcome for patients who received treatment at time T=1.}
 
-\item{Y_untr_post}{Outcome for patients who did not receive treatment at time T=1.}
+\item{Y_untr_post}{Outcome for patients who did not receive treatment at
+time T=1.}
 
 \item{Y_tr_pre}{Outcome for patients who did receive treatment at time T=0.}
 
-\item{Y_untr_pre}{Outcome for patients who did not receive treatment at time T=0.}
+\item{Y_untr_pre}{Outcome for patients who did not receive treatment at
+time T=0.}
 
 \item{min_delta}{Minimum delta.}
 
@@ -28,7 +34,8 @@ scqe.2csumm(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
-\item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
+\item{tre_pre}{Integer number of treated patients in the first cohort if
+applicable (T=0).}
 
 \item{untr}{Integer number of untreated patients.}
 
@@ -37,12 +44,14 @@ scqe.2csumm(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
 \item{Y_tr}{Outcome for treated patients.}
 }
 \description{
-This function returns the scqe estimates and confidence intervals for the 2 cohort
-case when the user inputs only summary statistics.
+This function returns the scqe estimates and confidence intervals for the
+2 cohort case when the user inputs only summary statistics.
 }
 \examples{
 # Two cohorts, summary data only
-scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,
+Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,
+Y_untr_pre=5,min_delta=.1, max_delta=1)
 plot(scqe.2cohort.sum)
 summary(scqe.2cohort.sum)
 

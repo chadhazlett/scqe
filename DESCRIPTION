@@ -5,10 +5,12 @@ Authors@R:
     c(person(given = "Kirsten", family = "Landsiedel", role = "cre", email = "kirstenlandsiedel@gmail.com"),
     person("Hazlett", "Chad", role="aut", email = "chazlett@ucla.edu"))
 Description: The scqe package allows users to implement the stability controlled quasi-experiment (SCQE) (Hazlett, 2019) approach to study the effects of newly adopted treatments that were not assigned at random. This package contains tools to help users avoid making statistical assumptions that rely on infeasible assumptions.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Imports: 
     AER,
-    ggplot2
+    ggplot2,
+    stats,
+    utils

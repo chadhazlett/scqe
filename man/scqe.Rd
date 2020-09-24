@@ -24,19 +24,24 @@ delta.}
 
 \item{cohort}{1 or 2 depending existence of time element.}
 
-\item{untr_pre}{Integer number of untreated patients in the first cohort if applicable (T=0).}
+\item{untr_pre}{Integer number of untreated patients in the first cohort if
+applicable (T=0).}
 
-\item{untr_post}{Integer number of untreated patients in the second cohort if applicable (T=1).}
+\item{untr_post}{Integer number of untreated patients in the second cohort
+if applicable (T=1).}
 
-\item{tr_post}{Integer number of treated patients in the second cohort if applicable (T=1).}
+\item{tr_post}{Integer number of treated patients in the second cohort if
+applicable (T=1).}
 
 \item{Y_tr_post}{Outcome for patients who received treatment at time T=1.}
 
-\item{Y_untr_post}{Outcome for patients who did not receive treatment at time T=1.}
+\item{Y_untr_post}{Outcome for patients who did not receive treatment at
+time T=1.}
 
 \item{Y_tr_pre}{Outcome for patients who did receive treatment at time T=0.}
 
-\item{Y_untr_pre}{Outcome for patients who did not receive treatment at time T=0.}
+\item{Y_untr_pre}{Outcome for patients who did not receive treatment at time
+T=0.}
 
 \item{untr}{Integer number of untreated patients.}
 
@@ -50,10 +55,12 @@ delta.}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
-\item{tre_pre}{Integer number of treated patients in the first cohort if applicable (T=0).}
+\item{tre_pre}{Integer number of treated patients in the first cohort if
+applicable (T=0).}
 }
 \description{
-Main scqe function. Computes scqe estimates and corresponding confidence intervals.
+Main scqe function. Computes scqe estimates and corresponding confidence
+intervals.
 }
 \examples{
 set.seed(1234)
@@ -62,27 +69,33 @@ tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 
 # Two cohorts, full data
-scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
+delta=seq(from=-.1, to=.1, by=0.05))
 plot(scqe.2cohort.full)
 summary(scqe.2cohort.full)
 
 # One cohort, full data
-scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.1cohort.full = scqe(treatment=tx, outcome=y,
+delta=seq(from=-.1, to=.1, by=0.05))
 plot(scqe.1cohort.full)
 summary(scqe.1cohort.full)
 
 # Two cohorts, summary data only
-scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,
+Y_tr_post=20,Y_untr_post=1,
+Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
 plot(scqe.2cohort.sum)
 summary(scqe.2cohort.sum)
 
 # One cohort, summary data only
-scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
-scqe.1cohort.sum$result
+scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,
+max_outcome=1, min_delta=.1,max_delta=1)
 plot(scqe.1cohort.sum)
 summary(scqe.1cohort.sum)
 
 }
 \references{
-Hazlett, C. (2019), "Estimating causal effects of new treatments despite self-selection: The case of experimental medical treatments." Journal of Causal Inference.
+Hazlett, C. (2019), "Estimating causal effects of new treatments
+despite self-selection: The case of experimental medical treatments."
+Journal of Causal Inference.
 }

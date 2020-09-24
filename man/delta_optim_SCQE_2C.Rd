@@ -11,5 +11,6 @@ delta_optim_SCQE_2C(delta, untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
 }
 \description{
-The \code{print} method provides the critical values presented in the summary method for scqe objects.
+The \code{print} method provides the critical values presented in the summary
+method for scqe objects.
 }

@@ -11,5 +11,6 @@ delta.optim.scqe.1cfull(treatment, outcome, delta, obj, specified = NULL,
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
 }
 \description{
-The \code{print} method provides the critical values presented in the summary method for scqe objects.
+The \code{print} method provides the critical values presented in the summary
+method for scqe objects.
 }
