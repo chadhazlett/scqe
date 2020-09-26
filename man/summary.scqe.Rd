@@ -12,7 +12,7 @@
 \arguments{
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
 
-\item{scqe.obj}{an object of class \code{\link{scqe}}}
+\item{...}{Extra optional arguments}
 }
 \description{
 The \code{summary} method provides several statements that summarize

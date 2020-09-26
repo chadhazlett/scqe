@@ -8,7 +8,38 @@ delta_optim_SCQE_2C(delta, untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
   Y_untr_post, Y_tr_pre, Y_untr_pre, obj, specified = NULL, alpha, ...)
 }
 \arguments{
-\item{scqe.obj}{an object of class \code{\link{scqe}}}
+\item{delta}{Can take either a single value or vector of values.}
+
+\item{untr_pre}{Integer number of untreated patients in the first cohort if
+applicable (T=0).}
+
+\item{untr_post}{Integer number of untreated patients in the second cohort if
+applicable (T=1).}
+
+\item{tr_post}{Integer number of treated patients in the second cohort if
+applicable (T=1).}
+
+\item{tr_pre}{Integer nunber of reated patients in the first cohort if
+applicable (T=0).}
+
+\item{Y_tr_post}{Outcome for patients who received patients at T=1.}
+
+\item{Y_untr_post}{Outcome for patients who did not receive treatment at
+time T=1.}
+
+\item{Y_tr_pre}{Outcome for patients who did not receive treatment at
+time T=0.}
+
+\item{Y_untr_pre}{Outcome for patients who did not receive treatment at
+time T=0.}
+
+\item{obj}{scqe object.}
+
+\item{specified}{optional specified arguments.}
+
+\item{alpha}{Numeric alpha for confidence intervals (default alpha=.05).}
+
+\item{...}{Extra optional arguments}
 }
 \description{
 The \code{print} method provides the critical values presented in the summary

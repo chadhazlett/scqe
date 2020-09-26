@@ -41,7 +41,7 @@ NULL
 #' if applicable (T=1).
 #' @param tr_post Integer number of treated patients in the second cohort if
 #' applicable (T=1).
-#' @param tre_pre Integer number of treated patients in the first cohort if
+#' @param tr_pre Integer number of treated patients in the first cohort if
 #' applicable (T=0).
 #' @param Y_tr_post Outcome for patients who received treatment at time T=1.
 #' @param Y_untr_post Outcome for patients who did not receive treatment at
@@ -52,9 +52,11 @@ NULL
 #' @param untr Integer number of untreated patients.
 #' @param tr Integer number of treated patients.
 #' @param Y_tr Outcome for treated patients.
+#' @param Y_untr Outcome for unreated patients.
 #' @param min_delta Minimum delta.
 #' @param max_delta Maximum delta.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param ... Extra optional arguments
 #'
 #' @references  Hazlett, C. (2019), "Estimating causal effects of new treatments
 #' despite self-selection: The case of experimental medical treatments."
@@ -139,6 +141,7 @@ scqemethod <- function(...){
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param ... Extra optional arguments
 #'
 #'
 #' @examples
@@ -228,6 +231,7 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
 #' @param delta Can take either a single value or vector of possible values for
 #'   delta.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param ... Extra optional arguments
 #'
 #' @examples
 #' set.seed(1234)
@@ -311,24 +315,22 @@ scqe.1cfull = function(treatment, outcome, delta, alpha, ...){
 #'
 #' @param untr_pre Integer number of untreated patients in the first cohort
 #' if applicable (T=0).
+#' @param tr_pre Integer number of treated patients in the first cohort
+#' if applicable (T=0).
 #' @param untr_post Integer number of untreated patients in the second cohort
 #' if applicable (T=1).
 #' @param tr_post Integer number of treated patients in the second cohort if
 #' applicable (T=1).
-#' @param tre_pre Integer number of treated patients in the first cohort if
-#' applicable (T=0).
 #' @param Y_tr_post Outcome for patients who received treatment at time T=1.
 #' @param Y_untr_post Outcome for patients who did not receive treatment at
 #' time T=1.
 #' @param Y_tr_pre Outcome for patients who did receive treatment at time T=0.
 #' @param Y_untr_pre Outcome for patients who did not receive treatment at
 #' time T=0.
-#' @param untr Integer number of untreated patients.
-#' @param tr Integer number of treated patients.
-#' @param Y_tr Outcome for treated patients.
 #' @param min_delta Minimum delta.
 #' @param max_delta Maximum delta.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param ... Extra optional arguments
 #'
 #' @examples
 #' # Two cohorts, summary data only
@@ -479,6 +481,7 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 #' @param min_delta Minimum possible delta.
 #' @param max_delta Maximum possible delta.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param ... Extra optional arguments
 #'
 #' @examples
 #' # One cohort, summary data only
@@ -564,7 +567,15 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta
 #' The \code{print} method provides the critical values presented in the summary
 #' method for scqe objects.
 #'
-#' @param scqe.obj an object of class \code{\link{scqe}}
+#'@param Y_T0 Y
+#'@param untreated Number of untreated individuals.
+#'@param Y_untreated Outcome for untreated individuals.
+#'@param treated Number of treated individuals.
+#'@param Y_treated Outcome for treated individuals.
+#'@param obj scqe object.
+#'@param specified specified optional arguments.
+#'@param alpha Numeric alpha for confidence intervals (default alpha=.05)
+#'@param ... Extra optional arguments
 #'
 #' @export
 delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, obj, specified = NULL,alpha,...){
@@ -596,7 +607,27 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, o
 #' The \code{print} method provides the critical values presented in the summary
 #' method for scqe objects.
 #'
-#' @param scqe.obj an object of class \code{\link{scqe}}
+#' @param delta Can take either a single value or vector of values.
+#' @param untr_pre Integer number of untreated patients in the first cohort if
+#' applicable (T=0).
+#' @param untr_post Integer number of untreated patients in the second cohort if
+#' applicable (T=1).
+#' @param tr_post Integer number of treated patients in the second cohort if
+#' applicable (T=1).
+#' @param tr_pre Integer nunber of reated patients in the first cohort if
+#' applicable (T=0).
+#' @param Y_tr_post Outcome for patients who received patients at T=1.
+#' @param Y_untr_pre Outcome for patients who did not receive treatment at
+#' time T=0.
+#' @param Y_tr_pre Outcome for patients who did not receive treatment at
+#' time T=0.
+#' @param Y_untr_post Outcome for patients who did not receive treatment at
+#' time T=1.
+#' @param obj scqe object.
+#' @param specified optional specified arguments.
+#' @param alpha Numeric alpha for confidence intervals (default alpha=.05).
+#' @param ... Extra optional arguments
+#'
 #'
 #' @export
 delta_optim_SCQE_2C <- function(delta,untr_pre,untr_post,tr_post,tr_pre,
@@ -676,7 +707,15 @@ delta_optim_SCQE_2C <- function(delta,untr_pre,untr_post,tr_post,tr_pre,
 #' The \code{print} method provides the critical values presented in the summary
 #' method for scqe objects.
 #'
-#' @param scqe.obj an object of class \code{\link{scqe}}
+#' @param post Indicator for being in the second cohort.
+#' @param treatment Binary or continuous vector correspoding (usually) to 0,1.
+#' @param outcome Continueous vector representing the outcome for each
+#' observation
+#' @param delta Can take either a single value or vector of possible values.
+#' @param obj scqe object.
+#' @param alpha Numeric alpha for confidence intervals (default alpha=.05).
+#' @param specified specified additional arguments.
+#' @param ... Extra optional arguments
 #'
 #' @export
 delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, alpha, specified = NULL,...){
@@ -771,7 +810,15 @@ delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, alpha, speci
 #' The \code{print} method provides the critical values presented in the summary
 #' method for scqe objects.
 #'
-#' @param scqe.obj an object of class \code{\link{scqe}}
+#' @param treatment Binary or continuous vector correspoding (usually) to 0,1
+#' (no treatment or treatment) for each observation.
+#' @param outcome Continuous vector representing the outcome for each
+#' observation.
+#' @param delta Can take either a single value or vector of possible values.
+#' @param obj scqe object
+#' @param specified specified
+#' @param alpha Numeric alpha for confidence intervals (default alpha=.05).
+#' @param ... Extra optional arguments
 #'
 #' @export
 delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = NULL,alpha,...){
@@ -805,6 +852,7 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #' values of delta provided by the user.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
+#' @param ... Extra optional arguments
 #'
 #' @examples
 #' set.seed(1234)
@@ -838,7 +886,6 @@ plot.scqe = function(scqe.obj, ...){
 #' important values of delta requires to make different conclusions
 #' about the treatment's effect on patient outcome.
 #'
-#' @param scqe.obj an object of class \code{\link{scqe}}
 #'
 #' @examples
 #' set.seed(1234)
@@ -855,7 +902,7 @@ plot.scqe = function(scqe.obj, ...){
 #'
 #' @export
 #'
-summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,...) {
+summary.scqe = function(scqe.obj,...) {
 
   treatment <- scqe.obj$treatment
   post <- scqe.obj$post
@@ -960,6 +1007,7 @@ summary.scqe = function(scqe.obj, ...) { #, #treatment, cohort, outcome, post,..
 #' about the treatment's effect on patient outcome.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
+#' @param ... Extra optional arguments
 #'
 #' @examples
 #' set.seed(1234)

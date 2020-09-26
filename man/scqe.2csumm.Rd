@@ -18,6 +18,9 @@ if applicable (T=1).}
 \item{tr_post}{Integer number of treated patients in the second cohort if
 applicable (T=1).}
 
+\item{tr_pre}{Integer number of treated patients in the first cohort
+if applicable (T=0).}
+
 \item{Y_tr_post}{Outcome for patients who received treatment at time T=1.}
 
 \item{Y_untr_post}{Outcome for patients who did not receive treatment at
@@ -34,14 +37,7 @@ time T=0.}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
-\item{tre_pre}{Integer number of treated patients in the first cohort if
-applicable (T=0).}
-
-\item{untr}{Integer number of untreated patients.}
-
-\item{tr}{Integer number of treated patients.}
-
-\item{Y_tr}{Outcome for treated patients.}
+\item{...}{Extra optional arguments}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the

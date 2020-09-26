@@ -22,6 +22,8 @@ scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
 \item{max_delta}{Maximum possible delta.}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
+
+\item{...}{Extra optional arguments}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the

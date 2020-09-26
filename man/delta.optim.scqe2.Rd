@@ -8,7 +8,22 @@ delta.optim.scqe2(post, treatment, outcome, delta, obj, alpha,
   specified = NULL, ...)
 }
 \arguments{
-\item{scqe.obj}{an object of class \code{\link{scqe}}}
+\item{post}{Indicator for being in the second cohort.}
+
+\item{treatment}{Binary or continuous vector correspoding (usually) to 0,1.}
+
+\item{outcome}{Continueous vector representing the outcome for each
+observation}
+
+\item{delta}{Can take either a single value or vector of possible values.}
+
+\item{obj}{scqe object.}
+
+\item{alpha}{Numeric alpha for confidence intervals (default alpha=.05).}
+
+\item{specified}{specified additional arguments.}
+
+\item{...}{Extra optional arguments}
 }
 \description{
 The \code{print} method provides the critical values presented in the summary

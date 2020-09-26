@@ -17,6 +17,8 @@ observation.}
 delta.}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
+
+\item{...}{Extra optional arguments}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the

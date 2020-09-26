@@ -33,6 +33,9 @@ if applicable (T=1).}
 \item{tr_post}{Integer number of treated patients in the second cohort if
 applicable (T=1).}
 
+\item{tr_pre}{Integer number of treated patients in the first cohort if
+applicable (T=0).}
+
 \item{Y_tr_post}{Outcome for patients who received treatment at time T=1.}
 
 \item{Y_untr_post}{Outcome for patients who did not receive treatment at
@@ -49,14 +52,15 @@ T=0.}
 
 \item{Y_tr}{Outcome for treated patients.}
 
+\item{Y_untr}{Outcome for unreated patients.}
+
 \item{min_delta}{Minimum delta.}
 
 \item{max_delta}{Maximum delta.}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
-\item{tre_pre}{Integer number of treated patients in the first cohort if
-applicable (T=0).}
+\item{...}{Extra optional arguments}
 }
 \description{
 Main scqe function. Computes scqe estimates and corresponding confidence

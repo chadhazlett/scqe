@@ -8,7 +8,23 @@ delta.optim.scqe(Y_T0, untreated, Y_untreated, treated, Y_treated, obj,
   specified = NULL, alpha, ...)
 }
 \arguments{
-\item{scqe.obj}{an object of class \code{\link{scqe}}}
+\item{Y_T0}{Y}
+
+\item{untreated}{Number of untreated individuals.}
+
+\item{Y_untreated}{Outcome for untreated individuals.}
+
+\item{treated}{Number of treated individuals.}
+
+\item{Y_treated}{Outcome for treated individuals.}
+
+\item{obj}{scqe object.}
+
+\item{specified}{specified optional arguments.}
+
+\item{alpha}{Numeric alpha for confidence intervals (default alpha=.05)}
+
+\item{...}{Extra optional arguments}
 }
 \description{
 The \code{print} method provides the critical values presented in the summary

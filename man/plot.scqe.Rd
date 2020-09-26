@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
+
+\item{...}{Extra optional arguments}
 }
 \description{
 The \code{print} method provides a plot of the estimates

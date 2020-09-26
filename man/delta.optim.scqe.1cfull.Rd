@@ -8,7 +8,21 @@ delta.optim.scqe.1cfull(treatment, outcome, delta, obj, specified = NULL,
   alpha, ...)
 }
 \arguments{
-\item{scqe.obj}{an object of class \code{\link{scqe}}}
+\item{treatment}{Binary or continuous vector correspoding (usually) to 0,1
+(no treatment or treatment) for each observation.}
+
+\item{outcome}{Continuous vector representing the outcome for each
+observation.}
+
+\item{delta}{Can take either a single value or vector of possible values.}
+
+\item{obj}{scqe object}
+
+\item{specified}{specified}
+
+\item{alpha}{Numeric alpha for confidence intervals (default alpha=.05).}
+
+\item{...}{Extra optional arguments}
 }
 \description{
 The \code{print} method provides the critical values presented in the summary
