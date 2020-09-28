@@ -869,6 +869,10 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #'
 plot.scqe = function(scqe.obj, ...){
   scqe.obj <- as.data.frame(scqe.obj$result)
+  term <- NULL
+  estimate <- NULL
+  conf.high <- NULL
+  conf.low <- NULL
   return(ggplot2::ggplot(scqe.obj, ggplot2::aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high)) +
            ggplot2::geom_pointrange(size=.5, shape=16) +
            ggplot2::ylab("Average treatment effect on treated") +
