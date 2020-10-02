@@ -11,48 +11,50 @@ scqe(post = NA, treatment = NA, outcome = NA, delta = NA,
   min_delta = NA, max_delta = NA, alpha = NA, ...)
 }
 \arguments{
-\item{post}{Indicator for being in the second cohort}
+\item{post}{Binary vector corresponding to T=0,1 for each observation.}
 
-\item{treatment}{Binary or continuous vector correspoding (usually) to 0,1
+\item{treatment}{Binary or continuous vector corresponding (usually) to 0,1
 (no treatment or treatment) for each observation.}
 
 \item{outcome}{Continuous vector representing the outcome for each
 observation.}
 
-\item{delta}{Can take either a single value or vector of possible values for
-delta.}
+\item{delta}{Single value or vector of possible values for change in
+average non-treatment outcome between cohorts (if applicable).}
 
-\item{cohort}{1 or 2 depending existence of time element.}
+\item{cohort}{Numeric, 1 or 2 depending on cohort membership.}
 
 \item{untr_pre}{Integer number of untreated patients in the first cohort if
-applicable (T=0).}
+applicable (summary statistics input) (T=0).}
 
 \item{untr_post}{Integer number of untreated patients in the second cohort
-if applicable (T=1).}
+if applicable (summary statistics input) (T=1).}
 
 \item{tr_post}{Integer number of treated patients in the second cohort if
-applicable (T=1).}
+applicable (summary statistics input) (T=1).}
 
 \item{tr_pre}{Integer number of treated patients in the first cohort if
-applicable (T=0).}
+applicable (summary statistics input) (T=0).}
 
-\item{Y_tr_post}{Outcome for patients who received treatment at time T=1.}
+\item{Y_tr_post}{Outcome for patients who received treatment at time T=1
+(summary statistics input).}
 
 \item{Y_untr_post}{Outcome for patients who did not receive treatment at
-time T=1.}
+time T=1 (summary statistics input).}
 
-\item{Y_tr_pre}{Outcome for patients who did receive treatment at time T=0.}
+\item{Y_tr_pre}{Outcome for patients who did receive treatment at time T=0
+(summary statistics input).}
 
 \item{Y_untr_pre}{Outcome for patients who did not receive treatment at time
-T=0.}
+T=0 (summary statistics input).}
 
-\item{untr}{Integer number of untreated patients.}
+\item{untr}{Integer number of untreated patients (summary statistics input).}
 
-\item{tr}{Integer number of treated patients.}
+\item{tr}{Integer number of treated patients (summary statistics input).}
 
-\item{Y_tr}{Outcome for treated patients.}
+\item{Y_tr}{Outcome for treated patients (summary statistics input).}
 
-\item{Y_untr}{Outcome for unreated patients.}
+\item{Y_untr}{Outcome for untreated patients (summary statistics input).}
 
 \item{min_delta}{Minimum delta.}
 
@@ -60,7 +62,7 @@ T=0.}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
-\item{...}{Extra optional arguments}
+\item{...}{Extra optional arguments.}
 }
 \description{
 Main scqe function. Computes scqe estimates and corresponding confidence

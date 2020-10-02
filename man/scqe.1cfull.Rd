@@ -13,12 +13,12 @@ scqe.1cfull(treatment, outcome, delta, alpha, ...)
 \item{outcome}{Continuous vector representing the outcome for each
 observation.}
 
-\item{delta}{Can take either a single value or vector of possible values for
-delta.}
+\item{delta}{Single value or vector of possible values for change in
+average non-treatment outcome between cohorts (if applicable).}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
-\item{...}{Extra optional arguments}
+\item{...}{Extra optional arguments.}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the

@@ -14,15 +14,16 @@ delta.optim.scqe.1cfull(treatment, outcome, delta, obj, specified = NULL,
 \item{outcome}{Continuous vector representing the outcome for each
 observation.}
 
-\item{delta}{Can take either a single value or vector of possible values.}
+\item{delta}{Single value or vector of possible values for change in
+average non-treatment outcome between cohorts (if applicable).}
 
-\item{obj}{scqe object}
+\item{obj}{scqe object.}
 
-\item{specified}{specified}
+\item{specified}{Specified optional arguments.}
 
 \item{alpha}{Numeric alpha for confidence intervals (default alpha=.05).}
 
-\item{...}{Extra optional arguments}
+\item{...}{Extra optional arguments.}
 }
 \description{
 The \code{print} method provides the critical values presented in the summary

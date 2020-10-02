@@ -9,7 +9,7 @@ scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
   alpha, ...)
 }
 \arguments{
-\item{untr_1C}{Number of unreated individuals.}
+\item{untr_1C}{Number of untreated individuals.}
 
 \item{Y_untr_1C}{Outcome for untreated individuals.}
 
@@ -23,12 +23,11 @@ scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
-\item{...}{Extra optional arguments}
+\item{...}{Extra optional arguments.}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the
-1 cohort
-case when the user inputs only summary statistics.
+1 cohort case when the user inputs only summary statistics.
 }
 \examples{
 # One cohort, summary data only

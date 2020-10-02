@@ -9,27 +9,29 @@ scqe.2csumm(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
   Y_tr_pre, Y_untr_pre, min_delta, max_delta, alpha, ...)
 }
 \arguments{
-\item{untr_pre}{Integer number of untreated patients in the first cohort
-if applicable (T=0).}
+\item{untr_pre}{Integer number of untreated patients in the first cohort if
+applicable (summary statistics input) (T=0).}
 
 \item{untr_post}{Integer number of untreated patients in the second cohort
-if applicable (T=1).}
+if applicable (summary statistics input) (T=1).}
 
 \item{tr_post}{Integer number of treated patients in the second cohort if
-applicable (T=1).}
+applicable (summary statistics input) (T=1).}
 
-\item{tr_pre}{Integer number of treated patients in the first cohort
-if applicable (T=0).}
+\item{tr_pre}{Integer number of treated patients in the first cohort if
+applicable (summary statistics input) (T=0).}
 
-\item{Y_tr_post}{Outcome for patients who received treatment at time T=1.}
+\item{Y_tr_post}{Outcome for patients who received treatment at time T=1
+(summary statistics input).}
 
 \item{Y_untr_post}{Outcome for patients who did not receive treatment at
-time T=1.}
+time T=1 (summary statistics input).}
 
-\item{Y_tr_pre}{Outcome for patients who did receive treatment at time T=0.}
+\item{Y_tr_pre}{Outcome for patients who did receive treatment at time T=0
+(summary statistics input).}
 
-\item{Y_untr_pre}{Outcome for patients who did not receive treatment at
-time T=0.}
+\item{Y_untr_pre}{Outcome for patients who did not receive treatment at time
+T=0 (summary statistics input).}
 
 \item{min_delta}{Minimum delta.}
 
@@ -37,7 +39,7 @@ time T=0.}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
-\item{...}{Extra optional arguments}
+\item{...}{Extra optional arguments.}
 }
 \description{
 This function returns the scqe estimates and confidence intervals for the

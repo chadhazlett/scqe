@@ -20,11 +20,11 @@ delta.optim.scqe(Y_T0, untreated, Y_untreated, treated, Y_treated, obj,
 
 \item{obj}{scqe object.}
 
-\item{specified}{specified optional arguments.}
+\item{specified}{Specified optional arguments.}
 
-\item{alpha}{Numeric alpha for confidence intervals (default alpha=.05)}
+\item{alpha}{Numeric alpha for confidence intervals (default alpha=.05).}
 
-\item{...}{Extra optional arguments}
+\item{...}{Extra optional arguments.}
 }
 \description{
 The \code{print} method provides the critical values presented in the summary
