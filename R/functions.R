@@ -143,6 +143,8 @@ scqemethod <- function(...){
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param max_delta Max delta (see delta description), optional.
+#' @param min_delta Min delta (see delta description), optional.
 #' @param ... Extra optional arguments.
 #'
 #'
@@ -153,13 +155,13 @@ scqemethod <- function(...){
 #' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y,
+#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
 #' delta=seq(from=-.1,to=.1, by=0.05))
 #' plot(scqe.2cohort.full)
 #' summary(scqe.2cohort.full)
 #'
 #'@export
-scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
+scqe.2cfull = function(post, treatment, outcome, delta, alpha,min_delta,max_delta,...){
 
   if(!is.numeric(alpha)){
     alpha <- .05
@@ -171,9 +173,23 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
     post <- as.numeric(post)
   }
 
-  if(!is.numeric(delta)){
+  if(!is.numeric(delta) & !is.numeric(min_delta) & !is.numeric(max_delta)){
     delta <- seq(from=-.1, to=.1, by=.05)
   }
+
+  if(!is.numeric(delta) & is.numeric(min_delta) & is.numeric(max_delta)){
+
+    if(max_delta == min_delta){
+      #spread out the delta range to +/- 0.2 from the single entered
+      #delta, ensuring the range doesn't go beyond the possible bounds
+      min_delta <- max(-0.99, min_delta - 0.20)
+      max_delta <- min(0.99, min_delta + 0.40)
+      min_delta <- max_delta - 0.40
+    }
+
+    delta <- seq(from = max_delta, to = min_delta, length.out = 11)
+  }
+
 
   if(any( class(post)=="character" | class(treatment)=="character" | class(outcome)=="character" | class(delta)=="character")){
     stop("One or more inputs to function are of invalid class")
@@ -233,6 +249,8 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param max_delta Max delta (see delta description), optional.
+#' @param min_delta Min delta (see delta description), optional.
 #' @param ... Extra optional arguments.
 #'
 #' @examples
@@ -250,7 +268,7 @@ scqe.2cfull = function(post, treatment, outcome, delta, alpha,...){
 #'
 #'
 #'@export
-scqe.1cfull = function(treatment, outcome, delta, alpha, ...){
+scqe.1cfull = function(treatment, outcome, delta, alpha, min_delta, max_delta, ...){
 
   if(!is.numeric(alpha)){
     alpha <- .05
@@ -258,8 +276,21 @@ scqe.1cfull = function(treatment, outcome, delta, alpha, ...){
 
   value <- stats::qnorm(1-(alpha/2))
 
-  if(!is.numeric(delta)){
+  if(!is.numeric(delta) & !is.numeric(min_delta) & !is.numeric(max_delta)){
     delta <- seq(from=-.1, to=.1, by=.05)
+  }
+
+  if(!is.numeric(delta) & is.numeric(min_delta) & is.numeric(max_delta)){
+
+    if(max_delta == min_delta){
+      #spread out the delta range to +/- 0.2 from the single entered
+      #delta, ensuring the range doesn't go beyond the possible bounds
+      min_delta <- max(-0.99, min_delta - 0.20)
+      max_delta <- min(0.99, min_delta + 0.40)
+      min_delta <- max_delta - 0.40
+    }
+
+    delta <- seq(from = max_delta, to = min_delta, length.out = 11)
   }
 
   if(any( (treatment)=="character" | class(outcome)=="character" | class(delta)=="character")){

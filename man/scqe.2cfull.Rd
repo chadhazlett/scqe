@@ -4,7 +4,8 @@
 \alias{scqe.2cfull}
 \title{Stability controlled quasi-experiment (scqe) for 2 cohort case, full data}
 \usage{
-scqe.2cfull(post, treatment, outcome, delta, alpha, ...)
+scqe.2cfull(post, treatment, outcome, delta, alpha, min_delta, max_delta,
+  ...)
 }
 \arguments{
 \item{post}{Binary vector corresponding to T=0,1 for each observation.}
@@ -20,6 +21,10 @@ average non-treatment outcome between cohorts (if applicable).}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
+\item{min_delta}{Min delta (see delta description), optional.}
+
+\item{max_delta}{Max delta (see delta description), optional.}
+
 \item{...}{Extra optional arguments.}
 }
 \description{
@@ -33,7 +38,7 @@ tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
 y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
 
 # Two cohorts, full data
-scqe.2cohort.full = scqe(scqe.obj, post=post, treatment=tx, outcome=y,
+scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
 delta=seq(from=-.1,to=.1, by=0.05))
 plot(scqe.2cohort.full)
 summary(scqe.2cohort.full)

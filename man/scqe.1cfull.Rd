@@ -4,7 +4,7 @@
 \alias{scqe.1cfull}
 \title{Stability controlled quasi-experiment (scqe) for 1 cohort case, full data}
 \usage{
-scqe.1cfull(treatment, outcome, delta, alpha, ...)
+scqe.1cfull(treatment, outcome, delta, alpha, min_delta, max_delta, ...)
 }
 \arguments{
 \item{treatment}{Binary or continuous vector correspoding (usually) to 0,1
@@ -17,6 +17,10 @@ observation.}
 average non-treatment outcome between cohorts (if applicable).}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
+
+\item{min_delta}{Min delta (see delta description), optional.}
+
+\item{max_delta}{Max delta (see delta description), optional.}
 
 \item{...}{Extra optional arguments.}
 }
