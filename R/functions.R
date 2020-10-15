@@ -90,8 +90,8 @@ NULL
 #' summary(scqe.2cohort.sum)
 #'
 #' # One cohort, summary data only
-#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,
-#' max_outcome=1, min_delta=.1,max_delta=1)
+#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,
+#'  min_delta=.1,max_delta=1)
 #' plot(scqe.1cohort.sum)
 #' summary(scqe.1cohort.sum)
 #'
@@ -364,6 +364,8 @@ scqe.1cfull = function(treatment, outcome, delta, alpha, min_delta, max_delta, .
 #'  T=0 (summary statistics input).
 #' @param min_delta Minimum delta.
 #' @param max_delta Maximum delta.
+#' @param delta Single value or vector of possible values for change in
+#' average non-treatment outcome between cohorts (if applicable).
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #' @param ... Extra optional arguments.
 #'
@@ -379,7 +381,7 @@ scqe.1cfull = function(treatment, outcome, delta, alpha, min_delta, max_delta, .
 #'@export
 scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
                         Y_untr_post,Y_tr_pre,Y_untr_pre,
-                        min_delta, max_delta, alpha, ...){
+                        min_delta, max_delta, delta, alpha, ...){
 
   if(!is.numeric(alpha)){
     alpha <- .05
@@ -388,24 +390,35 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
   value <- stats::qnorm(1-(alpha/2))
 
 
-  if(!is.numeric(min_delta) | !is.numeric(max_delta)){
+  if(!is.numeric(min_delta) & !is.numeric(max_delta) & !is.numeric(delta)){
     min_delta <- -.1
     max_delta <- .1
+    delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
   }
+
+  if(!is.numeric(min_delta) & !is.numeric(max_delta) & is.numeric(delta)){
+    delta_list <- delta
+  }
+
+
 
   if(any( class(untr_pre)=="character" | class(untr_post)=="character" | class(tr_post)=="character" | class(tr_pre)=="character"| class(Y_tr_post)=="character" | class(Y_untr_post)=="character" | class(Y_tr_pre)=="character" | class(Y_untr_pre)=="character" )){
     stop("One or more inputs to function are of invalid class")
   }
 
-  if(max_delta == min_delta){
-    #spread out the delta range to +/- 0.2 from the single entered
-    #delta, ensuring the range doesn't go beyond the possible bounds
-    min_delta <- max(-0.99, min_delta - 0.20)
-    max_delta <- min(0.99, min_delta + 0.40)
-    min_delta <- max_delta - 0.40
+  if(!is.numeric(delta) & is.numeric(min_delta) & is.numeric(max_delta) ){
+    if(max_delta == min_delta){
+      #spread out the delta range to +/- 0.2 from the single entered
+      #delta, ensuring the range doesn't go beyond the possible bounds
+      min_delta <- max(-0.99, min_delta - 0.20)
+      max_delta <- min(0.99, min_delta + 0.40)
+      min_delta <- max_delta - 0.40
+    }
+
+
+    delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
   }
 
-  delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
 
   N_pre <- untr_pre + tr_pre
   N_post <- untr_post + tr_post
@@ -514,19 +527,21 @@ scqe.2csumm <- function(untr_pre,untr_post,tr_post,tr_pre,Y_tr_post,
 #' @param Y_tr_1C Outcome for treated individuals.
 #' @param min_delta Minimum possible delta.
 #' @param max_delta Maximum possible delta.
+#' @param delta Single value or vector of possible values for change in
+#' average non-treatment outcome between cohorts (if applicable).
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #' @param ... Extra optional arguments.
 #'
 #' @examples
 #' # One cohort, summary data only
-#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,
-#' max_outcome=1, min_delta=.1,max_delta=1)
+#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,
+#' min_delta=.1,max_delta=1)
 #' plot(scqe.1cohort.sum)
 #' summary(scqe.1cohort.sum)
 #'
 #'
 #'@export
-scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta, alpha, ...){
+scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,delta, alpha, ...){
 
   if(!is.numeric(alpha)){
     alpha <- .05
@@ -534,9 +549,27 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta
 
   value <- stats::qnorm(1-(alpha/2))
 
-  if(!is.numeric(min_delta) | !is.numeric(max_delta)){
+  if(!is.numeric(min_delta) & !is.numeric(max_delta) & !is.numeric(delta)){
     min_delta <- -.1
     max_delta <- .1
+    outcome_list <- seq(from = max_delta, to = min_delta, length.out = 11)
+  }
+
+  if(!is.numeric(min_delta) & !is.numeric(max_delta) & is.numeric(delta)){
+    outcome_list <- delta
+  }
+
+  if(!is.numeric(delta) & is.numeric(min_delta) & is.numeric(max_delta) ){
+    if(max_delta == min_delta){
+      #spread out the delta range to +/- 0.2 from the single entered
+      #delta, ensuring the range doesn't go beyond the possible bounds
+      min_delta <- max(-0.99, min_delta - 0.20)
+      max_delta <- min(0.99, min_delta + 0.40)
+      min_delta <- max_delta - 0.40
+    }
+
+
+    outcome_list <- seq(from = max_delta, to = min_delta, length.out = 11)
   }
 
   if(any( class(untr_1C)=="character" | class(Y_untr_1C)=="character" | class(tr_1C)=="character" | class(Y_tr_1C)=="character")){
@@ -546,15 +579,6 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta
   pi1 <- tr_1C/N
   Ybar_T1 <- (Y_tr_1C + Y_untr_1C)/N
 
-  if(min_delta == max_delta){
-    #spread out the outcome range to +/- 0.2 from the single entered
-    #outcome rate, ensuring the range doesn't go beyond the possible bounds
-    min_delta <- max(0, min_delta - 0.20)
-    max_delta <- min(0.99, min_delta + 0.40)
-    min_delta <- max_delta - 0.40
-  }
-
-  outcome_list <- seq(from = max_delta, to = min_delta, length.out = 11)
 
   Beta_SCQE_1C <- NULL
   SE_B_SCQE_1C <- NULL

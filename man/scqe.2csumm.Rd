@@ -6,7 +6,7 @@
 summary statistics}
 \usage{
 scqe.2csumm(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
-  Y_tr_pre, Y_untr_pre, min_delta, max_delta, alpha, ...)
+  Y_tr_pre, Y_untr_pre, min_delta, max_delta, delta, alpha, ...)
 }
 \arguments{
 \item{untr_pre}{Integer number of untreated patients in the first cohort if
@@ -36,6 +36,9 @@ T=0 (summary statistics input).}
 \item{min_delta}{Minimum delta.}
 
 \item{max_delta}{Maximum delta.}
+
+\item{delta}{Single value or vector of possible values for change in
+average non-treatment outcome between cohorts (if applicable).}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 

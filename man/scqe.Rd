@@ -94,8 +94,8 @@ plot(scqe.2cohort.sum)
 summary(scqe.2cohort.sum)
 
 # One cohort, summary data only
-scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,
-max_outcome=1, min_delta=.1,max_delta=1)
+scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,
+ min_delta=.1,max_delta=1)
 plot(scqe.1cohort.sum)
 summary(scqe.1cohort.sum)
 

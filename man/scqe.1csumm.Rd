@@ -6,7 +6,7 @@
 statistics}
 \usage{
 scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
-  alpha, ...)
+  delta, alpha, ...)
 }
 \arguments{
 \item{untr_1C}{Number of untreated individuals.}
@@ -21,6 +21,9 @@ scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
 
 \item{max_delta}{Maximum possible delta.}
 
+\item{delta}{Single value or vector of possible values for change in
+average non-treatment outcome between cohorts (if applicable).}
+
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
 \item{...}{Extra optional arguments.}
@@ -31,8 +34,8 @@ This function returns the scqe estimates and confidence intervals for the
 }
 \examples{
 # One cohort, summary data only
-scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,
-max_outcome=1, min_delta=.1,max_delta=1)
+scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,
+min_delta=.1,max_delta=1)
 plot(scqe.1cohort.sum)
 summary(scqe.1cohort.sum)
 
