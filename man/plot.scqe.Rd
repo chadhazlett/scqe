@@ -4,10 +4,14 @@
 \alias{plot.scqe}
 \title{Plot method for \code{scqe}}
 \usage{
-\method{plot}{scqe}(scqe.obj, ...)
+\method{plot}{scqe}(scqe.obj, xlab, ylab, ...)
 }
 \arguments{
 \item{scqe.obj}{an object of class \code{\link{scqe}}}
+
+\item{xlab}{Optional character label for x axis.}
+
+\item{ylab}{Optional character label for y axis.}
 
 \item{...}{Extra optional arguments}
 }

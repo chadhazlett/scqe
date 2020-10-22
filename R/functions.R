@@ -914,6 +914,8 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #' values of delta provided by the user.
 #'
 #' @param scqe.obj an object of class \code{\link{scqe}}
+#' @param xlab Optional character label for x axis.
+#' @param ylab Optional character label for y axis.
 #' @param ... Extra optional arguments
 #'
 #' @examples
@@ -929,7 +931,13 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #'
 #' @export
 #'
-plot.scqe = function(scqe.obj,...){
+plot.scqe = function(scqe.obj,xlab,ylab,...){
+  if(missing(xlab)){
+    xlab <- c("Delta")
+  }
+  if(missing(ylab)){
+    ylab <- c("Average treatment effected on treated")
+  }
   scqe.obj <- as.data.frame(scqe.obj$result)
   term <- NULL
   estimate <- NULL
@@ -937,8 +945,8 @@ plot.scqe = function(scqe.obj,...){
   conf.low <- NULL
   return(ggplot2::ggplot(scqe.obj, ggplot2::aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high)) +
            ggplot2::geom_pointrange(size=.5, shape=16) +
-           ggplot2::ylab("Average treatment effect on treated") +
-           ggplot2::xlab("Delta") + ggplot2::coord_flip() + ggplot2::theme_bw() +
+           ggplot2::ylab(ylab) +
+           ggplot2::xlab(xlab) + ggplot2::coord_flip() + ggplot2::theme_bw() +
            ggplot2::geom_hline(yintercept = 0, color="gray50"))
 }
 
