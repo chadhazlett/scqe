@@ -945,8 +945,8 @@ plot.scqe = function(scqe.obj,xlab,ylab,...){
   conf.low <- NULL
   return(ggplot2::ggplot(scqe.obj, ggplot2::aes(x=term, y=estimate, ymin=conf.low, ymax=conf.high)) +
            ggplot2::geom_pointrange(size=.5, shape=16) +
-           ggplot2::ylab(ylab) +
-           ggplot2::xlab(xlab) + ggplot2::coord_flip() + ggplot2::theme_bw() +
+           ggplot2::ylab(xlab) +
+           ggplot2::xlab(ylab) + ggplot2::coord_flip() + ggplot2::theme_bw() +
            ggplot2::geom_hline(yintercept = 0, color="gray50"))
 }
 
