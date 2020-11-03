@@ -4,8 +4,7 @@
 \alias{scqe.2cfull}
 \title{Stability controlled quasi-experiment (scqe) for 2 cohort case, full data}
 \usage{
-scqe.2cfull(post, treatment, outcome, delta, alpha, min_delta, max_delta,
-  ...)
+scqe.2cfull(post, treatment, outcome, delta, alpha, min_delta, max_delta, ...)
 }
 \arguments{
 \item{post}{Binary vector corresponding to T=0,1 for each observation.}

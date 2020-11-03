@@ -8,7 +8,7 @@ Description: The scqe package allows users to implement the stability controlled
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Imports: 
     AER,
     ggplot2,

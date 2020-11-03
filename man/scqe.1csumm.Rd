@@ -5,8 +5,17 @@
 \title{Stability controlled quasi-experiment (scqe) for 1 cohort case, summary
 statistics}
 \usage{
-scqe.1csumm(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
-  delta, alpha, ...)
+scqe.1csumm(
+  untr_1C,
+  Y_untr_1C,
+  tr_1C,
+  Y_tr_1C,
+  min_delta,
+  max_delta,
+  delta,
+  alpha,
+  ...
+)
 }
 \arguments{
 \item{untr_1C}{Number of untreated individuals.}

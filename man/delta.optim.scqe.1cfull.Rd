@@ -4,8 +4,15 @@
 \alias{delta.optim.scqe.1cfull}
 \title{Delta optimization method for \code{scqe} 1 cohort, full data}
 \usage{
-delta.optim.scqe.1cfull(treatment, outcome, delta, obj, specified = NULL,
-  alpha, ...)
+delta.optim.scqe.1cfull(
+  treatment,
+  outcome,
+  delta,
+  obj,
+  specified = NULL,
+  alpha,
+  ...
+)
 }
 \arguments{
 \item{treatment}{Binary or continuous vector correspoding (usually) to 0,1

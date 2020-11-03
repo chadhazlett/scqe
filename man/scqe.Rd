@@ -4,11 +4,29 @@
 \alias{scqe}
 \title{Stability controlled quasi-experiment (scqe)}
 \usage{
-scqe(post = NA, treatment = NA, outcome = NA, delta = NA,
-  cohort = NA, untr_pre = NA, untr_post = NA, tr_post = NA,
-  tr_pre = NA, Y_tr_post = NA, Y_untr_post = NA, Y_tr_pre = NA,
-  Y_untr_pre = NA, untr = NA, tr = NA, Y_tr = NA, Y_untr = NA,
-  min_delta = NA, max_delta = NA, alpha = NA, ...)
+scqe(
+  post = NA,
+  treatment = NA,
+  outcome = NA,
+  delta = NA,
+  cohort = NA,
+  untr_pre = NA,
+  untr_post = NA,
+  tr_post = NA,
+  tr_pre = NA,
+  Y_tr_post = NA,
+  Y_untr_post = NA,
+  Y_tr_pre = NA,
+  Y_untr_pre = NA,
+  untr = NA,
+  tr = NA,
+  Y_tr = NA,
+  Y_untr = NA,
+  min_delta = NA,
+  max_delta = NA,
+  alpha = NA,
+  ...
+)
 }
 \arguments{
 \item{post}{Binary vector corresponding to T=0,1 for each observation.}

@@ -4,8 +4,21 @@
 \alias{delta_optim_SCQE_2C}
 \title{Delta optimization method for \code{scqe} 2 cohort, summary statistics}
 \usage{
-delta_optim_SCQE_2C(delta, untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
-  Y_untr_post, Y_tr_pre, Y_untr_pre, obj, specified = NULL, alpha, ...)
+delta_optim_SCQE_2C(
+  delta,
+  untr_pre,
+  untr_post,
+  tr_post,
+  tr_pre,
+  Y_tr_post,
+  Y_untr_post,
+  Y_tr_pre,
+  Y_untr_pre,
+  obj,
+  specified = NULL,
+  alpha,
+  ...
+)
 }
 \arguments{
 \item{delta}{Single value or vector of possible values for change in

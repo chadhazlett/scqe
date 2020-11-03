@@ -4,8 +4,17 @@
 \alias{delta.optim.scqe}
 \title{Delta optimization method for \code{scqe} 1 cohort, summary statistics}
 \usage{
-delta.optim.scqe(Y_T0, untreated, Y_untreated, treated, Y_treated, obj,
-  specified = NULL, alpha, ...)
+delta.optim.scqe(
+  Y_T0,
+  untreated,
+  Y_untreated,
+  treated,
+  Y_treated,
+  obj,
+  specified = NULL,
+  alpha,
+  ...
+)
 }
 \arguments{
 \item{Y_T0}{Y}

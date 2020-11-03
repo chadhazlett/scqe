@@ -4,8 +4,16 @@
 \alias{delta.optim.scqe2}
 \title{Delta optimization method for \code{scqe} 2 cohort, full data}
 \usage{
-delta.optim.scqe2(post, treatment, outcome, delta, obj, alpha,
-  specified = NULL, ...)
+delta.optim.scqe2(
+  post,
+  treatment,
+  outcome,
+  delta,
+  obj,
+  alpha,
+  specified = NULL,
+  ...
+)
 }
 \arguments{
 \item{post}{Binary vector corresponding to T=0,1 for each observation.}
