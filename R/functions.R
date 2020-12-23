@@ -31,6 +31,8 @@ NULL
 #'   observation.
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
+#' @param min_delta Minimum delta.
+#' @param max_delta Maximum delta.
 #' @param cohort Numeric, 1 or 2 depending on cohort membership.
 #' @param untr_pre Integer number of untreated patients in the first cohort if
 #' applicable (summary statistics input) (T=0).
@@ -52,8 +54,6 @@ NULL
 #' @param tr Integer number of treated patients (summary statistics input).
 #' @param Y_tr Outcome for treated patients (summary statistics input).
 #' @param Y_untr Outcome for untreated patients (summary statistics input).
-#' @param min_delta Minimum delta.
-#' @param max_delta Maximum delta.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #' @param ... Extra optional arguments.
 #'
@@ -114,12 +114,16 @@ scqe <- function(post, treatment, outcome, delta, cohort,
   {
     class(scqe.obj) <- "2csumm"
   }
+
   # call the main scqe function
-  return(scqemethod(scqe.obj, post = post, treatment = treatment, outcome = outcome,
-                    delta = delta, cohort = cohort, untr_pre = untr_pre, untr_post = untr_post,
-                    tr_post = tr_post, tr_pre = tr_pre, Y_tr_post = Y_tr_post, Y_untr_post = Y_untr_post,
-                    Y_tr_pre = Y_tr_pre, Y_untr_pre = Y_untr_pre, untr = untr, tr = tr, Y_tr = Y_tr,
-                    Y_untr = Y_untr, min_delta = min_delta, max_delta = max_delta, alpha = alpha))
+  return(scqemethod(scqe.obj, post = post, treatment = treatment,
+                    outcome = outcome, delta = delta, cohort = cohort,
+                    untr_pre = untr_pre, untr_post = untr_post,
+                    tr_post = tr_post, tr_pre = tr_pre, Y_tr_post = Y_tr_post,
+                    Y_untr_post = Y_untr_post, Y_tr_pre = Y_tr_pre,
+                    Y_untr_pre = Y_untr_pre, untr = untr, tr = tr, Y_tr = Y_tr,
+                    Y_untr = Y_untr, min_delta = min_delta,
+                    max_delta = max_delta, alpha = alpha))
 }
 #' Stability controlled quasi-experiment (scqe)
 #'
@@ -164,8 +168,8 @@ scqemethod <- function(...)
 #' summary(scqe.2cohort.full)
 #'
 #'@export
-scqe.2cfull <- function(post, treatment, outcome, delta, alpha, min_delta, max_delta,
-                        ...)
+scqe.2cfull <- function(post, treatment, outcome, delta, alpha,
+                        min_delta, max_delta, ...)
 {
   if (!is.numeric(alpha))
   {
@@ -363,8 +367,8 @@ scqe.1cfull <- function(treatment, outcome, delta, alpha, min_delta, max_delta, 
 #' (summary statistics input).
 #' @param Y_untr_pre Outcome for patients who did not receive treatment at time
 #'  T=0 (summary statistics input).
-#' @param min_delta Minimum delta.
-#' @param max_delta Maximum delta.
+#' @param max_delta Max delta (see delta description), optional.
+#' @param min_delta Min delta (see delta description), optional.
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
@@ -380,24 +384,29 @@ scqe.1cfull <- function(treatment, outcome, delta, alpha, min_delta, max_delta, 
 #'
 #'
 #'@export
-scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
-                        Y_tr_pre, Y_untr_pre, min_delta, max_delta, delta, alpha, ...)
+scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
+                        Y_untr_post, Y_tr_pre, Y_untr_pre, min_delta,
+                        max_delta, delta, alpha, ...)
 {
-  if (!is.numeric(alpha))
+  if (missing(alpha))
   {
     alpha <- 0.05
   }
   value <- stats::qnorm(1 - (alpha/2))
-  if (!is.numeric(min_delta) & !is.numeric(max_delta) & !is.numeric(delta))
+
+  if (missing(min_delta) & missing(max_delta) & missing(delta))
   {
+    message("delta (and min_delta/max_delta) missing. Setting delta to range from -0.1 to 0.1.")
     min_delta <- -0.1
     max_delta <- 0.1
     delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
   }
-  if (!is.numeric(min_delta) & !is.numeric(max_delta) & is.numeric(delta))
+  if (missing(min_delta) & missing(max_delta) & !missing(delta))
   {
     delta_list <- delta
   }
+  # if (missing(delta) & (missing(min_delta) | missing(max_delta)))
+  #   stop("Either set delta or min_delta and max_delta.")
   if (any(class(untr_pre) == "character" | class(untr_post) == "character" | class(tr_post) ==
           "character" | class(tr_pre) == "character" | class(Y_tr_post) == "character" |
           class(Y_untr_post) == "character" | class(Y_tr_pre) == "character" | class(Y_untr_pre) ==
@@ -405,7 +414,7 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_
   {
     stop("One or more inputs to function are of invalid class")
   }
-  if (!is.numeric(delta) & is.numeric(min_delta) & is.numeric(max_delta))
+  if (missing(delta) & !missing(min_delta) & !missing(max_delta))
   {
     if (max_delta == min_delta)
     {
@@ -417,6 +426,7 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_
     }
     delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
   }
+
   N_pre <- untr_pre + tr_pre
   N_post <- untr_post + tr_post
   N <- N_pre + N_post
@@ -514,7 +524,7 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_
 scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
                         delta, alpha, ...)
 {
-  if (!is.numeric(alpha))
+  if (missing(alpha))
   {
     alpha <- 0.05
   }

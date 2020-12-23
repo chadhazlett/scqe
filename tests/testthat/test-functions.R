@@ -11,8 +11,8 @@ test_that("Allow delta to have now arguments if min_delta and max_delta are spec
       Y_untr_post = 315e3,
       Y_tr_pre = 0,
       Y_untr_pre = 4e5,
-      min_delta = -0.1,
-      max_delta = 0.1,
+      min_delta = -0.05,
+      max_delta = 0.05,
       alpha = 0.95
     ),
     NA
