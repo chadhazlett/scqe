@@ -119,7 +119,7 @@ summary(scqe.1cohort.sum)
 
 }
 \references{
-Hazlett, C. (2019), "Estimating causal effects of new treatments
-despite self-selection: The case of experimental medical treatments."
+Hazlett, C. (2019), 'Estimating causal effects of new treatments
+despite self-selection: The case of experimental medical treatments.'
 Journal of Causal Inference.
 }

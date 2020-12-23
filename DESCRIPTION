@@ -1,6 +1,6 @@
 Package: scqe
 Title: Stability Controlled Quasi-Experimentation
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     c(person(given = "Kirsten", family = "Landsiedel", role = "cre", email = "kirstenlandsiedel@gmail.com"),
     person("Hazlett", "Chad", role="aut", email = "chazlett@ucla.edu"))
@@ -14,3 +14,6 @@ Imports:
     ggplot2,
     stats,
     utils
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
