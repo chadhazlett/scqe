@@ -16,7 +16,7 @@ delta_optim_SCQE_2C(
   Y_untr_pre,
   obj,
   specified = NULL,
-  alpha,
+  alpha = 0.05,
   ...
 )
 }
@@ -52,7 +52,7 @@ T=0 (summary statistics input).}
 
 \item{specified}{Specified optional arguments.}
 
-\item{alpha}{Numeric alpha for confidence intervals (default alpha=.05).}
+\item{alpha}{Numeric alpha for confidence intervals (default alpha = 0.05).}
 
 \item{...}{Extra optional arguments.}
 }

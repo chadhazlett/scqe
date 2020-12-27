@@ -5,14 +5,16 @@
 \alias{print.scqe}
 \title{Summary method for \code{scqe}}
 \usage{
-\method{summary}{scqe}(scqe.obj, ...)
+\method{summary}{scqe}(object, ...)
 
-\method{print}{scqe}(scqe.obj, ...)
+\method{print}{scqe}(x, ...)
 }
 \arguments{
-\item{scqe.obj}{an object of class \code{\link{scqe}}}
+\item{object}{an object of class \code{\link{scqe}}}
 
 \item{...}{Extra optional arguments}
+
+\item{x}{an object of class \code{\link{scqe}}}
 }
 \description{
 The \code{summary} method provides several statements that summarize
@@ -25,23 +27,23 @@ about the treatment's effect on patient outcome.
 }
 \examples{
 set.seed(1234)
-post = c(rep(0,100), rep(1,100))
-tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+post <- c(rep(0, 100), rep(1, 100))
+tx <- c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+y <- rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 
 # Two cohorts, full data
-scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full = scqe(post = post, treatment = tx, outcome = y,
+                         delta=seq(from = -0.1, to = 0.1, by = 0.05))
 summary(scqe.2cohort.full)
 
 set.seed(1234)
 post = c(rep(0,100), rep(1,100))
-tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+tx = c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+y = rbinom(n= 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 
 # Two cohorts, full data
-scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full = scqe(post = post, treatment = tx, outcome = y,
+                         delta = seq(from = -0.1, to = 0.1, by = 0.05))
 scqe.2cohort.full
 print(scqe.2cohort.full)
 

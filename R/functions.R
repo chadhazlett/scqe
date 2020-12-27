@@ -24,15 +24,19 @@ NULL
 #' Main scqe function. Computes scqe estimates and corresponding confidence
 #' intervals.
 #'
-#' @param post Binary vector corresponding to T=0,1 for each observation.
-#' @param treatment Binary or continuous vector corresponding (usually) to 0,1
+#' @param post Binary vector corresponding to T = 0, 1 for each observation.
+#' @param treatment Binary or continuous vector corresponding (usually) to [0,1]
 #'   (no treatment or treatment) for each observation.
 #' @param outcome Continuous vector representing the outcome for each
 #'   observation.
+#' @param min_outcome Minimum value for the outcome. 
+#' Optional, not used if \code{outcome} is supplied.
+#' @param max_outcome Maximum value for the outcome. 
+#' Optional, not used if \code{outcome} is supplied.
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
-#' @param min_delta Minimum delta.
-#' @param max_delta Maximum delta.
+#' @param min_delta Minimum delta. Optional, not used if \code{delta} is supplied.
+#' @param max_delta Maximum delta. Optional, not used if \code{delta} is supplied.
 #' @param cohort Numeric, 1 or 2 depending on cohort membership.
 #' @param untr_pre Integer number of untreated patients in the first cohort if
 #' applicable (summary statistics input) (T=0).
@@ -54,7 +58,7 @@ NULL
 #' @param tr Integer number of treated patients (summary statistics input).
 #' @param Y_tr Outcome for treated patients (summary statistics input).
 #' @param Y_untr Outcome for untreated patients (summary statistics input).
-#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
 #' @references  Hazlett, C. (2019), 'Estimating causal effects of new treatments
@@ -64,53 +68,79 @@ NULL
 #' @examples
 #' set.seed(1234)
 #' post = c(rep(0,100), rep(1,100))
-#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#' tx = c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+#' y = rbinom(n = 200, prob = 0.1 + .02 * post - 0.05 * tx, size = 1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-#' delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full = scqe(post = post, treatment = tx, outcome = y,
+#'                         delta = seq(from = -0.1, to = 0.1, by = 0.05))
 #' plot(scqe.2cohort.full)
 #' summary(scqe.2cohort.full)
 #'
 #' # One cohort, full data
-#' scqe.1cohort.full = scqe(treatment=tx, outcome=y,
-#' delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.1cohort.full = scqe(treatment = tx, outcome = y,
+#'                         delta=seq(from = -0.1, to = 0.1, by = 0.05))
 #' plot(scqe.1cohort.full)
 #' summary(scqe.1cohort.full)
 #'
 #' # Two cohorts, summary data only
-#' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,
-#' Y_tr_post=20,Y_untr_post=1,
-#' Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+#' scqe.2cohort.sum = scqe(untr_pre = 200,untr_post = 150, tr_post = 50, 
+#'                        tr_pre = 0, Y_tr_post = 20, Y_untr_post = 1,
+#'                        Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1, 
+#'                        max_delta = 1)
 #' plot(scqe.2cohort.sum)
 #' summary(scqe.2cohort.sum)
 #'
 #' # One cohort, summary data only
-#' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,
-#'  min_delta=.1,max_delta=1)
+#' scqe.1cohort.sum = scqe(untr = 100, tr = 200, Y_untr = 5, Y_tr = 50,
+#'                         min_delta= 0.1, max_delta = 1)
 #' plot(scqe.1cohort.sum)
 #' summary(scqe.1cohort.sum)
 #'
 #' @export
-scqe <- function(post, treatment, outcome, delta, cohort,
-                 untr_pre, untr_post, tr_post, tr_pre, Y_tr_post, Y_untr_post,
-                 Y_tr_pre, Y_untr_pre, untr, tr, Y_tr, Y_untr, min_delta,
-                 max_delta, alpha, ...)
+
+scqe <- function(post,
+                 treatment,
+                 outcome,
+                 min_outcome,
+                 max_outcome,
+                 delta,
+                 min_delta,
+                 max_delta,
+                 cohort,
+                 untr_pre,
+                 untr_post,
+                 tr_post,
+                 tr_pre,
+                 Y_tr_post,
+                 Y_untr_post,
+                 Y_tr_pre,
+                 Y_untr_pre,
+                 untr,
+                 tr,
+                 Y_tr,
+                 Y_untr,
+                 alpha = 0.05,
+                 ...)
 {
   scqe.obj <- NA
+
+  # Check that arguments are of the expected (numeric or integer) type
+  argument_list <- as.list(match.call(expand.dots = FALSE))
+  arguments_type_checker(argument_list)
+
   # first define class of object is.numeric(post) = TRUE indicates 2 cohort case
   # is.numeric(untr) indicates summary case
-  if (!is.numeric(post) & !is.numeric(untr) & !is.numeric(untr_post))
+  if (missing(post) & missing(untr) & missing(untr_post))
   {
     class(scqe.obj) <- "1cfull"
-  } else if (is.numeric(post) & !is.numeric(untr) & !is.numeric(untr_post))
+  } else if (!missing(post) & missing(untr) & missing(untr_post))
   {
     class(scqe.obj) <- "2cfull"
-  } else if (!is.numeric(post) & is.numeric(untr) & !is.numeric(untr_post))
+  } else if (missing(post) & !missing(untr) & missing(untr_post))
   {
     class(scqe.obj) <- "1csumm"
-  } else if (is.numeric(untr_post))
+  } else if (!missing(untr_post))
   {
     class(scqe.obj) <- "2csumm"
   }
@@ -142,65 +172,50 @@ scqemethod <- function(...)
 #' This function returns the scqe estimates and confidence intervals for the
 #' 2 cohort case when the user inputs full data.
 #'
-#' @param post Binary vector corresponding to T=0,1 for each observation.
+#' @param post Binary vector corresponding to T = 0,1 for each observation.
 #' @param treatment Binary or continuous vector correspoding (usually) to 0,1
 #'   (no treatment or treatment) for each observation.
 #' @param outcome Continuous vector representing the outcome for each
 #'   observation.
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
-#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
-#' @param max_delta Max delta (see delta description), optional.
-#' @param min_delta Min delta (see delta description), optional.
+#' @param min_delta Minimum delta. Optional, not used if \code{delta} is supplied.
+#' @param max_delta Maximum delta. Optional, not used if \code{delta} is supplied.
+#' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
 #'
 #' @examples
 #' set.seed(1234)
 #' post = c(rep(0,100), rep(1,100))
-#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#' tx = c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+#' y = rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-#' delta=seq(from=-.1,to=.1, by=0.05))
+#' scqe.2cohort.full = scqe(post = post, treatment = tx, outcome = y,
+#' delta = seq(from = -0.1,to = 0.1, by = 0.05))
 #' plot(scqe.2cohort.full)
 #' summary(scqe.2cohort.full)
 #'
 #'@export
-scqe.2cfull <- function(post, treatment, outcome, delta, alpha,
-                        min_delta, max_delta, ...)
+scqe.2cfull <- function(post, 
+                        treatment, 
+                        outcome, 
+                        delta, 
+                        min_delta, max_delta,
+                        alpha = 0.05,
+                        ...)
 {
-  if (!is.numeric(alpha))
-  {
-    alpha <- 0.05
-  }
+  value <- stats::qnorm(1 - (alpha/2))
+
+  delta_list <- delta_setter(delta, min_delta, max_delta)
+
   value <- stats::qnorm(1 - (alpha/2))
   if (all(post == TRUE | post == FALSE))
   {
     post <- as.numeric(post)
   }
-  if (!is.numeric(delta) & !is.numeric(min_delta) & !is.numeric(max_delta))
-  {
-    delta <- seq(from = -0.1, to = 0.1, by = 0.05)
-  }
-  if (!is.numeric(delta) & is.numeric(min_delta) & is.numeric(max_delta))
-  {
-    if (max_delta == min_delta)
-    {
-      # spread out the delta range to +/- 0.2 from the single entered delta, ensuring
-      # the range doesn't go beyond the possible bounds
-      min_delta <- max(-0.99, min_delta - 0.2)
-      max_delta <- min(0.99, min_delta + 0.4)
-      min_delta <- max_delta - 0.4
-    }
-    delta <- seq(from = max_delta, to = min_delta, length.out = 11)
-  }
-  if (any(class(post) == "character" | class(treatment) == "character" | class(outcome) ==
-          "character" | class(delta) == "character"))
-  {
-    stop("One or more inputs to function are of invalid class")
-  }
+
   # check if delta is in range for binary case
   if (all(outcome == 1 | outcome == 0))
   {
@@ -219,8 +234,11 @@ scqe.2cfull <- function(post, treatment, outcome, delta, alpha,
     }
   }
   y2 <- outcome - post %*% t(delta)
-  r <- data.frame(term = numeric(length(delta)), estimate = numeric(length(delta)),
-                  conf.low = numeric(length(delta)), conf.high = numeric(length(delta)), se = numeric(length(delta)))
+  r <- data.frame(term = numeric(length(delta)),
+                  estimate = numeric(length(delta)),
+                  conf.low = numeric(length(delta)),
+                  conf.high = numeric(length(delta)),
+                  se = numeric(length(delta)))
   for (i in 1:length(delta))
   {
     iv.out <- summary(AER::ivreg(y2[, i] ~ treatment | post))
@@ -258,67 +276,55 @@ scqe.2cfull <- function(post, treatment, outcome, delta, alpha,
 #'   observation.
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
-#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
-#' @param max_delta Max delta (see delta description), optional.
-#' @param min_delta Min delta (see delta description), optional.
+#' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
+#' @param min_delta Minimum delta. Optional, not used if \code{delta} is supplied.
+#' @param max_delta Maximum delta. Optional, not used if \code{delta} is supplied.
 #' @param ... Extra optional arguments.
 #'
 #' @examples
 #' set.seed(1234)
 #' post = c(rep(0,100), rep(1,100))
-#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#' tx = c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+#' y = rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 #'
 #' # One cohort, full data
-#' scqe.1cohort.full = scqe(treatment=tx, outcome=y,
-#' delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.1cohort.full = scqe(treatment = tx, outcome = y, 
+#'                          delta=seq(from = -0.1, to = 0.1, by = 0.05))
 #' plot(scqe.1cohort.full)
 #' summary(scqe.1cohort.full)
 #'
 #'
 #'
 #'@export
-scqe.1cfull <- function(treatment, outcome, delta, alpha, min_delta, max_delta, ...)
+
+scqe.1cfull <- function(treatment,
+                        outcome,
+                        delta,
+                        min_delta,
+                        max_delta,
+                        alpha = 0.05,
+                        ...)
 {
-  if (!is.numeric(alpha))
-  {
-    alpha <- 0.05
-  }
   value <- stats::qnorm(1 - (alpha/2))
-  if (!is.numeric(delta) & !is.numeric(min_delta) & !is.numeric(max_delta))
-  {
-    delta <- seq(from = -0.1, to = 0.1, by = 0.05)
-  }
-  if (!is.numeric(delta) & is.numeric(min_delta) & is.numeric(max_delta))
-  {
-    if (max_delta == min_delta)
-    {
-      # spread out the delta range to +/- 0.2 from the single entered delta, ensuring
-      # the range doesn't go beyond the possible bounds
-      min_delta <- max(-0.99, min_delta - 0.2)
-      max_delta <- min(0.99, min_delta + 0.4)
-      min_delta <- max_delta - 0.4
-    }
-    delta <- seq(from = max_delta, to = min_delta, length.out = 11)
-  }
-  if (any((treatment) == "character" | class(outcome) == "character" | class(delta) ==
-          "character"))
-  {
-    stop("One or more inputs to function are of invalid class")
-  }
+
+  delta_list <- delta_setter(delta, min_delta, max_delta)
+
   # check if delta is in range for binary case
   if (all(outcome == 1 | outcome == 0))
   {
     if (any(delta > 1 | delta < -1))
     {
-      warning("One or more deltas out of expected range (-1,1)")
+      warning("One or more deltas out of expected range [-1,1]")
     }
   }
   N <- length(treatment)  #number of obs
   pi1 <- sum(treatment)/N  #number of treated ind/N
   Ybar_T1 <- sum(outcome)/N  #the sum of outcomes for treated and untreated/N
-  r <- data.frame(term = numeric(length(delta)), estimate = numeric(length(delta)),
-                  conf.low = numeric(length(delta)), conf.high = numeric(length(delta)), se = numeric(length(delta)))
+  r <- data.frame(term = numeric(length(delta)),
+                  estimate = numeric(length(delta)),
+                  conf.low = numeric(length(delta)),
+                  conf.high = numeric(length(delta)),
+                  se = numeric(length(delta)))
   for (i in 1:length(delta))
   {
     Beta_SCQE_outcome <- (Ybar_T1 - delta[i])/pi1  #code adapted from shiby app for calculations here
@@ -369,8 +375,8 @@ scqe.1cfull <- function(treatment, outcome, delta, alpha, min_delta, max_delta, 
 #'  T=0 (summary statistics input).
 #' @param delta Numeric scalar or numeric vector of possible values for change
 #' in average non-treatment outcome between cohorts (if applicable).
-#' @param max_delta Numeric scalar (Optional) maximum delta value (see delta description).
-#' @param min_delta Numeric scalar (Optional) minimum delta value (see delta description).
+#' @param min_delta Minimum delta. Optional, not used if \code{delta} is supplied.
+#' @param max_delta Maximum delta. Optional, not used if \code{delta} is supplied.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #' @param ... Extra optional arguments.
 #'
@@ -393,17 +399,6 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
   value <- stats::qnorm(1 - (alpha/2))
 
   delta_list <- delta_setter(delta, min_delta, max_delta)
-
-  argument_list <- as.list(match.call(expand.dots = FALSE))
-  arguments_type_checker(argument_list)
-
-  # if (any(class(untr_pre) == "character" | class(untr_post) == "character" | class(tr_post) ==
-  #         "character" | class(tr_pre) == "character" | class(Y_tr_post) == "character" |
-  #         class(Y_untr_post) == "character" | class(Y_tr_pre) == "character" | class(Y_untr_pre) ==
-  #         "character"))
-  # {
-  #   stop("One or more inputs to function are of invalid class")
-  # }
 
   N_pre <- untr_pre + tr_pre
   N_post <- untr_post + tr_post
@@ -485,10 +480,10 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
 #' @param Y_untr_1C Outcome for untreated individuals.
 #' @param tr_1C Number of treated individuals.
 #' @param Y_tr_1C Outcome for treated individuals.
-#' @param min_delta Minimum possible delta.
-#' @param max_delta Maximum possible delta.
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
+#' @param min_delta Minimum delta. Optional, not used if \code{delta} is supplied.
+#' @param max_delta Maximum delta. Optional, not used if \code{delta} is supplied.
 #' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
@@ -501,47 +496,25 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
 #'
 #'
 #'@export
-scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta,
-                        delta, alpha, ...)
+scqe.1csumm <- function(untr_1C,
+                        Y_untr_1C,
+                        tr_1C,
+                        Y_tr_1C,
+                        delta,
+                        min_delta,
+                        max_delta,
+                        alpha = 0.05, ...)
 {
-  if (missing(alpha))
-  {
-    alpha <- 0.05
-  }
   value <- stats::qnorm(1 - (alpha/2))
-  if (!is.numeric(min_delta) & !is.numeric(max_delta) & !is.numeric(delta))
-  {
-    min_delta <- -0.1
-    max_delta <- 0.1
-    outcome_list <- seq(from = max_delta, to = min_delta, length.out = 11)
-  }
-  if (!is.numeric(min_delta) & !is.numeric(max_delta) & is.numeric(delta))
-  {
-    outcome_list <- delta
-  }
-  if (!is.numeric(delta) & is.numeric(min_delta) & is.numeric(max_delta))
-  {
-    if (max_delta == min_delta)
-    {
-      # spread out the delta range to +/- 0.2 from the single entered delta, ensuring
-      # the range doesn't go beyond the possible bounds
-      min_delta <- max(-0.99, min_delta - 0.2)
-      max_delta <- min(0.99, min_delta + 0.4)
-      min_delta <- max_delta - 0.4
-    }
-    outcome_list <- seq(from = max_delta, to = min_delta, length.out = 11)
-  }
-  if (any(class(untr_1C) == "character" | class(Y_untr_1C) == "character" | class(tr_1C) ==
-          "character" | class(Y_tr_1C) == "character"))
-  {
-    stop("One or more inputs to function are of invalid class")
-  }
+
+  delta_list <- delta_setter(delta, min_delta, max_delta)
+
   N <- tr_1C + untr_1C
   pi1 <- tr_1C/N
   Ybar_T1 <- (Y_tr_1C + Y_untr_1C)/N
   Beta_SCQE_1C <- NULL
   SE_B_SCQE_1C <- NULL
-  for (Y_T0 in outcome_list)
+  for (Y_T0 in delta_list)
   {
     Beta_SCQE_outcome <- (Ybar_T1 - Y_T0)/pi1
     SE_B_SCQE_outcome <- sqrt((1/(N - 1)) * (((Ybar_T1 * (1 - Ybar_T1))/(pi1^2)) +
@@ -549,7 +522,7 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta
     Beta_SCQE_1C <- c(Beta_SCQE_1C, Beta_SCQE_outcome)
     SE_B_SCQE_1C <- c(SE_B_SCQE_1C, SE_B_SCQE_outcome)
   }
-  SCQE_1C_df <- data.frame(term = outcome_list, estimate = Beta_SCQE_1C, conf.low = Beta_SCQE_1C -
+  SCQE_1C_df <- data.frame(term = delta_list, estimate = Beta_SCQE_1C, conf.low = Beta_SCQE_1C -
                              value * SE_B_SCQE_1C, conf.high = Beta_SCQE_1C + value * SE_B_SCQE_1C, se = SE_B_SCQE_1C)
   out <- list()
   out$result <- SCQE_1C_df
@@ -580,12 +553,17 @@ scqe.1csumm <- function(untr_1C, Y_untr_1C, tr_1C, Y_tr_1C, min_delta, max_delta
 #'@param Y_treated Outcome for treated individuals.
 #'@param obj scqe object.
 #'@param specified Specified optional arguments.
-#'@param alpha Numeric alpha for confidence intervals (default alpha=.05).
+#'@param alpha Numeric alpha for confidence intervals (default alpha = 0.05).
 #'@param ... Extra optional arguments.
 #'
 #' @export
-delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, obj,
-                             specified = NULL, alpha, ...)
+delta.optim.scqe <- function(Y_T0, untreated,
+                             Y_untreated,
+                             treated,
+                             Y_treated,
+                             obj,
+                             specified = NULL,
+                             alpha = 0.05, ...)
 {
   value <- stats::qnorm(1 - (alpha/2))
   N <- treated + untreated
@@ -638,13 +616,23 @@ delta.optim.scqe <- function(Y_T0, untreated, Y_untreated, treated, Y_treated, o
 #' time T=1 (summary statistics input).
 #' @param obj scqe object.
 #' @param specified Specified optional arguments.
-#' @param alpha Numeric alpha for confidence intervals (default alpha=.05).
+#' @param alpha Numeric alpha for confidence intervals (default alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
 #'
 #' @export
-delta_optim_SCQE_2C <- function(delta, untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
-                                Y_untr_post, Y_tr_pre, Y_untr_pre, obj, specified = NULL, alpha, ...)
+delta_optim_SCQE_2C <- function(delta,
+                                untr_pre,
+                                untr_post,
+                                tr_post,
+                                tr_pre,
+                                Y_tr_post,
+                                Y_untr_post,
+                                Y_tr_pre,
+                                Y_untr_pre,
+                                obj,
+                                specified = NULL,
+                                alpha = 0.05, ...)
 {
   value <- stats::qnorm(1 - (alpha/2))
   N_pre <- untr_pre + tr_pre
@@ -731,7 +719,13 @@ delta_optim_SCQE_2C <- function(delta, untr_pre, untr_post, tr_post, tr_pre, Y_t
 #' @param ... Extra optional arguments.
 #'
 #' @export
-delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, alpha, specified = NULL,
+delta.optim.scqe2 <- function(post,
+                              treatment,
+                              outcome,
+                              delta,
+                              obj,
+                              alpha = 0.05,
+                              specified = NULL,
                               ...)
 {
   value <- stats::qnorm(1 - (alpha/2))
@@ -827,8 +821,12 @@ delta.optim.scqe2 <- function(post, treatment, outcome, delta, obj, alpha, speci
 #' @param ... Extra optional arguments.
 #'
 #' @export
-delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = NULL,
-                                    alpha, ...)
+delta.optim.scqe.1cfull <- function(treatment,
+                                    outcome,
+                                    delta,
+                                    obj,
+                                    specified = NULL,
+                                    alpha = 0.05, ...)
 {
   value <- stats::qnorm(1 - (alpha/2))
   N <- length(treatment)
@@ -862,25 +860,25 @@ delta.optim.scqe.1cfull <- function(treatment, outcome, delta, obj, specified = 
 #' and confidence intervals for the scqe estimates for the range of
 #' values of delta provided by the user.
 #'
-#' @param scqe.obj an object of class \code{\link{scqe}}
+#' @param x an object of class \code{\link{scqe}}
 #' @param xlab Optional character label for x axis.
 #' @param ylab Optional character label for y axis.
 #' @param ... Extra optional arguments
 #'
 #' @examples
 #' set.seed(1234)
-#' post = c(rep(0,100), rep(1,100))
-#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#' post <- c(rep(0,100), rep(1,100))
+#' tx <- c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+#' y <- rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-#' delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full <- scqe(post = post, treatment = tx, outcome = y,
+#'                           delta = seq(from = -0.1, to = 0.1, by = 0.05))
 #' plot(scqe.2cohort.full)
 #'
 #' @export
 #'
-plot.scqe <- function(scqe.obj, xlab, ylab, ...)
+plot.scqe <- function(x, xlab, ylab, ...)
 {
   if (missing(xlab))
   {
@@ -890,12 +888,12 @@ plot.scqe <- function(scqe.obj, xlab, ylab, ...)
   {
     ylab <- c("Average treatment effected on treated")
   }
-  scqe.obj <- as.data.frame(scqe.obj$result)
+  x <- as.data.frame(x$result)
   term <- NULL
   estimate <- NULL
   conf.high <- NULL
   conf.low <- NULL
-  return(ggplot2::ggplot(scqe.obj, ggplot2::aes(x = term, y = estimate, ymin = conf.low,
+  return(ggplot2::ggplot(x, ggplot2::aes(x = term, y = estimate, ymin = conf.low,
                                                 ymax = conf.high)) + ggplot2::geom_pointrange(size = 0.5, shape = 16) + ggplot2::ylab(xlab) +
            ggplot2::xlab(ylab) + ggplot2::coord_flip() + ggplot2::theme_bw() + ggplot2::geom_hline(yintercept = 0,
                                                                                                    color = "gray50"))
@@ -908,30 +906,32 @@ plot.scqe <- function(scqe.obj, xlab, ylab, ...)
 #' important values of delta requires to make different conclusions
 #' about the treatment's effect on patient outcome.
 #'
+#' @param object an object of class \code{\link{scqe}}
+#' @param ... Extra optional arguments
 #'
 #' @examples
 #' set.seed(1234)
-#' post = c(rep(0,100), rep(1,100))
-#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#' post <- c(rep(0, 100), rep(1, 100))
+#' tx <- c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+#' y <- rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-#' delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full = scqe(post = post, treatment = tx, outcome = y,
+#'                          delta=seq(from = -0.1, to = 0.1, by = 0.05))
 #' summary(scqe.2cohort.full)
 #'
 #' @importFrom stats optimize
 #'
 #' @export
 #'
-summary.scqe <- function(scqe.obj, ...)
+summary.scqe <- function(object, ...)
 {
-  treatment <- scqe.obj$treatment
-  post <- scqe.obj$post
-  outcome <- scqe.obj$outcome
-  cohort <- scqe.obj$cohort
-  alpha <- scqe.obj$alpha
-  scqe.obj <- as.data.frame(scqe.obj$result)
+  treatment <- object$treatment
+  post <- object$post
+  outcome <- object$outcome
+  cohort <- object$cohort
+  alpha <- object$alpha
+  object <- as.data.frame(object$result)
   value <- stats::qnorm(1 - (alpha/2))
   if (cohort == 2)
   {
@@ -961,7 +961,7 @@ summary.scqe <- function(scqe.obj, ...)
     rlist <- list(less.likely = utils::capture.output(cat("To claim the treatment made the outcome significantly less likely: \n",
                                                           one)), more.likely = utils::capture.output(cat("To claim the treatment made the outcome significantly more likely: \n",
                                                                                                          two)), no.effect = utils::capture.output(cat("To claim the treatment had 0 effect on the outcome:\n",
-                                                                                                                                                      three)), critical.points = critical_point, full.results = scqe.obj)
+                                                                                                                                                      three)), critical.points = critical_point, full.results = object)
   } else
   {
     # optimize for the 'less likely case'
@@ -990,7 +990,7 @@ summary.scqe <- function(scqe.obj, ...)
     rlist <- list(less.likely = utils::capture.output(cat("To claim the treatment made the outcome significantly less likely: \n",
                                                           one)), more.likely = utils::capture.output(cat("To claim the treatment made the outcome significantly more likely: \n",
                                                                                                          two)), no.effect = utils::capture.output(cat("To claim the treatment had 0 effect on the outcome:\n",
-                                                                                                                                                      three)), critical.points = critical_point, full.results = scqe.obj)
+                                                                                                                                                      three)), critical.points = critical_point, full.results = object)
   }
   cat("-- SCQE Method Results -- \n\n")
   cat("- Claims About Treatment Effects -\n")
@@ -1001,7 +1001,7 @@ summary.scqe <- function(scqe.obj, ...)
   cat(" 3.", "To claim the treatment had 0 effect on the outcome:\n")
   cat("   ", three, "\n\n\n")
   cat("- Full Results Table: - \n")
-  print(scqe.obj)
+  print(object)
   invisible(rlist)
 }
 ## SCQE PRINT METHOD
@@ -1012,30 +1012,30 @@ summary.scqe <- function(scqe.obj, ...)
 #' includes the given delta values and their conclusions
 #' about the treatment's effect on patient outcome.
 #'
-#' @param scqe.obj an object of class \code{\link{scqe}}
+#' @param x an object of class \code{\link{scqe}}
 #' @param ... Extra optional arguments
 #'
 #' @examples
 #' set.seed(1234)
 #' post = c(rep(0,100), rep(1,100))
-#' tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-#' y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+#' tx = c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+#' y = rbinom(n= 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 #'
 #' # Two cohorts, full data
-#' scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-#' delta=seq(from=-.1, to=.1, by=0.05))
+#' scqe.2cohort.full = scqe(post = post, treatment = tx, outcome = y,
+#'                          delta = seq(from = -0.1, to = 0.1, by = 0.05))
 #' scqe.2cohort.full
 #' print(scqe.2cohort.full)
 #'
 #' @export
 #'
-print.scqe <- function(scqe.obj, ...)
+print.scqe <- function(x, ...)
 {
-  treatment <- scqe.obj$treatment
-  post <- scqe.obj$post
-  outcome <- scqe.obj$outcome
-  cohort <- scqe.obj$cohort
-  result <- as.data.frame(scqe.obj$result)
+  treatment <- x$treatment
+  post <- x$post
+  outcome <- x$outcome
+  cohort <- x$cohort
+  result <- as.data.frame(x$result)
   cat("-- SCQE Method Result Table -- \n\n")
   print(result)
   cat("\nFor more information, see full summary.")

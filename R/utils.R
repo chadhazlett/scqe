@@ -52,12 +52,12 @@ delta_setter <- function(delta, min_delta, max_delta) {
 
 arguments_type_checker <- function(x) {
   for (i in seq_along(x)[-1]) {
-    argument_value <- x[i][[1]]
+    argument_value <- eval(x[i][[1]])
     if (!any(c(inherits(argument_value, "integer"),
                inherits(argument_value, "numeric"),
                # Used for negative integer values. There is probably a better way to do this
                is.call(argument_value))))
-      stop("One or more function arguments are of invalid class. All arguments must be numeric.",
+      stop("One or more function arguments are of an invalid class. All arguments must be numeric.",
            call. = FALSE)
   }
 }

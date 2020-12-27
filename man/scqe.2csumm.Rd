@@ -46,9 +46,9 @@ time T=1 (summary statistics input).}
 \item{Y_untr_pre}{Outcome for patients who did not receive treatment at time
 T=0 (summary statistics input).}
 
-\item{min_delta}{Numeric scalar (Optional) minimum delta value (see delta description).}
+\item{min_delta}{Minimum delta. Optional, not used if \code{delta} is supplied.}
 
-\item{max_delta}{Numeric scalar (Optional) maximum delta value (see delta description).}
+\item{max_delta}{Maximum delta. Optional, not used if \code{delta} is supplied.}
 
 \item{delta}{Numeric scalar or numeric vector of possible values for change
 in average non-treatment outcome between cohorts (if applicable).}

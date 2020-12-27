@@ -10,10 +10,10 @@ scqe.1csumm(
   Y_untr_1C,
   tr_1C,
   Y_tr_1C,
+  delta,
   min_delta,
   max_delta,
-  delta,
-  alpha,
+  alpha = 0.05,
   ...
 )
 }
@@ -26,14 +26,14 @@ scqe.1csumm(
 
 \item{Y_tr_1C}{Outcome for treated individuals.}
 
-\item{min_delta}{Minimum possible delta.}
-
-\item{max_delta}{Maximum possible delta.}
-
 \item{delta}{Single value or vector of possible values for change in
 average non-treatment outcome between cohorts (if applicable).}
 
-\item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
+\item{min_delta}{Minimum delta. Optional, not used if \code{delta} is supplied.}
+
+\item{max_delta}{Maximum delta. Optional, not used if \code{delta} is supplied.}
+
+\item{alpha}{Numeric alpha for confidence interval (default is alpha = 0.05).}
 
 \item{...}{Extra optional arguments.}
 }

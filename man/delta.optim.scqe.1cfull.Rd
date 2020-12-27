@@ -10,7 +10,7 @@ delta.optim.scqe.1cfull(
   delta,
   obj,
   specified = NULL,
-  alpha,
+  alpha = 0.05,
   ...
 )
 }

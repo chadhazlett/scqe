@@ -4,10 +4,19 @@
 \alias{scqe.2cfull}
 \title{Stability controlled quasi-experiment (scqe) for 2 cohort case, full data}
 \usage{
-scqe.2cfull(post, treatment, outcome, delta, alpha, min_delta, max_delta, ...)
+scqe.2cfull(
+  post,
+  treatment,
+  outcome,
+  delta,
+  min_delta,
+  max_delta,
+  alpha = 0.05,
+  ...
+)
 }
 \arguments{
-\item{post}{Binary vector corresponding to T=0,1 for each observation.}
+\item{post}{Binary vector corresponding to T = 0,1 for each observation.}
 
 \item{treatment}{Binary or continuous vector correspoding (usually) to 0,1
 (no treatment or treatment) for each observation.}
@@ -18,11 +27,11 @@ observation.}
 \item{delta}{Single value or vector of possible values for change in
 average non-treatment outcome between cohorts (if applicable).}
 
-\item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
+\item{min_delta}{Minimum delta. Optional, not used if \code{delta} is supplied.}
 
-\item{min_delta}{Min delta (see delta description), optional.}
+\item{max_delta}{Maximum delta. Optional, not used if \code{delta} is supplied.}
 
-\item{max_delta}{Max delta (see delta description), optional.}
+\item{alpha}{Numeric alpha for confidence interval (default is alpha = 0.05).}
 
 \item{...}{Extra optional arguments.}
 }
@@ -33,12 +42,12 @@ This function returns the scqe estimates and confidence intervals for the
 \examples{
 set.seed(1234)
 post = c(rep(0,100), rep(1,100))
-tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+tx = c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+y = rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 
 # Two cohorts, full data
-scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-delta=seq(from=-.1,to=.1, by=0.05))
+scqe.2cohort.full = scqe(post = post, treatment = tx, outcome = y,
+delta = seq(from = -0.1,to = 0.1, by = 0.05))
 plot(scqe.2cohort.full)
 summary(scqe.2cohort.full)
 

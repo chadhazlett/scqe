@@ -106,8 +106,9 @@ example). Plot and summary methods can be used here as well.
 
 ``` r
 scqe.2cohort.sum <- scqe(untr_pre = 200, untr_post = 150, tr_post = 50, 
-    tr_pre = 0, Y_tr_post = 20, Y_untr_post = 1, Y_tr_pre = 0, Y_untr_pre = 5, 
-    min_delta = 0.1, max_delta = 1)
+                         tr_pre = 0, Y_tr_post = 20, Y_untr_post = 1, 
+                         Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1, 
+                         max_delta = 1)
 #> -- SCQE Method Result Table -- 
 #> 
 #>    term estimate   conf.low  conf.high        se
@@ -163,7 +164,8 @@ Example 3: 1 cohort, full data
 
 ``` r
 scqe.1cohort.full <- scqe(treatment = tx, outcome = y, delta = seq(from = -0.1, 
-    to = 0.1, by = 0.05))
+                                                                   to = 0.1, 
+                                                                   by = 0.05))
 #> -- SCQE Method Result Table -- 
 #> 
 #>    term estimate   conf.low conf.high        se
@@ -206,8 +208,9 @@ summary(scqe.1cohort.full)
 Example 4: 1 cohort, summary statistics
 
 ``` r
-scqe.1cohort.sum <- scqe(untr = 100, tr = 200, Y_untr = 5, Y_tr = 50, min_outcome = 0.1, 
-    max_outcome = 1, min_delta = 0.1, max_delta = 1)
+scqe.1cohort.sum <- scqe(untr = 100, tr = 200, Y_untr = 5, Y_tr = 50, 
+                         min_outcome = 0.1, max_outcome = 1, min_delta = 0.1, 
+                         max_delta = 1)
 #> -- SCQE Method Result Table -- 
 #> 
 #>    term estimate    conf.low   conf.high         se

@@ -8,7 +8,11 @@ scqe(
   post,
   treatment,
   outcome,
+  min_outcome,
+  max_outcome,
   delta,
+  min_delta,
+  max_delta,
   cohort,
   untr_pre,
   untr_post,
@@ -22,23 +26,31 @@ scqe(
   tr,
   Y_tr,
   Y_untr,
-  min_delta,
-  max_delta,
-  alpha,
+  alpha = 0.05,
   ...
 )
 }
 \arguments{
-\item{post}{Binary vector corresponding to T=0,1 for each observation.}
+\item{post}{Binary vector corresponding to T = 0, 1 for each observation.}
 
-\item{treatment}{Binary or continuous vector corresponding (usually) to 0,1
+\item{treatment}{Binary or continuous vector corresponding (usually) to [0,1]
 (no treatment or treatment) for each observation.}
 
 \item{outcome}{Continuous vector representing the outcome for each
 observation.}
 
+\item{min_outcome}{Minimum value for the outcome. 
+Optional, not used if \code{outcome} is supplied.}
+
+\item{max_outcome}{Maximum value for the outcome. 
+Optional, not used if \code{outcome} is supplied.}
+
 \item{delta}{Single value or vector of possible values for change in
 average non-treatment outcome between cohorts (if applicable).}
+
+\item{min_delta}{Minimum delta. Optional, not used if \code{delta} is supplied.}
+
+\item{max_delta}{Maximum delta. Optional, not used if \code{delta} is supplied.}
 
 \item{cohort}{Numeric, 1 or 2 depending on cohort membership.}
 
@@ -74,11 +86,7 @@ T=0 (summary statistics input).}
 
 \item{Y_untr}{Outcome for untreated patients (summary statistics input).}
 
-\item{min_delta}{Minimum delta.}
-
-\item{max_delta}{Maximum delta.}
-
-\item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
+\item{alpha}{Numeric alpha for confidence interval (default is alpha = 0.05).}
 
 \item{...}{Extra optional arguments.}
 }
@@ -89,31 +97,32 @@ intervals.
 \examples{
 set.seed(1234)
 post = c(rep(0,100), rep(1,100))
-tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+tx = c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+y = rbinom(n = 200, prob = 0.1 + .02 * post - 0.05 * tx, size = 1)
 
 # Two cohorts, full data
-scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full = scqe(post = post, treatment = tx, outcome = y,
+                        delta = seq(from = -0.1, to = 0.1, by = 0.05))
 plot(scqe.2cohort.full)
 summary(scqe.2cohort.full)
 
 # One cohort, full data
-scqe.1cohort.full = scqe(treatment=tx, outcome=y,
-delta=seq(from=-.1, to=.1, by=0.05))
+scqe.1cohort.full = scqe(treatment = tx, outcome = y,
+                        delta=seq(from = -0.1, to = 0.1, by = 0.05))
 plot(scqe.1cohort.full)
 summary(scqe.1cohort.full)
 
 # Two cohorts, summary data only
-scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,
-Y_tr_post=20,Y_untr_post=1,
-Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+scqe.2cohort.sum = scqe(untr_pre = 200,untr_post = 150, tr_post = 50, 
+                       tr_pre = 0, Y_tr_post = 20, Y_untr_post = 1,
+                       Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1, 
+                       max_delta = 1)
 plot(scqe.2cohort.sum)
 summary(scqe.2cohort.sum)
 
 # One cohort, summary data only
-scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,
- min_delta=.1,max_delta=1)
+scqe.1cohort.sum = scqe(untr = 100, tr = 200, Y_untr = 5, Y_tr = 50,
+                        min_delta= 0.1, max_delta = 1)
 plot(scqe.1cohort.sum)
 summary(scqe.1cohort.sum)
 
