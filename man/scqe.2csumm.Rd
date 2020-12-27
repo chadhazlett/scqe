@@ -17,7 +17,7 @@ scqe.2csumm(
   min_delta,
   max_delta,
   delta,
-  alpha,
+  alpha = 0.05,
   ...
 )
 }
@@ -46,12 +46,12 @@ time T=1 (summary statistics input).}
 \item{Y_untr_pre}{Outcome for patients who did not receive treatment at time
 T=0 (summary statistics input).}
 
-\item{min_delta}{Min delta (see delta description), optional.}
+\item{min_delta}{Numeric scalar (Optional) minimum delta value (see delta description).}
 
-\item{max_delta}{Max delta (see delta description), optional.}
+\item{max_delta}{Numeric scalar (Optional) maximum delta value (see delta description).}
 
-\item{delta}{Single value or vector of possible values for change in
-average non-treatment outcome between cohorts (if applicable).}
+\item{delta}{Numeric scalar or numeric vector of possible values for change
+in average non-treatment outcome between cohorts (if applicable).}
 
 \item{alpha}{Numeric alpha for confidence interval (default is alpha=.05).}
 
@@ -63,11 +63,11 @@ This function returns the scqe estimates and confidence intervals for the
 }
 \examples{
 # Two cohorts, summary data only
-scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,
-Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,
-Y_untr_pre=5,min_delta=.1, max_delta=1)
-plot(scqe.2cohort.sum)
-summary(scqe.2cohort.sum)
-
+scqe_2cohort_sum <- scqe(untr_pre = 200,untr_post = 150,tr_post = 50,
+                         tr_pre=0, Y_tr_post = 20, Y_untr_post = 1,
+                         Y_tr_pre=0, Y_untr_pre = 5,min_delta = 0.1,
+                         max_delta = 1)
+plot(scqe_2cohort_sum)
+summary(scqe_2cohort_sum)
 
 }

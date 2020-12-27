@@ -367,65 +367,43 @@ scqe.1cfull <- function(treatment, outcome, delta, alpha, min_delta, max_delta, 
 #' (summary statistics input).
 #' @param Y_untr_pre Outcome for patients who did not receive treatment at time
 #'  T=0 (summary statistics input).
-#' @param max_delta Max delta (see delta description), optional.
-#' @param min_delta Min delta (see delta description), optional.
-#' @param delta Single value or vector of possible values for change in
-#' average non-treatment outcome between cohorts (if applicable).
+#' @param delta Numeric scalar or numeric vector of possible values for change
+#' in average non-treatment outcome between cohorts (if applicable).
+#' @param max_delta Numeric scalar (Optional) maximum delta value (see delta description).
+#' @param min_delta Numeric scalar (Optional) minimum delta value (see delta description).
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #' @param ... Extra optional arguments.
 #'
 #' @examples
 #' # Two cohorts, summary data only
-#' scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,
-#' Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0,
-#' Y_untr_pre=5,min_delta=.1, max_delta=1)
-#' plot(scqe.2cohort.sum)
-#' summary(scqe.2cohort.sum)
+#' scqe_2cohort_sum <- scqe(untr_pre = 200,untr_post = 150,tr_post = 50,
+#'                          tr_pre=0, Y_tr_post = 20, Y_untr_post = 1,
+#'                          Y_tr_pre=0, Y_untr_pre = 5,min_delta = 0.1,
+#'                          max_delta = 1)
+#' plot(scqe_2cohort_sum)
+#' summary(scqe_2cohort_sum)
 #'
+#' @importFrom stats qnorm
 #'
 #'@export
 scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
                         Y_untr_post, Y_tr_pre, Y_untr_pre, min_delta,
-                        max_delta, delta, alpha, ...)
+                        max_delta, delta, alpha = 0.05, ...)
 {
-  if (missing(alpha))
-  {
-    alpha <- 0.05
-  }
   value <- stats::qnorm(1 - (alpha/2))
 
-  if (missing(min_delta) & missing(max_delta) & missing(delta))
-  {
-    message("delta (and min_delta/max_delta) missing. Setting delta to range from -0.1 to 0.1.")
-    min_delta <- -0.1
-    max_delta <- 0.1
-    delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
-  }
-  if (missing(min_delta) & missing(max_delta) & !missing(delta))
-  {
-    delta_list <- delta
-  }
-  # if (missing(delta) & (missing(min_delta) | missing(max_delta)))
-  #   stop("Either set delta or min_delta and max_delta.")
-  if (any(class(untr_pre) == "character" | class(untr_post) == "character" | class(tr_post) ==
-          "character" | class(tr_pre) == "character" | class(Y_tr_post) == "character" |
-          class(Y_untr_post) == "character" | class(Y_tr_pre) == "character" | class(Y_untr_pre) ==
-          "character"))
-  {
-    stop("One or more inputs to function are of invalid class")
-  }
-  if (missing(delta) & !missing(min_delta) & !missing(max_delta))
-  {
-    if (max_delta == min_delta)
-    {
-      # spread out the delta range to +/- 0.2 from the single entered delta, ensuring
-      # the range doesn't go beyond the possible bounds
-      min_delta <- max(-0.99, min_delta - 0.2)
-      max_delta <- min(0.99, min_delta + 0.4)
-      min_delta <- max_delta - 0.4
-    }
-    delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
-  }
+  delta_list <- delta_setter(delta, min_delta, max_delta)
+
+  argument_list <- as.list(match.call(expand.dots = FALSE))
+  arguments_type_checker(argument_list)
+
+  # if (any(class(untr_pre) == "character" | class(untr_post) == "character" | class(tr_post) ==
+  #         "character" | class(tr_pre) == "character" | class(Y_tr_post) == "character" |
+  #         class(Y_untr_post) == "character" | class(Y_tr_pre) == "character" | class(Y_untr_pre) ==
+  #         "character"))
+  # {
+  #   stop("One or more inputs to function are of invalid class")
+  # }
 
   N_pre <- untr_pre + tr_pre
   N_post <- untr_post + tr_post
@@ -481,10 +459,12 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
   out$treatment <- c(rep(0, untr_pre + untr_post), rep(1, tr_pre + tr_post))
   out$post <- c(rep(0, untr_pre), rep(1, untr_post), rep(0, tr_pre), rep(1, tr_post))
   out$outcome <- c(rep(1, Y_untr_pre), rep(0, ifelse(untr_pre - Y_untr_pre < 0,
-                                                     0, untr_pre - Y_untr_pre)), rep(1, Y_untr_post), rep(0, ifelse(untr_post -
-                                                                                                                      Y_untr_post < 0, 0, untr_post - Y_untr_post)), rep(1, Y_tr_pre), rep(0, ifelse(tr_pre -
-                                                                                                                                                                                                       Y_tr_pre < 0, 0, tr_pre - Y_tr_pre)), rep(1, Y_tr_post), rep(0, ifelse(tr_post -
-                                                                                                                                                                                                                                                                                Y_tr_post < 0, 0, tr_post - Y_tr_post)))
+                                                     0, untr_pre - Y_untr_pre)),
+                                                     rep(1, Y_untr_post),
+                                                     rep(0, ifelse(untr_post - Y_untr_post < 0, 0, untr_post - Y_untr_post)),
+                                                     rep(1, Y_tr_pre), rep(0, ifelse(tr_pre - Y_tr_pre < 0, 0, tr_pre - Y_tr_pre)),
+                                                     rep(1, Y_tr_post),
+                                                     rep(0, ifelse(tr_post - Y_tr_post < 0, 0, tr_post - Y_tr_post)))
   out$alpha <- alpha
   class(out) <- c("scqe")
   # print only result data frame but retain all attributes
@@ -509,7 +489,7 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
 #' @param max_delta Maximum possible delta.
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
-#' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
+#' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
 #' @examples
