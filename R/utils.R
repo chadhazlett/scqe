@@ -47,18 +47,26 @@ delta_setter <- function(delta, min_delta, max_delta) {
 }
 
 #' Check if all arguments are either numeric or integer values
+#' @param list of call arguments
+#' @param integer number of parent generations to go back on evaluation
 #'
 #' @noRd
 
-arguments_type_checker <- function(x) {
+arguments_type_checker <- function(x, parent.eval.n = 2) {
   for (i in seq_along(x)[-1]) {
-    argument_value <- eval(x[i][[1]])
-    if (!any(c(inherits(argument_value, "integer"),
-               inherits(argument_value, "numeric"),
-               # Used for negative integer values. There is probably a better way to do this
-               is.call(argument_value))))
-      stop("One or more function arguments are of an invalid class. All arguments must be numeric.",
-           call. = FALSE)
+    argument_value <- tryCatch(eval.parent(x[i][[1]], n = parent.eval.n),
+                               error = function(e) e)
+    if (!inherits(argument_value, "error")) {
+      if (!inherits(argument_value, "pairlist")){
+        if (!any(c(inherits(argument_value, "integer"),
+                   inherits(argument_value, "numeric"),
+                   # Used for negative integer values. There is probably a better way to do this
+                   is.call(argument_value)))) {
+          stop("One or more function arguments are of an invalid class. All arguments must be numeric.",
+               call. = FALSE)
+        }
+      }
+    }
   }
 }
 

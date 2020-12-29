@@ -127,7 +127,7 @@ scqe <- function(post,
 
   # Check that arguments are of the expected (numeric or integer) type
   argument_list <- as.list(match.call(expand.dots = FALSE))
-  arguments_type_checker(argument_list)
+  arguments_type_checker(argument_list, parent.eval.n = 1)
 
   # first define class of object is.numeric(post) = TRUE indicates 2 cohort case
   # is.numeric(untr) indicates summary case
@@ -206,6 +206,10 @@ scqe.2cfull <- function(post,
                         alpha = 0.05,
                         ...)
 {
+  # Check that arguments are of the expected (numeric or integer) type
+  argument_list <- as.list(match.call(expand.dots = FALSE))
+  arguments_type_checker(argument_list)
+
   value <- stats::qnorm(1 - (alpha/2))
 
   delta_list <- delta_setter(delta, min_delta, max_delta)
