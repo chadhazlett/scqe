@@ -309,6 +309,10 @@ scqe.1cfull <- function(treatment,
                         alpha = 0.05,
                         ...)
 {
+  # Check that arguments are of the expected (numeric or integer) type
+  argument_list <- as.list(match.call(expand.dots = FALSE))
+  arguments_type_checker(argument_list)
+
   value <- stats::qnorm(1 - (alpha/2))
 
   delta_list <- delta_setter(delta, min_delta, max_delta)
@@ -400,6 +404,10 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
                         Y_untr_post, Y_tr_pre, Y_untr_pre, min_delta,
                         max_delta, delta, alpha = 0.05, ...)
 {
+  # Check that arguments are of the expected (numeric or integer) type
+  argument_list <- as.list(match.call(expand.dots = FALSE))
+  arguments_type_checker(argument_list)
+
   value <- stats::qnorm(1 - (alpha/2))
 
   delta_list <- delta_setter(delta, min_delta, max_delta)
@@ -509,6 +517,10 @@ scqe.1csumm <- function(untr_1C,
                         max_delta,
                         alpha = 0.05, ...)
 {
+  # Check that arguments are of the expected (numeric or integer) type
+  argument_list <- as.list(match.call(expand.dots = FALSE))
+  arguments_type_checker(argument_list)
+
   value <- stats::qnorm(1 - (alpha/2))
 
   delta_list <- delta_setter(delta, min_delta, max_delta)

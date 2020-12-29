@@ -62,3 +62,16 @@ test_that("Return error if argument class is not numeric or integer", {
     "One or more function arguments are of an invalid class. All arguments must be numeric."
   )
 })
+
+test_that("Expect no error for calling scqe.2cfull directly", {
+  set.seed(1234)
+  post = c(rep(0,100), rep(1,100))
+  tx = c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+  y = rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
+  expect_error(
+    scqe.2cfull(post = post, treatment = tx, outcome = y,
+                delta = seq(from = -0.1,to = 0.1, by = 0.05))
+    ,
+    NA
+  )
+})
