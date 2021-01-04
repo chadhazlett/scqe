@@ -39,10 +39,10 @@ scqe(
 \item{outcome}{Continuous vector representing the outcome for each
 observation.}
 
-\item{min_outcome}{Minimum value for the outcome. 
+\item{min_outcome}{Minimum value for the outcome.
 Optional, not used if \code{outcome} is supplied.}
 
-\item{max_outcome}{Maximum value for the outcome. 
+\item{max_outcome}{Maximum value for the outcome.
 Optional, not used if \code{outcome} is supplied.}
 
 \item{delta}{Single value or vector of possible values for change in
@@ -113,9 +113,9 @@ plot(scqe.1cohort.full)
 summary(scqe.1cohort.full)
 
 # Two cohorts, summary data only
-scqe.2cohort.sum = scqe(untr_pre = 200,untr_post = 150, tr_post = 50, 
+scqe.2cohort.sum = scqe(untr_pre = 200,untr_post = 150, tr_post = 50,
                        tr_pre = 0, Y_tr_post = 20, Y_untr_post = 1,
-                       Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1, 
+                       Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1,
                        max_delta = 1)
 plot(scqe.2cohort.sum)
 summary(scqe.2cohort.sum)

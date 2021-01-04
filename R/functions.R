@@ -29,9 +29,9 @@ NULL
 #'   (no treatment or treatment) for each observation.
 #' @param outcome Continuous vector representing the outcome for each
 #'   observation.
-#' @param min_outcome Minimum value for the outcome. 
+#' @param min_outcome Minimum value for the outcome.
 #' Optional, not used if \code{outcome} is supplied.
-#' @param max_outcome Maximum value for the outcome. 
+#' @param max_outcome Maximum value for the outcome.
 #' Optional, not used if \code{outcome} is supplied.
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
@@ -84,9 +84,9 @@ NULL
 #' summary(scqe.1cohort.full)
 #'
 #' # Two cohorts, summary data only
-#' scqe.2cohort.sum = scqe(untr_pre = 200,untr_post = 150, tr_post = 50, 
+#' scqe.2cohort.sum = scqe(untr_pre = 200,untr_post = 150, tr_post = 50,
 #'                        tr_pre = 0, Y_tr_post = 20, Y_untr_post = 1,
-#'                        Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1, 
+#'                        Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1,
 #'                        max_delta = 1)
 #' plot(scqe.2cohort.sum)
 #' summary(scqe.2cohort.sum)
@@ -198,10 +198,10 @@ scqemethod <- function(...)
 #' summary(scqe.2cohort.full)
 #'
 #'@export
-scqe.2cfull <- function(post, 
-                        treatment, 
-                        outcome, 
-                        delta, 
+scqe.2cfull <- function(post,
+                        treatment,
+                        outcome,
+                        delta,
                         min_delta, max_delta,
                         alpha = 0.05,
                         ...)
@@ -292,7 +292,7 @@ scqe.2cfull <- function(post,
 #' y = rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 #'
 #' # One cohort, full data
-#' scqe.1cohort.full = scqe(treatment = tx, outcome = y, 
+#' scqe.1cohort.full = scqe(treatment = tx, outcome = y,
 #'                          delta=seq(from = -0.1, to = 0.1, by = 0.05))
 #' plot(scqe.1cohort.full)
 #' summary(scqe.1cohort.full)
@@ -898,11 +898,11 @@ plot.scqe <- function(x, xlab, ylab, ...)
 {
   if (missing(xlab))
   {
-    xlab <- c("Delta")
+    xlab <- c("Average treatment effected on treated")
   }
   if (missing(ylab))
   {
-    ylab <- c("Average treatment effected on treated")
+    ylab <- c("Delta")
   }
   x <- as.data.frame(x$result)
   term <- NULL

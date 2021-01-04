@@ -24,6 +24,18 @@ delta_setter <- function(delta, min_delta, max_delta) {
     delta_list <- delta
     warning("delta, min_delta, and max_delta all provided. Ignoring min_delta and max_delta.")
   }
+  else if(!missing(min_delta) & missing(max_delta) & missing(delta)) {
+    min_delta <- -0.1
+    max_delta <- 0.1
+    delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
+    message("delta (and min_delta/max_delta) missing. Setting delta to range from -0.1 to 0.1.")
+  }
+  else if(missing(min_delta) & !missing(max_delta) & missing(delta)) {
+    min_delta <- -0.1
+    max_delta <- 0.1
+    delta_list <- seq(from = max_delta, to = min_delta, length.out = 11)
+    message("delta (and min_delta/max_delta) missing. Setting delta to range from -0.1 to 0.1.")
+  }
   else if (missing(min_delta) & missing(max_delta) & missing(delta))
   {
     min_delta <- -0.1
