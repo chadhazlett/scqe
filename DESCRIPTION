@@ -6,6 +6,8 @@ Authors@R:
     c(person(given = "Kirsten", family = "Landsiedel", role = "cre", 
     email = "kirstenlandsiedel@gmail.com"),
     person("Hazlett", "Chad", role = "aut", email = "chazlett@ucla.edu"),
+    person("Wulf", "Ami", role = "ctr", email = "amiwulf@gmail.com"),
+    person("Pinkelman", "Colleen", role = "ctr", email = "cpinkelman@g.ucla.edu"),
     person("Christopher", "Gandrud", email = "christopher.gandrud@gmail.com",
     role = "ctr")
     )
