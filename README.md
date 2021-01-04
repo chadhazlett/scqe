@@ -4,6 +4,7 @@
 # scqe
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The scqe package allows users to implement the stability controlled

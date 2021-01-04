@@ -35,7 +35,6 @@ devtools::install_github("chadhazlett/scqe")
 The following examples will demonstrate how to use the scqe function for both the 1 and 2 cohort case when users wish to input either full data or summary statistics alone.
 
 Simulated data:
-
 ```{r}
 set.seed(1234)
 post <- c(rep(0, 100), rep(1, 100))
