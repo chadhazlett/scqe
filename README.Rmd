@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 The scqe package allows users to implement the stability controlled quasi-experiment (SCQE) (Hazlett, 2019) approach to study the effects of newly adopted treatments that were not assigned at random. This package contains tools to help users avoid making statistical assumptions that rely on infeasible assumptions. The scqe function allows user to study both the 1 cohort and 2 cohort cases.
 
 ## Motivation
-Typical covariate-adjustment techniques used in statistical analysis impose the often too strict "no-unobserved confounding" assumption. Ignoring relevant cofounding biases can lead to overconfidence or inaccuracy of experimental results. SCQE instead imposes an assumption about the "baseline trend" for the change in average non-treatment outcome between successive cohorts in observational studies. More information about this method can be found in Hazlett, 2019.
+Typical covariate-adjustment techniques used in statistical analysis impose the often too strict "no-unobserved confounding" assumption. Ignoring relevant confounding biases can lead to overconfidence or inaccuracy of experimental results. SCQE instead imposes an assumption about the "baseline trend" for the change in average non-treatment outcome between successive cohorts in observational studies. More information about this method can be found in Hazlett, 2019.
 
 ## Installation
 
@@ -35,17 +35,20 @@ devtools::install_github("chadhazlett/scqe")
 The following examples will demonstrate how to use the scqe function for both the 1 and 2 cohort case when users wish to input either full data or summary statistics alone.
 
 Simulated data:
+
 ```{r}
 set.seed(1234)
-post = c(rep(0,100), rep(1,100))
-tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+post <- c(rep(0, 100), rep(1, 100))
+tx <- c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+y <- rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 ```
 
 Example 1: 2 cohorts, full data
+
 ```{r}
 library(scqe)
-scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full <- scqe(post = post, treatment = tx, outcome = y, 
+                          delta = seq(from = -0.1, to = 0.1, by = 0.05))
 ```
 
 The results can be plotted by calling plot() on an scqe object.
@@ -54,30 +57,40 @@ plot(scqe.2cohort.full)
 ```
 
 The results can be summarized by calling summary() on an scqe object.
+
 ```{r}
 summary(scqe.2cohort.full)
 ```
 
 Example 2: 2 cohorts, summary statistics
 The user can input summary statistics about the data instead of the full data (as in the previous example). Plot and summary methods can be used here as well.
+
 ```{r}
-scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+scqe.2cohort.sum <- scqe(untr_pre = 200, untr_post = 150, tr_post = 50, 
+                         tr_pre = 0, Y_tr_post = 20, Y_untr_post = 1, 
+                         Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1, 
+                         max_delta = 1)
 plot(scqe.2cohort.sum)
 summary(scqe.2cohort.sum)
 ```
 
 Example 3: 1 cohort, full data
+
 ```{r}
-scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.1cohort.full <- scqe(treatment = tx, outcome = y, delta = seq(from = -0.1, 
+                                                                   to = 0.1, 
+                                                                   by = 0.05))
 plot(scqe.1cohort.full)
 summary(scqe.1cohort.full)
 ```
 
 Example 4: 1 cohort, summary statistics
+
 ```{r}
-scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
+scqe.1cohort.sum <- scqe(untr = 100, tr = 200, Y_untr = 5, Y_tr = 50, 
+                         min_outcome = 0.1, max_outcome = 1, min_delta = 0.1, 
+                         max_delta = 1)
 plot(scqe.1cohort.sum)
 summary(scqe.1cohort.sum)
-
 ```
 

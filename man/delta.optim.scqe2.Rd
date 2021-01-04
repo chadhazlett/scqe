@@ -10,7 +10,7 @@ delta.optim.scqe2(
   outcome,
   delta,
   obj,
-  alpha,
+  alpha = 0.05,
   specified = NULL,
   ...
 )

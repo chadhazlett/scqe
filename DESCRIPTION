@@ -1,10 +1,20 @@
 Package: scqe
 Title: Stability Controlled Quasi-Experimentation
-Version: 0.0.0.9000
+Version: 0.0.0.9001
+Date: 2020-12-29
 Authors@R: 
-    c(person(given = "Kirsten", family = "Landsiedel", role = "cre", email = "kirstenlandsiedel@gmail.com"),
-    person("Hazlett", "Chad", role="aut", email = "chazlett@ucla.edu"))
-Description: The scqe package allows users to implement the stability controlled quasi-experiment (SCQE) (Hazlett, 2019) approach to study the effects of newly adopted treatments that were not assigned at random. This package contains tools to help users avoid making statistical assumptions that rely on infeasible assumptions.
+    c(person(given = "Kirsten", family = "Landsiedel", role = "cre", 
+    email = "kirstenlandsiedel@gmail.com"),
+    person("Hazlett", "Chad", role = "aut", email = "chazlett@ucla.edu"),
+    person("Christopher", "Gandrud", email = "christopher.gandrud@gmail.com",
+    role = "ctr")
+    )
+Description: The scqe package allows users to implement the stability controlled 
+    quasi-experiment (SCQE) approach to study the effects of 
+    newly adopted treatments that were not assigned at random. This package 
+    contains tools to help users avoid making statistical assumptions that rely 
+    on infeasible assumptions. Methods developed in Hazlett (2019) 
+    <doi:10.1002/sim.8717>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -14,3 +24,6 @@ Imports:
     ggplot2,
     stats,
     utils
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

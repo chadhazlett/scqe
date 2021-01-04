@@ -4,10 +4,10 @@
 \alias{plot.scqe}
 \title{Plot method for \code{scqe}}
 \usage{
-\method{plot}{scqe}(scqe.obj, xlab, ylab, ...)
+\method{plot}{scqe}(x, xlab, ylab, ...)
 }
 \arguments{
-\item{scqe.obj}{an object of class \code{\link{scqe}}}
+\item{x}{an object of class \code{\link{scqe}}}
 
 \item{xlab}{Optional character label for x axis.}
 
@@ -22,13 +22,13 @@ values of delta provided by the user.
 }
 \examples{
 set.seed(1234)
-post = c(rep(0,100), rep(1,100))
-tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+post <- c(rep(0,100), rep(1,100))
+tx <- c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+y <- rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 
 # Two cohorts, full data
-scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y,
-delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full <- scqe(post = post, treatment = tx, outcome = y,
+                          delta = seq(from = -0.1, to = 0.1, by = 0.05))
 plot(scqe.2cohort.full)
 
 }

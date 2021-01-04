@@ -12,7 +12,7 @@ delta.optim.scqe(
   Y_treated,
   obj,
   specified = NULL,
-  alpha,
+  alpha = 0.05,
   ...
 )
 }
@@ -31,7 +31,7 @@ delta.optim.scqe(
 
 \item{specified}{Specified optional arguments.}
 
-\item{alpha}{Numeric alpha for confidence intervals (default alpha=.05).}
+\item{alpha}{Numeric alpha for confidence intervals (default alpha = 0.05).}
 
 \item{...}{Extra optional arguments.}
 }

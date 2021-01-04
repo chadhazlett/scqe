@@ -4,7 +4,6 @@
 # scqe
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The scqe package allows users to implement the stability controlled
@@ -18,7 +17,7 @@ both the 1 cohort and 2 cohort cases.
 
 Typical covariate-adjustment techniques used in statistical analysis
 impose the often too strict “no-unobserved confounding” assumption.
-Ignoring relevant cofounding biases can lead to overconfidence or
+Ignoring relevant confounding biases can lead to overconfidence or
 inaccuracy of experimental results. SCQE instead imposes an assumption
 about the “baseline trend” for the change in average non-treatment
 outcome between successive cohorts in observational studies. More
@@ -44,16 +43,17 @@ Simulated data:
 
 ``` r
 set.seed(1234)
-post = c(rep(0,100), rep(1,100))
-tx = c(rep(0, 100), rbinom(n = 100, prob=.27, size=1))
-y = rbinom(n=200, prob = .1 + .02*post - .05*tx, size=1)
+post <- c(rep(0, 100), rep(1, 100))
+tx <- c(rep(0, 100), rbinom(n = 100, prob = 0.27, size = 1))
+y <- rbinom(n = 200, prob = 0.1 + 0.02 * post - 0.05 * tx, size = 1)
 ```
 
 Example 1: 2 cohorts, full data
 
 ``` r
 library(scqe)
-scqe.2cohort.full = scqe(post=post, treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.2cohort.full <- scqe(post = post, treatment = tx, outcome = y, 
+                          delta = seq(from = -0.1, to = 0.1, by = 0.05))
 #> -- SCQE Method Result Table -- 
 #> 
 #>    term estimate   conf.low   conf.high        se
@@ -102,11 +102,13 @@ summary(scqe.2cohort.full)
 
 Example 2: 2 cohorts, summary statistics The user can input summary
 statistics about the data instead of the full data (as in the previous
-example). Plot and summary methods can be used here as
-well.
+example). Plot and summary methods can be used here as well.
 
 ``` r
-scqe.2cohort.sum = scqe(untr_pre=200,untr_post=150,tr_post=50,tr_pre=0,Y_tr_post=20,Y_untr_post=1,Y_tr_pre=0, Y_untr_pre=5,min_delta=.1, max_delta=1)
+scqe.2cohort.sum <- scqe(untr_pre = 200, untr_post = 150, tr_post = 50, 
+                         tr_pre = 0, Y_tr_post = 20, Y_untr_post = 1, 
+                         Y_tr_pre = 0, Y_untr_pre = 5, min_delta = 0.1, 
+                         max_delta = 1)
 #> -- SCQE Method Result Table -- 
 #> 
 #>    term estimate   conf.low  conf.high        se
@@ -158,11 +160,12 @@ summary(scqe.2cohort.sum)
 #> 11 0.10    -0.08 -0.2814172  0.1214172 0.1027658
 ```
 
-Example 3: 1 cohort, full
-data
+Example 3: 1 cohort, full data
 
 ``` r
-scqe.1cohort.full = scqe(treatment=tx, outcome=y, delta=seq(from=-.1, to=.1, by=0.05))
+scqe.1cohort.full <- scqe(treatment = tx, outcome = y, delta = seq(from = -0.1, 
+                                                                   to = 0.1, 
+                                                                   by = 0.05))
 #> -- SCQE Method Result Table -- 
 #> 
 #>    term estimate   conf.low conf.high        se
@@ -202,11 +205,12 @@ summary(scqe.1cohort.full)
 #> 5  0.10     0.15 -0.2976311 0.5976311 0.2283874
 ```
 
-Example 4: 1 cohort, summary
-statistics
+Example 4: 1 cohort, summary statistics
 
 ``` r
-scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,min_outcome=.1,max_outcome=1, min_delta=.1,max_delta=1)
+scqe.1cohort.sum <- scqe(untr = 100, tr = 200, Y_untr = 5, Y_tr = 50, 
+                         min_outcome = 0.1, max_outcome = 1, min_delta = 0.1, 
+                         max_delta = 1)
 #> -- SCQE Method Result Table -- 
 #> 
 #>    term estimate    conf.low   conf.high         se
