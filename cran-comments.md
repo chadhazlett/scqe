@@ -1,6 +1,5 @@
 ## Test environments
---- Need to update this 
-* local OS X install, R 3.1.2
+* local OS Big Sur install, R 4.0.4
 * ubuntu 12.04 (on travis-ci), R 3.1.2
 * win-builder (devel and release)
 
@@ -8,12 +7,5 @@
 There were no ERRORs or WARNINGs. 
 
 ## Downstream dependencies
----Need to do this:
-I have also run R CMD check on downstream dependencies of httr 
-(https://github.com/wch/checkresults/blob/master/httr/r-release). 
-All packages that I could install passed except:
-
-* Ecoengine: this appears to be a failure related to config on 
-  that machine. I couldn't reproduce it locally, and it doesn't 
-  seem to be related to changes in httr (the same problem exists 
-  with httr 0.4).
+This is the first version of the scqe package. There are no downstream 
+dependencies
