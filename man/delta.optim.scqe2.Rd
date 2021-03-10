@@ -18,9 +18,9 @@ delta.optim.scqe2(
 \arguments{
 \item{post}{Binary vector corresponding to T=0,1 for each observation.}
 
-\item{treatment}{Binary or continuous vector correspoding (usually) to 0,1.}
+\item{treatment}{Binary or continuous vector corresponding (usually) to 0,1.}
 
-\item{outcome}{Continueous vector representing the outcome for each
+\item{outcome}{Continuous vector representing the outcome for each
 observation}
 
 \item{delta}{Single value or vector of possible values for change in

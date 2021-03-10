@@ -173,7 +173,7 @@ scqemethod <- function(...)
 #' 2 cohort case when the user inputs full data.
 #'
 #' @param post Binary vector corresponding to T = 0,1 for each observation.
-#' @param treatment Binary or continuous vector correspoding (usually) to 0,1
+#' @param treatment Binary or continuous vector corresponding (usually) to 0,1
 #'   (no treatment or treatment) for each observation.
 #' @param outcome Continuous vector representing the outcome for each
 #'   observation.
@@ -724,8 +724,8 @@ delta_optim_SCQE_2C <- function(delta,
 #' method for scqe objects.
 #'
 #' @param post Binary vector corresponding to T=0,1 for each observation.
-#' @param treatment Binary or continuous vector correspoding (usually) to 0,1.
-#' @param outcome Continueous vector representing the outcome for each
+#' @param treatment Binary or continuous vector corresponding (usually) to 0,1.
+#' @param outcome Continuous vector representing the outcome for each
 #' observation
 #' @param delta Single value or vector of possible values for change in
 #' average non-treatment outcome between cohorts (if applicable).
@@ -825,7 +825,7 @@ delta.optim.scqe2 <- function(post,
 #' The \code{print} method provides the critical values presented in the summary
 #' method for scqe objects.
 #'
-#' @param treatment Binary or continuous vector correspoding (usually) to 0,1
+#' @param treatment Binary or continuous vector corresponding (usually) to 0,1
 #' (no treatment or treatment) for each observation.
 #' @param outcome Continuous vector representing the outcome for each
 #' observation.

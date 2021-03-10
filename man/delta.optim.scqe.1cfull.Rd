@@ -15,7 +15,7 @@ delta.optim.scqe.1cfull(
 )
 }
 \arguments{
-\item{treatment}{Binary or continuous vector correspoding (usually) to 0,1
+\item{treatment}{Binary or continuous vector corresponding (usually) to 0,1
 (no treatment or treatment) for each observation.}
 
 \item{outcome}{Continuous vector representing the outcome for each
