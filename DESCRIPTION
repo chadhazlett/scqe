@@ -1,6 +1,6 @@
 Package: scqe
 Title: Stability Controlled Quasi-Experimentation
-Version: 1.0
+Version: 1.0.0
 Date: 2020-12-29
 Authors@R: 
     c(person(given = "Kirsten", family = "Landsiedel", role = "cre", 
