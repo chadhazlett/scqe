@@ -16,6 +16,11 @@
 
 \item{x}{an object of class \code{\link{scqe}}}
 }
+\value{
+Text interpretations of your results from scqe method results table.
+
+Results table.
+}
 \description{
 The \code{summary} method provides several statements that summarize
 important values of delta requires to make different conclusions

@@ -61,7 +61,7 @@ NULL
 #' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
-#'@return scqe object
+#'@return scqe object, results table
 #'
 #' @references  Hazlett, C. (2019), 'Estimating causal effects of new treatments
 #' despite self-selection: The case of experimental medical treatments.'
@@ -161,6 +161,8 @@ scqe <- function(post,
 #'
 #'@description Dispatches to correct scqe function
 #'
+#'@return scqe object of class "scqe", results table
+#'
 #' @param ...  Arguments from scqe
 #'
 scqemethod <- function(...)
@@ -186,6 +188,8 @@ scqemethod <- function(...)
 #' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
+#'@return scqe object of class "scqe." Returns results table for the 2 cohort,
+#'full data case.
 #'
 #' @examples
 #' set.seed(1234)
@@ -286,6 +290,8 @@ scqe.2cfull <- function(post,
 #' @param min_delta Minimum delta. Optional, not used if \code{delta} is supplied.
 #' @param max_delta Maximum delta. Optional, not used if \code{delta} is supplied.
 #' @param ... Extra optional arguments.
+#'
+#' @return scqe object of class "scqe." Returns results table for the 1 cohort, full data case.
 #'
 #' @examples
 #' set.seed(1234)
@@ -389,6 +395,9 @@ scqe.1cfull <- function(treatment,
 #' @param max_delta Maximum delta. Optional, not used if \code{delta} is supplied.
 #' @param alpha Numeric alpha for confidence interval (default is alpha=.05).
 #' @param ... Extra optional arguments.
+#'
+#' @return scqe object of class "scqe." Returns results table for the 2 cohort,
+#' summary statistics case.
 #'
 #' @examples
 #' # Two cohorts, summary data only
@@ -501,6 +510,9 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
 #' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
+#'@return scqe object of class "scqe." Returns results table for the 1 cohort,
+#' summary statistics case.
+#'
 #' @examples
 #' # One cohort, summary data only
 #' scqe.1cohort.sum = scqe(untr=100,tr=200,Y_untr=5,Y_tr=50,
@@ -574,6 +586,8 @@ scqe.1csumm <- function(untr_1C,
 #'@param alpha Numeric alpha for confidence intervals (default alpha = 0.05).
 #'@param ... Extra optional arguments.
 #'
+#'@return Optimal delta.
+#'
 #' @export
 delta.optim.scqe <- function(Y_T0, untreated,
                              Y_untreated,
@@ -637,6 +651,7 @@ delta.optim.scqe <- function(Y_T0, untreated,
 #' @param alpha Numeric alpha for confidence intervals (default alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
+#'@return Optimal delta.
 #'
 #' @export
 delta_optim_SCQE_2C <- function(delta,
@@ -735,6 +750,8 @@ delta_optim_SCQE_2C <- function(delta,
 #' @param alpha Numeric alpha for confidence intervals (default alpha=.05).
 #' @param specified Specified optional arguments.
 #' @param ... Extra optional arguments.
+#'
+#'@return Optimal delta.
 #'
 #' @export
 delta.optim.scqe2 <- function(post,
@@ -838,6 +855,8 @@ delta.optim.scqe2 <- function(post,
 #' @param alpha Numeric alpha for confidence intervals (default alpha=.05).
 #' @param ... Extra optional arguments.
 #'
+#' @return Optimal delta.
+#'
 #' @export
 delta.optim.scqe.1cfull <- function(treatment,
                                     outcome,
@@ -883,6 +902,8 @@ delta.optim.scqe.1cfull <- function(treatment,
 #' @param ylab Optional character label for y axis.
 #' @param ... Extra optional arguments
 #'
+#' @return Plot of estimates and confidence intervals.
+#'
 #' @examples
 #' set.seed(1234)
 #' post <- c(rep(0,100), rep(1,100))
@@ -926,6 +947,8 @@ plot.scqe <- function(x, xlab, ylab, ...)
 #'
 #' @param object an object of class \code{\link{scqe}}
 #' @param ... Extra optional arguments
+#'
+#'@return Text interpretations of your results from scqe method results table.
 #'
 #' @examples
 #' set.seed(1234)
@@ -1032,6 +1055,8 @@ summary.scqe <- function(object, ...)
 #'
 #' @param x an object of class \code{\link{scqe}}
 #' @param ... Extra optional arguments
+#'
+#' @return Results table.
 #'
 #' @examples
 #' set.seed(1234)

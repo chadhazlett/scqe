@@ -9,6 +9,9 @@ scqemethod(...)
 \arguments{
 \item{...}{Arguments from scqe}
 }
+\value{
+scqe object of class "scqe", results table
+}
 \description{
 Dispatches to correct scqe function
 }

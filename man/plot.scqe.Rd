@@ -15,6 +15,9 @@
 
 \item{...}{Extra optional arguments}
 }
+\value{
+Plot of estimates and confidence intervals.
+}
 \description{
 The \code{print} method provides a plot of the estimates
 and confidence intervals for the scqe estimates for the range of

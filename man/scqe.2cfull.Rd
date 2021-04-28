@@ -35,6 +35,10 @@ average non-treatment outcome between cohorts (if applicable).}
 
 \item{...}{Extra optional arguments.}
 }
+\value{
+scqe object of class "scqe." Returns results table for the 2 cohort,
+full data case.
+}
 \description{
 This function returns the scqe estimates and confidence intervals for the
 2 cohort case when the user inputs full data.

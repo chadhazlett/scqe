@@ -35,6 +35,9 @@ delta.optim.scqe(
 
 \item{...}{Extra optional arguments.}
 }
+\value{
+Optimal delta.
+}
 \description{
 The \code{print} method provides the critical values presented in the summary
 method for scqe objects.
