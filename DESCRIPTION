@@ -11,7 +11,7 @@ Authors@R:
     person("Christopher", "Gandrud", email = "christopher.gandrud@gmail.com",
     role = "ctr")
     )
-Description: The scqe package allows users to implement the stability controlled 
+Description: Functions to implement the stability controlled 
     quasi-experiment (SCQE) approach to study the effects of 
     newly adopted treatments that were not assigned at random. This package 
     contains tools to help users avoid making statistical assumptions that rely 

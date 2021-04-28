@@ -61,6 +61,8 @@ NULL
 #' @param alpha Numeric alpha for confidence interval (default is alpha = 0.05).
 #' @param ... Extra optional arguments.
 #'
+#'@return scqe object
+#'
 #' @references  Hazlett, C. (2019), 'Estimating causal effects of new treatments
 #' despite self-selection: The case of experimental medical treatments.'
 #' Journal of Causal Inference.

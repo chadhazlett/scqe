@@ -90,6 +90,9 @@ T=0 (summary statistics input).}
 
 \item{...}{Extra optional arguments.}
 }
+\value{
+scqe object
+}
 \description{
 Main scqe function. Computes scqe estimates and corresponding confidence
 intervals.
