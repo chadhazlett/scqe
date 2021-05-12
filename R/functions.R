@@ -220,7 +220,6 @@ scqe.2cfull <- function(post,
 
   delta_list <- delta_setter(delta, min_delta, max_delta)
 
-  value <- stats::qnorm(1 - (alpha/2))
   if (all(post == TRUE | post == FALSE))
   {
     post <- as.numeric(post)
@@ -229,7 +228,7 @@ scqe.2cfull <- function(post,
   # check if delta is in range for binary case
   if (all(outcome == 1 | outcome == 0))
   {
-    if (any(delta > 1 | delta < -1))
+    if (any(delta_list > 1 | delta_list < -1))
     {
       warning("One or more deltas out of expected range (-1,1)")
     }
@@ -238,25 +237,25 @@ scqe.2cfull <- function(post,
     # checks if delta is in range for non-binary case
     quant <- stats::quantile(outcome, probs = c(0.25, 0.75))
     diff <- quant[[2]] - quant[[1]]
-    if (any(delta > diff | delta < -diff))
+    if (any(delta_list > diff | delta_list < -diff))
     {
       warning("One or more deltas out of expected range")
     }
   }
-  y2 <- outcome - post %*% t(delta)
-  r <- data.frame(term = numeric(length(delta)),
-                  estimate = numeric(length(delta)),
-                  conf.low = numeric(length(delta)),
-                  conf.high = numeric(length(delta)),
-                  se = numeric(length(delta)))
-  for (i in 1:length(delta))
+  y2 <- outcome - post %*% t(delta_list)
+  r <- data.frame(term = numeric(length(delta_list)),
+                  estimate = numeric(length(delta_list)),
+                  conf.low = numeric(length(delta_list)),
+                  conf.high = numeric(length(delta_list)),
+                  se = numeric(length(delta_list)))
+  for (i in 1:length(delta_list))
   {
     iv.out <- summary(AER::ivreg(y2[, i] ~ treatment | post))
     est <- iv.out$coef["treatment", 1]
     se <- iv.out$coef["treatment", 2]
     conf.low <- est - value * se
     conf.high <- est + value * se
-    r[i, ] <- c(delta[i], est, conf.low, conf.high, se)
+    r[i, ] <- c(delta_list[i], est, conf.low, conf.high, se)
   }
   out <- list()
   out$result <- r
@@ -264,14 +263,10 @@ scqe.2cfull <- function(post,
   out$post <- post
   out$treatment <- treatment
   out$outcome <- outcome
-  out$delta <- delta
+  out$delta <- delta_list
   out$alpha <- alpha
   class(out) <- c("scqe")
-  # print only result data frame but retain all attributes
-  cat("-- SCQE Method Result Table -- \n\n")
-  print(out$result)
-  cat("\nFor more information, see full summary.")
-  invisible(out)
+  out
 }
 ## ONE COHORT CASE FULL DATA FXN
 #' Stability controlled quasi-experiment (scqe) for 1 cohort case, full data
@@ -328,7 +323,7 @@ scqe.1cfull <- function(treatment,
   # check if delta is in range for binary case
   if (all(outcome == 1 | outcome == 0))
   {
-    if (any(delta > 1 | delta < -1))
+    if (any(delta_list > 1 | delta_list < -1))
     {
       warning("One or more deltas out of expected range [-1,1]")
     }
@@ -336,19 +331,19 @@ scqe.1cfull <- function(treatment,
   N <- length(treatment)  #number of obs
   pi1 <- sum(treatment)/N  #number of treated ind/N
   Ybar_T1 <- sum(outcome)/N  #the sum of outcomes for treated and untreated/N
-  r <- data.frame(term = numeric(length(delta)),
-                  estimate = numeric(length(delta)),
-                  conf.low = numeric(length(delta)),
-                  conf.high = numeric(length(delta)),
-                  se = numeric(length(delta)))
-  for (i in 1:length(delta))
+  r <- data.frame(term = numeric(length(delta_list)),
+                  estimate = numeric(length(delta_list)),
+                  conf.low = numeric(length(delta_list)),
+                  conf.high = numeric(length(delta_list)),
+                  se = numeric(length(delta_list)))
+  for (i in 1:length(delta_list))
   {
-    Beta_SCQE_outcome <- (Ybar_T1 - delta[i])/pi1  #code adapted from shiby app for calculations here
+    Beta_SCQE_outcome <- (Ybar_T1 - delta_list[i])/pi1  #code adapted from shiby app for calculations here
     SE_B_SCQE_outcome <- sqrt((1/(N - 1)) * (((Ybar_T1 * (1 - Ybar_T1))/(pi1^2)) +
-                                               ((Ybar_T1 - delta[i])^2 * (pi1 * (1 - pi1)))/(pi1^4)))
+                                               ((Ybar_T1 - delta_list[i])^2 * (pi1 * (1 - pi1)))/(pi1^4)))
     Beta_SCQE_1C <- c(Beta_SCQE_outcome)
     SE_B_SCQE_1C <- c(SE_B_SCQE_outcome)
-    r[i, ] <- c(delta[i], Beta_SCQE_1C, Beta_SCQE_1C - value * SE_B_SCQE_1C,
+    r[i, ] <- c(delta_list[i], Beta_SCQE_1C, Beta_SCQE_1C - value * SE_B_SCQE_1C,
                 Beta_SCQE_1C + value * SE_B_SCQE_1C, SE_B_SCQE_1C)
   }
   out <- list()
@@ -356,14 +351,10 @@ scqe.1cfull <- function(treatment,
   out$cohort <- 1
   out$treatment <- treatment
   out$outcome <- outcome
-  out$delta <- delta
+  out$delta <- delta_list
   out$alpha <- alpha
   class(out) <- c("scqe")
-  # print only result data frame but retain all attributes
-  cat("-- SCQE Method Result Table -- \n\n")
-  print(out$result)
-  cat("\nFor more information, see full summary.")
-  invisible(out)
+  out
 }
 ## 2 COHORT CASE SUM STATS FXN
 #' Stability controlled quasi-experiment (scqe) for 1 cohort case,
@@ -485,11 +476,7 @@ scqe.2csumm <- function(untr_pre, untr_post, tr_post, tr_pre, Y_tr_post,
                                                      rep(0, ifelse(tr_post - Y_tr_post < 0, 0, tr_post - Y_tr_post)))
   out$alpha <- alpha
   class(out) <- c("scqe")
-  # print only result data frame but retain all attributes
-  cat("-- SCQE Method Result Table -- \n\n")
-  print(out$result)
-  cat("\nFor more information, see full summary.")
-  invisible(out)
+  out
 }
 ## ONE COHORT CASE SUM STATS FXN
 #' Stability controlled quasi-experiment (scqe) for 1 cohort case, summary
@@ -563,11 +550,7 @@ scqe.1csumm <- function(untr_1C,
                                                                                                             0, 0, tr_1C - Y_untr_1C)))
   out$alpha <- alpha
   class(out) <- c("scqe")
-  # print only result data frame but retain all attributes
-  cat("-- SCQE Method Result Table -- \n\n")
-  print(out$result)
-  cat("\nFor more information, see full summary.")
-  invisible(out)
+  out
 }
 # DELTA OPTIM: ONE COHORT SUMMARY STATS
 #' Delta optimization method for \code{scqe} 1 cohort, summary statistics
@@ -1081,5 +1064,5 @@ print.scqe <- function(x, ...)
   result <- as.data.frame(x$result)
   cat("-- SCQE Method Result Table -- \n\n")
   print(result)
-  cat("\nFor more information, see full summary.")
+  cat("\nFor more information, see full summary.\n")
 }
